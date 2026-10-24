@@ -335,5 +335,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  setTimeout(runSimulation, 150);
+  // Wait for Chart.js to be ready before first render
+  function initWhenReady() {
+    if (typeof Chart !== 'undefined') {
+      runSimulation();
+    } else {
+      setTimeout(initWhenReady, 100);
+    }
+  }
+  setTimeout(initWhenReady, 200);
 });
