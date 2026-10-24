@@ -1,0 +1,27 @@
+{
+  "name": "spark-ev",
+  "version": "1.0.0",
+  "description": "[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-rose.svg)](https://www.python.org/) [![License: MIT](https://img.shields.io/badge/License-MIT-pink.svg)](https://opensource.org/licenses/MIT) [![Edge AI: ESP32 @ 240MHz](https://img.shields.io/badge/Edge%20AI-ESP32%208.65ms-rose.svg)](https://www.espressif.com/) [![Federated Learning](https://img.shields.io/badge/FL-FedPer-pink.svg)](https://flower.ai/) [![Explainable AI](https://img.shields.io/badge/XAI-TreeSHAP-rose.svg)](https://shap.readthedocs.io/)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shravanthi20/spark-ev.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Shravanthi20/spark-ev/issues"
+  },
+  "homepage": "https://github.com/Shravanthi20/spark-ev#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

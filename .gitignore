@@ -1,0 +1,4 @@
+node_modules/
+.env
+*.log
+assets/css/tailwind-input.css
