@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SparkEV — Personalized, Predictive & Explainable EV Management</title>
+  <meta name="description" content="SparkEV: A Personalized, Predictive, and Explainable Framework for Intelligent Electric Vehicle Management by Amrita Vishwa Vidyapeetham.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              cyan: '#00F2FE',
+              blue: '#4FACFE',
+              emerald: '#10B981',
+              dark: '#0A0F1D',
+              card: '#111827',
+              border: 'rgba(255, 255, 255, 0.08)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-[#0A0F1D] text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+
+  <!-- Top Announcement Bar -->
+  <aside aria-label="Announcement" class="bg-gradient-to-r from-cyan-900/60 via-blue-900/50 to-emerald-900/60 border-b border-cyan-500/20 py-2 px-4 text-xs font-mono text-center flex items-center justify-center gap-2">
+    <span class="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+    <span class="text-cyan-300 font-semibold">Research Paper Portal:</span>
+    <span class="text-slate-300">Amrita Vishwa Vidyapeetham, Coimbatore — Department of CSE & EEE</span>
+    <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="text-cyan-400 hover:text-white underline ml-2 hidden sm:inline">Star on GitHub <i class="fab fa-github"></i></a>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="flex items-center gap-2 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div>
+            <span class="font-heading font-black text-2xl tracking-wider text-white">Spark<span class="text-cyan-400">EV</span></span>
+            <span class="block text-[10px] font-mono text-slate-400 tracking-widest uppercase">Intelligent EV Management</span>
+          </div>
+        </a>
+      </div>
+
+      <nav aria-label="Main Navigation" class="hidden lg:flex items-center gap-7 text-sm font-medium">
+        <a href="#overview" class="text-slate-300 hover:text-cyan-400 transition-colors">Overview</a>
+        <a href="#objectives" class="text-slate-300 hover:text-cyan-400 transition-colors">Objectives</a>
+        <a href="#architecture" class="text-slate-300 hover:text-cyan-400 transition-colors">Architecture</a>
+        <a href="methodology.html" class="text-slate-300 hover:text-cyan-400 flex items-center gap-1.5 transition-colors">
+          <span>Methodology</span>
+          <span class="px-1.5 py-0.5 text-[10px] bg-cyan-500/20 text-cyan-300 rounded border border-cyan-500/30 font-mono">Deep Dive</span>
+        </a>
+        <a href="documentation.html" class="text-slate-300 hover:text-cyan-400 flex items-center gap-1.5 transition-colors">
+          <span>Documentation</span>
+          <span class="px-1.5 py-0.5 text-[10px] bg-emerald-500/20 text-emerald-300 rounded border border-emerald-500/30 font-mono">Manual</span>
+        </a>
+        <a href="#simulator" class="text-slate-300 hover:text-cyan-400 transition-colors">What-If Simulator</a>
+        <a href="#team" class="text-slate-300 hover:text-cyan-400 transition-colors">Team</a>
+        <a href="#progress" class="text-slate-300 hover:text-cyan-400 transition-colors">Progress</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <!-- Theme Switcher -->
+        <button type="button" aria-label="Toggle dark/light theme" class="theme-toggle-btn w-9 h-9 rounded-lg border border-slate-700 hover:border-cyan-400 flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-colors">
+          <i class="theme-toggle-icon fas fa-sun"></i>
+        </button>
+
+        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm font-medium text-white transition-all hover:border-cyan-400">
+          <i class="fab fa-github"></i>
+          <span>Repository</span>
+        </a>
+
+        <!-- Mobile hamburger -->
+        <button id="mobile-menu-btn" type="button" aria-label="Open mobile navigation menu" class="lg:hidden w-10 h-10 rounded-lg border border-slate-700 flex items-center justify-center text-slate-300 hover:text-cyan-400">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-6 bg-[#0B132B] border-b border-slate-800 space-y-3 text-sm font-medium">
+      <a href="#overview" class="block py-2 text-slate-300 hover:text-cyan-400">Overview</a>
+      <a href="#objectives" class="block py-2 text-slate-300 hover:text-cyan-400">Objectives</a>
+      <a href="#architecture" class="block py-2 text-slate-300 hover:text-cyan-400">Architecture</a>
+      <a href="methodology.html" class="block py-2 text-cyan-400 font-semibold">Methodology (Research Approach)</a>
+      <a href="documentation.html" class="block py-2 text-emerald-400 font-semibold">Documentation (Technical Reference)</a>
+      <a href="#simulator" class="block py-2 text-slate-300 hover:text-cyan-400">What-If Simulator</a>
+      <a href="#team" class="block py-2 text-slate-300 hover:text-cyan-400">Team Details</a>
+      <a href="#progress" class="block py-2 text-slate-300 hover:text-cyan-400">Project Progress</a>
+      <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="block py-2 text-slate-400 hover:text-white"><i class="fab fa-github mr-2"></i>GitHub Source</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="overview" class="relative pt-16 pb-24 overflow-hidden">
+    <!-- Glow Background Gradients -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-cyan-500/15 via-blue-500/10 to-emerald-500/15 blur-[120px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-4xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase tracking-wider mb-6">
+          <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+          Academic Research Deliverable · Amrita Vishwa Vidyapeetham
+        </div>
+
+        <h1 class="font-heading font-black text-4xl sm:text-6xl lg:text-7xl tracking-tight leading-none text-white mb-6">
+          Personalized, Predictive &amp; Explainable <br class="hidden sm:inline" />
+          <span class="text-gradient-cyan">EV Management</span>
+        </h1>
+
+        <p class="text-lg sm:text-xl text-slate-300 font-normal leading-relaxed mb-10 max-w-3xl mx-auto">
+          SparkEV transforms raw electric vehicle telemetry into proactive, user-tailored intelligence. By combining 
+          <strong class="text-white">Federated Personalization (FedPer)</strong>, <strong class="text-white">Explainable AI (SHAP)</strong>, and 
+          <strong class="text-white">Temporal Battery Health Forecasting</strong>, SparkEV preserves driver privacy while maximizing cell longevity and driving efficiency.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a href="#simulator" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-bold text-base hover:shadow-lg hover:shadow-cyan-500/25 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+            <i class="fas fa-sliders-h"></i>
+            <span>Interactive What-If Simulator</span>
+          </a>
+          <a href="methodology.html" class="px-6 py-3.5 rounded-xl glass-panel text-white hover:text-cyan-400 font-semibold text-base transition-all hover:border-cyan-400 flex items-center gap-2">
+            <i class="fas fa-book-open"></i>
+            <span>Explore Methodology</span>
+          </a>
+          <a href="documentation.html" class="px-6 py-3.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 font-semibold text-base border border-slate-700 transition-all flex items-center gap-2">
+            <i class="fas fa-terminal"></i>
+            <span>Technical Documentation</span>
+          </a>
+        </div>
+
+        <!-- Quick Metrics Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 text-left">
+          <div class="glass-panel p-5 rounded-2xl border-t-2 border-t-cyan-400">
+            <div class="text-3xl font-heading font-black text-cyan-400 mb-1">4</div>
+            <div class="text-sm font-semibold text-white">Intelligent Modules</div>
+            <div class="text-xs text-slate-400 mt-1">Driving, Charging, Health &amp; Simulator</div>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border-t-2 border-t-emerald-400">
+            <div class="text-3xl font-heading font-black text-emerald-400 mb-1">FedPer</div>
+            <div class="text-sm font-semibold text-white">Personalized FL</div>
+            <div class="text-xs text-slate-400 mt-1">0 raw telemetry bytes transferred</div>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border-t-2 border-t-blue-400">
+            <div class="text-3xl font-heading font-black text-blue-400 mb-1">SHAP</div>
+            <div class="text-sm font-semibold text-white">Explainable AI</div>
+            <div class="text-xs text-slate-400 mt-1">Transparent feature attribution</div>
+          </div>
+          <div class="glass-panel p-5 rounded-2xl border-t-2 border-t-amber-400">
+            <div class="text-3xl font-heading font-black text-amber-400 mb-1">&plusmn;1.4%</div>
+            <div class="text-sm font-semibold text-white">SOH Error Rate (MAE)</div>
+            <div class="text-xs text-slate-400 mt-1">Temporal lag &amp; aging dynamics</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem Statement Section -->
+  <section class="py-20 bg-slate-950/60 border-y border-slate-800/80 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-3">Context &amp; Motivation</h2>
+        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white">The Problem Statement</h3>
+        <p class="text-slate-400 mt-4 leading-relaxed">
+          Modern electric vehicles deliver high-resolution monitoring, but remain fundamentally reactionary and static. 
+          SparkEV addresses four major structural bottlenecks in present-day EV management.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <!-- Bottlenecks in Traditional Systems -->
+        <div class="glass-panel p-8 rounded-2xl border border-red-500/20 relative overflow-hidden">
+          <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-times-circle"></i>
+          </div>
+          <h4 class="font-heading font-bold text-xl text-white mb-4">Limitations of Existing EV Platforms</h4>
+          <ul class="space-y-4 text-sm text-slate-300">
+            <li class="flex items-start gap-3">
+              <i class="fas fa-exclamation-triangle text-red-400 mt-1"></i>
+              <span><strong>Static &amp; Reactive Monitoring:</strong> Present systems display current State-of-Charge (SoC) and estimated range, but fail to anticipate future battery degradation or stress points before damage occurs.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fas fa-exclamation-triangle text-red-400 mt-1"></i>
+              <span><strong>Ignoring User Heterogeneity:</strong> Driving styles, ambient climates, commute patterns, and charging schedules vary dramatically. Universal one-size-fits-all recommendations fail in the real world.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fas fa-exclamation-triangle text-red-400 mt-1"></i>
+              <span><strong>Black-Box Predictions:</strong> ML models that output a risk score without providing actionable explanations breed distrust, leaving drivers uncertain how to modify their habits.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fas fa-exclamation-triangle text-red-400 mt-1"></i>
+              <span><strong>Centralized Privacy Vulnerabilities:</strong> Streaming raw vehicle GPS traces, battery telemetry, and driving histories to central cloud servers creates severe privacy and security liabilities.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- The SparkEV Solution -->
+        <div class="glass-panel p-8 rounded-2xl border border-emerald-500/30 relative overflow-hidden bg-gradient-to-br from-slate-900/90 to-emerald-950/20">
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-6">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h4 class="font-heading font-bold text-xl text-white mb-4">The SparkEV Integrated Solution</h4>
+          <ul class="space-y-4 text-sm text-slate-300">
+            <li class="flex items-start gap-3">
+              <i class="fas fa-shield-alt text-emerald-400 mt-1"></i>
+              <span><strong>Personalized Federated Learning (FedPer):</strong> Each vehicle retains user-specific model personalization heads locally, while collaboratively updating shared global base representations without leaking raw driving data.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fas fa-chart-line text-emerald-400 mt-1"></i>
+              <span><strong>Temporal Battery Health Forecasting:</strong> Incorporates historical SOH and operational lag features (temperature exposure, C-rate, cycling depth) to predict impending stress early.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fas fa-lightbulb text-emerald-400 mt-1"></i>
+              <span><strong>Transparent SHAP Explanations:</strong> Quantifies the exact mathematical contribution of high temperatures, harsh acceleration, or fast DC charging, converting predictions into clear preventive guidance.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fas fa-gamepad text-emerald-400 mt-1"></i>
+              <span><strong>Interactive What-If Simulation:</strong> Empowers drivers to evaluate alternative routes, charging cutoff thresholds (80% vs 100%), and driving modes before taking physical action.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project Objectives Section -->
+  <section id="objectives" class="py-20 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-3">Target Deliverables</h2>
+        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white">Core Project Objectives</h3>
+        <p class="text-slate-400 mt-4 leading-relaxed">
+          SparkEV is engineered around five foundational research objectives spanning edge sensing, predictive intelligence, and decentralized learning.
+        </p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Objective 1 -->
+        <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:border-cyan-400 transition-all group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-tachometer-alt"></i>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white mb-2">1. Personalized Driving Guidance</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Analyze micro-driving telemetry (throttle jerk, brake pressure, speed variance) against individual driver baselines to deliver tailored eco-driving nudges that prevent unnecessary power spikes.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-cyan-400 font-mono">Module 1 · Rithanya K A</div>
+        </div>
+
+        <!-- Objective 2 -->
+        <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:border-cyan-400 transition-all group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-charging-station"></i>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white mb-2">2. Contextual Charging Recommender</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Formulate charging as a multi-criteria optimization problem balancing queue latency, tariff dynamics, route detour penalty, and battery longevity by preventing unnecessary 100% saturation.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-blue-400 font-mono">Module 2 · Irene Divya J</div>
+        </div>
+
+        <!-- Objective 3 -->
+        <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:border-cyan-400 transition-all group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-car-battery"></i>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white mb-2">3. Battery Health &amp; SHAP XAI</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Develop a multi-step temporal SOH degradation model incorporating cycling lag features, paired with TreeSHAP feature attributions to provide interpretable explanations for predicted risk tiers.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-emerald-400 font-mono">Module 3 · Shravanthi S</div>
+        </div>
+
+        <!-- Objective 4 -->
+        <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:border-cyan-400 transition-all group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-network-wired"></i>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white mb-2">4. Privacy-First FedPer Architecture</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Implement Federated Personalization (FedPer) splitting networks into a globally aggregated base representation ($\theta_{base}$) and localized personal classification heads ($\phi^k$), protecting user data.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-purple-400 font-mono">Federated Learning · Gayathri U</div>
+        </div>
+
+        <!-- Objective 5 -->
+        <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:border-cyan-400 transition-all group">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-microchip"></i>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white mb-2">5. Hardware Telemetry &amp; What-If</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Construct an OBD-II / CAN bus edge sensor acquisition pipeline with ESP32 microcontrollers alongside an interactive What-If scenario sandbox for testing alternative charging and driving decisions.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-amber-400 font-mono">Hardware &amp; Sim · Saravanapriyaa C R</div>
+        </div>
+
+        <!-- Objective 6 / Integrated Portal -->
+        <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between hover:border-cyan-400 transition-all group bg-gradient-to-br from-slate-900 to-cyan-950/20">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-desktop"></i>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white mb-2">6. Unified Interactive Documentation</h4>
+            <p class="text-slate-400 text-sm leading-relaxed">
+              Deliver an interactive web portal featuring architecture exploration, live parametric simulations, detailed API references, and open-source modular code for researchers and developers.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-cyan-400 font-mono">SparkEV Project Portal · Production Release</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive System Architecture Section -->
+  <section id="architecture" class="py-24 bg-slate-950/80 border-t border-slate-800 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-3">System Architecture</h2>
+        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white">SparkEV Multi-Layer Blueprint</h3>
+        <p class="text-slate-400 mt-4 leading-relaxed">
+          The SparkEV platform is architected into 5 distinct computational tiers. 
+          <span class="text-cyan-400 font-semibold">Click any layer or module</span> to inspect its exact inputs, algorithmic formulations, output artifacts, and research leads.
+        </p>
+      </div>
+
+      <!-- Architecture Interactive Grid -->
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Interactive Layer Stack (7 Cols) -->
+        <div class="lg:col-span-7 space-y-4">
+
+          <!-- Layer 6: User Decision Support Layer -->
+          <div class="arch-layer-btn glass-panel p-4 rounded-xl border border-slate-700 hover:border-cyan-400 cursor-pointer transition-all" data-layer="layer6">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold">
+                  <i class="fas fa-user-astronaut"></i>
+                </div>
+                <div>
+                  <h4 class="font-heading font-bold text-white text-base">Layer 6: User Decision Support &amp; HMI</h4>
+                  <p class="text-xs text-slate-400">Dashboards, Actionable Recommendations, Preventive Risk Alerts &amp; Scenario Simulator</p>
+                </div>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 bg-indigo-500/20 text-indigo-300 rounded">HMI Layer</span>
+            </div>
+          </div>
+
+          <!-- Layer 5: Personalized Federated Learning Layer -->
+          <div class="arch-layer-btn glass-panel p-4 rounded-xl border border-slate-700 hover:border-purple-400 cursor-pointer transition-all" data-layer="layer5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center font-bold">
+                  <i class="fas fa-network-wired"></i>
+                </div>
+                <div>
+                  <h4 class="font-heading font-bold text-white text-base">Layer 5: Personalized Federated Learning (FedPer)</h4>
+                  <p class="text-xs text-slate-400">Collaborative Base Feature Extraction &amp; Local Private Personalization Heads</p>
+                </div>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 bg-purple-500/20 text-purple-300 rounded">FedPer Backbone</span>
+            </div>
+          </div>
+
+          <!-- Layer 4: Explainable AI & SHAP Layer -->
+          <div class="arch-layer-btn glass-panel p-4 rounded-xl border border-slate-700 hover:border-amber-400 cursor-pointer transition-all" data-layer="layer4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold">
+                  <i class="fas fa-brain"></i>
+                </div>
+                <div>
+                  <h4 class="font-heading font-bold text-white text-base">Layer 4: Explainable AI (XAI) &amp; SHAP Engine</h4>
+                  <p class="text-xs text-slate-400">TreeSHAP Feature Attributions, Local Explanations &amp; Preventive Natural Language Translators</p>
+                </div>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 bg-amber-500/20 text-amber-300 rounded">SHAP XAI</span>
+            </div>
+          </div>
+
+          <!-- Layer 3: Predictive Intelligence Layer (Active by default) -->
+          <div class="arch-layer-btn glass-panel p-4 rounded-xl border border-slate-700 hover:border-cyan-400 cursor-pointer transition-all ring-2 ring-cyan-400 bg-cyan-500/10" data-layer="layer3">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-bold">
+                  <i class="fas fa-microchip"></i>
+                </div>
+                <div>
+                  <h4 class="font-heading font-bold text-white text-base">Layer 3: Predictive Intelligence Core (4 Modules)</h4>
+                  <p class="text-xs text-slate-400">Interconnected Machine Learning &amp; Optimization Engines</p>
+                </div>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 bg-cyan-500/20 text-cyan-300 rounded">Core Models</span>
+            </div>
+
+            <!-- Nested Submodules in Layer 3 -->
+            <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-cyan-500/20">
+              <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 text-xs">
+                <div class="font-semibold text-cyan-300 flex items-center gap-1.5"><i class="fas fa-route"></i> Mod 1: Driving Behavior</div>
+                <div class="text-[11px] text-slate-400">Eco-driving guidance &amp; anomaly detection</div>
+              </div>
+              <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 text-xs">
+                <div class="font-semibold text-blue-300 flex items-center gap-1.5"><i class="fas fa-plug"></i> Mod 2: Charging Recommender</div>
+                <div class="text-[11px] text-slate-400">Contextual MCDM station selection</div>
+              </div>
+              <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 text-xs">
+                <div class="font-semibold text-emerald-300 flex items-center gap-1.5"><i class="fas fa-heartbeat"></i> Mod 3: Battery Health Risk</div>
+                <div class="text-[11px] text-slate-400">Temporal SOH &amp; thermal risk scoring</div>
+              </div>
+              <div class="p-2.5 rounded bg-slate-900/80 border border-slate-800 text-xs">
+                <div class="font-semibold text-purple-300 flex items-center gap-1.5"><i class="fas fa-sliders-h"></i> Mod 4: What-If Simulator</div>
+                <div class="text-[11px] text-slate-400">Counterfactual scenario evaluation</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Layer 2: Preprocessing & Feature Engineering Layer -->
+          <div class="arch-layer-btn glass-panel p-4 rounded-xl border border-slate-700 hover:border-emerald-400 cursor-pointer transition-all" data-layer="layer2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold">
+                  <i class="fas fa-filter"></i>
+                </div>
+                <div>
+                  <h4 class="font-heading font-bold text-white text-base">Layer 2: Preprocessing &amp; Temporal Feature Engineering</h4>
+                  <p class="text-xs text-slate-400">Missing Value Imputation, SOH Lag Generation, dV/dQ Differential Capacity</p>
+                </div>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded">ETL Pipeline</span>
+            </div>
+          </div>
+
+          <!-- Layer 1: Data Acquisition Layer -->
+          <div class="arch-layer-btn glass-panel p-4 rounded-xl border border-slate-700 hover:border-blue-400 cursor-pointer transition-all" data-layer="layer1">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold">
+                  <i class="fas fa-satellite-dish"></i>
+                </div>
+                <div>
+                  <h4 class="font-heading font-bold text-white text-base">Layer 1: Data Acquisition &amp; Edge Sensing</h4>
+                  <p class="text-xs text-slate-400">OBD-II, CAN Bus 2.0B, BMS Current Shunt, Thermistor Matrix, OpenChargeMap API</p>
+                </div>
+              </div>
+              <span class="text-xs font-mono px-2 py-1 bg-blue-500/20 text-blue-300 rounded">Edge / IoT</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Layer Inspector Card (5 Cols) -->
+        <div id="architecture-inspector" class="lg:col-span-5 sticky top-28">
+          <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-cyan-500/30 shadow-2xl relative overflow-hidden bg-slate-900/90">
+            <div class="flex items-center justify-between mb-4">
+              <span id="arch-inspector-badge" class="px-2.5 py-1 text-xs font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded">
+                Machine Learning Core
+              </span>
+              <div id="arch-inspector-lead" class="text-xs font-mono">
+                <!-- Injected via architecture.js -->
+              </div>
+            </div>
+
+            <h3 id="arch-inspector-title" class="font-heading font-black text-2xl text-white mb-3">
+              3. Predictive Intelligence Layer
+            </h3>
+
+            <p id="arch-inspector-summary" class="text-slate-300 text-sm leading-relaxed mb-6">
+              Contains four interconnected AI/ML modules designed to provide holistic, user-tailored guidance across driving, charging, and long-term battery preservation.
+            </p>
+
+            <div class="space-y-4 text-xs font-mono">
+              <div>
+                <h4 class="text-cyan-400 uppercase tracking-wider font-semibold mb-2 flex items-center gap-1.5">
+                  <i class="fas fa-sign-in-alt"></i> Inputs &amp; Telemetry Signals
+                </h4>
+                <ul id="arch-inspector-inputs" class="space-y-1.5 text-slate-300">
+                  <!-- Injected via architecture.js -->
+                </ul>
+              </div>
+
+              <div class="pt-2 border-t border-slate-800">
+                <h4 class="text-emerald-400 uppercase tracking-wider font-semibold mb-2 flex items-center gap-1.5">
+                  <i class="fas fa-cogs"></i> Algorithms &amp; Formulations
+                </h4>
+                <ul id="arch-inspector-algos" class="space-y-1.5 text-slate-300">
+                  <!-- Injected via architecture.js -->
+                </ul>
+              </div>
+
+              <div class="pt-2 border-t border-slate-800">
+                <h4 class="text-blue-400 uppercase tracking-wider font-semibold mb-2 flex items-center gap-1.5">
+                  <i class="fas fa-sign-out-alt"></i> Outputs &amp; Downstream Consumers
+                </h4>
+                <ul id="arch-inspector-outputs" class="space-y-1.5 text-slate-300">
+                  <!-- Injected via architecture.js -->
+                </ul>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between">
+              <a href="methodology.html" class="text-xs text-cyan-400 hover:text-white font-mono flex items-center gap-1">
+                Read Detailed Mathematical Specs <i class="fas fa-arrow-right text-[10px]"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive What-If Simulator Section -->
+  <section id="simulator" class="py-24 relative overflow-hidden bg-slate-950/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase mb-3">
+          <i class="fas fa-play"></i> Live Sandbox Engine
+        </div>
+        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white">Interactive What-If Decision Simulator</h3>
+        <p class="text-slate-400 mt-4 leading-relaxed">
+          Experience Module 4 in action. Adjust operating parameters below to simulate counterfactual driving and charging choices. 
+          Observe real-time battery thermal stress, SOH degradation curves, and dynamically computed SHAP attribution factors.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-8">
+        <!-- Controls Column (5 cols) -->
+        <div class="lg:col-span-5 glass-panel p-6 sm:p-8 rounded-2xl border border-slate-700/80 space-y-6">
+          <h4 class="font-heading font-bold text-lg text-white border-b border-slate-800 pb-3 flex items-center justify-between">
+            <span>Simulation Parameters</span>
+            <span class="text-xs font-mono text-cyan-400"><i class="fas fa-sync-alt fa-spin text-[10px] mr-1"></i> Live Reactive</span>
+          </h4>
+
+          <!-- Initial SoC -->
+          <div>
+            <div class="flex justify-between text-sm mb-2">
+              <span class="text-slate-300 font-medium">Initial Battery SoC</span>
+              <span id="disp-soc" class="font-mono text-cyan-400 font-bold">65%</span>
+            </div>
+            <input type="range" id="sim-soc" min="15" max="100" value="65" class="w-full">
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+              <span>15%</span>
+              <span>50%</span>
+              <span>100%</span>
+            </div>
+          </div>
+
+          <!-- Target Trip Distance -->
+          <div>
+            <div class="flex justify-between text-sm mb-2">
+              <span class="text-slate-300 font-medium">Planned Trip Distance</span>
+              <span id="disp-distance" class="font-mono text-cyan-400 font-bold">120 km</span>
+            </div>
+            <input type="range" id="sim-distance" min="20" max="300" step="5" value="120" class="w-full">
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+              <span>20 km</span>
+              <span>150 km</span>
+              <span>300 km</span>
+            </div>
+          </div>
+
+          <!-- Driving Style Selector -->
+          <div>
+            <label for="sim-style" class="block text-sm font-medium text-slate-300 mb-2">Driving Behavior Profile</label>
+            <select id="sim-style" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm focus:border-cyan-400 focus:outline-none font-mono">
+              <option value="eco">Eco-Driver (Gentle throttle, high regenerative braking)</option>
+              <option value="balanced" selected>Balanced (Standard commuter driving)</option>
+              <option value="aggressive">Aggressive (Hard acceleration spikes, late braking)</option>
+            </select>
+          </div>
+
+          <!-- Ambient Temperature -->
+          <div>
+            <div class="flex justify-between text-sm mb-2">
+              <span class="text-slate-300 font-medium">Ambient Temperature</span>
+              <span id="disp-temp" class="font-mono text-cyan-400 font-bold">32°C</span>
+            </div>
+            <input type="range" id="sim-temp" min="-5" max="48" value="32" class="w-full">
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+              <span>-5°C (Freezing)</span>
+              <span>25°C (Optimal)</span>
+              <span>48°C (Extreme Heat)</span>
+            </div>
+          </div>
+
+          <!-- Charger Type & Target Limit -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="sim-charger" class="block text-xs font-medium text-slate-300 mb-1.5">Charging Rate</label>
+              <select id="sim-charger" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-2.5 py-2 text-xs focus:border-cyan-400 focus:outline-none font-mono">
+                <option value="ac11">11 kW AC Level 2</option>
+                <option value="dc50" selected>50 kW DC Fast</option>
+                <option value="dc150">150 kW Ultra-Fast</option>
+              </select>
+            </div>
+            <div>
+              <label for="sim-target-soc" class="block text-xs font-medium text-slate-300 mb-1.5">Target SoC Limit</label>
+              <select id="sim-target-soc" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-2.5 py-2 text-xs focus:border-cyan-400 focus:outline-none font-mono">
+                <option value="80" selected>80% (Recommended)</option>
+                <option value="90">90%</option>
+                <option value="100">100% (Full Saturation)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Baseline SOH -->
+          <div>
+            <div class="flex justify-between text-sm mb-2">
+              <span class="text-slate-300 font-medium">Current SOH Baseline</span>
+              <span id="disp-baseline-soh" class="font-mono text-emerald-400 font-bold">94.0%</span>
+            </div>
+            <input type="range" id="sim-baseline-soh" min="75" max="100" step="0.5" value="94" class="w-full">
+          </div>
+        </div>
+
+        <!-- Simulation Output & Visualizations (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Key Output Metrics Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div class="glass-panel p-4 rounded-xl border border-slate-700">
+              <div class="text-[11px] font-mono text-slate-400 uppercase">Trip Energy Rate</div>
+              <div id="res-consumption" class="text-lg font-heading font-bold text-white mt-1">16.2 kWh/100km</div>
+              <div id="res-energy-needed" class="text-[11px] font-mono text-cyan-400 mt-0.5">19.4 kWh total</div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl border border-slate-700">
+              <div class="text-[11px] font-mono text-slate-400 uppercase">Arrival SoC</div>
+              <div id="res-arrival-soc" class="text-lg font-heading font-bold text-white mt-1">32.6%</div>
+              <div class="text-[11px] font-mono text-slate-400 mt-0.5">Estimated on arrival</div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl border border-slate-700">
+              <div class="text-[11px] font-mono text-slate-400 uppercase">Charge Duration</div>
+              <div id="res-charge-time" class="text-lg font-heading font-bold text-white mt-1">38 mins</div>
+              <div class="text-[11px] font-mono text-slate-400 mt-0.5">To target limit</div>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl border border-slate-700">
+              <div class="text-[11px] font-mono text-slate-400 uppercase">Battery Stress</div>
+              <div id="res-stress-score" class="text-lg font-heading font-bold text-white mt-1">34 / 100</div>
+              <div class="mt-1">
+                <span id="res-risk-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full border bg-emerald-500/10 text-emerald-400 border-emerald-500/30">LOW</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SOH Degradation Curve Chart -->
+          <div class="glass-panel p-5 rounded-2xl border border-slate-700">
+            <div class="flex items-center justify-between mb-4">
+              <h4 class="font-heading font-bold text-sm text-white flex items-center gap-2">
+                <i class="fas fa-chart-line text-cyan-400"></i>
+                <span>Projected SOH Degradation: Next 500 Cycles</span>
+              </h4>
+              <span class="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                +14.8% Cycle Longevity with SparkEV
+              </span>
+            </div>
+            <div class="h-56">
+              <canvas id="sim-degradation-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- SHAP Feature Importance Waterfall Chart -->
+          <div class="glass-panel p-5 rounded-2xl border border-slate-700">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="font-heading font-bold text-sm text-white flex items-center gap-2">
+                <i class="fas fa-fingerprint text-purple-400"></i>
+                <span>SHAP Feature Attribution: Battery Stress Root Causes</span>
+              </h4>
+              <span class="text-[11px] font-mono text-slate-400">TreeSHAP \\(\\phi_i\\)</span>
+            </div>
+            <div class="h-44">
+              <canvas id="sim-shap-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- Smart Recommendation Box -->
+          <div class="p-4 rounded-xl bg-gradient-to-r from-cyan-950/40 to-blue-950/40 border border-cyan-500/30 text-xs">
+            <div class="font-bold text-cyan-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <i class="fas fa-robot text-cyan-400"></i> SparkEV Personalized Guidance
+            </div>
+            <ul id="res-smart-advice" class="space-y-1.5 text-slate-200">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Details Section -->
+  <section id="team" class="py-24 bg-slate-950/80 border-t border-slate-800 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-3">The Research Team</h2>
+        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white">Authors &amp; Contributors</h3>
+        <p class="text-slate-400 mt-4 leading-relaxed">
+          SparkEV is developed at <strong class="text-white">Amrita Vishwa Vidyapeetham, Coimbatore</strong>, by a multidisciplinary team combining computer science and electrical &amp; electronics engineering.
+        </p>
+      </div>
+
+      <!-- Faculty Guides -->
+      <div class="max-w-4xl mx-auto grid sm:grid-cols-2 gap-6 mb-12">
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700/80 flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-300 text-2xl font-black">
+            RG
+          </div>
+          <div>
+            <h4 class="font-heading font-bold text-lg text-white">Dr. Ramya G. R.</h4>
+            <p class="text-xs text-cyan-400 font-mono">Supervisor · Assistant Professor</p>
+            <p class="text-xs text-slate-400 mt-1">Department of Computer Science and Engineering</p>
+            <a href="mailto:gr_ramya@cb.amrita.edu" class="text-xs text-slate-400 hover:text-white font-mono mt-1.5 inline-block">
+              <i class="far fa-envelope mr-1"></i> gr_ramya@cb.amrita.edu
+            </a>
+          </div>
+        </div>
+
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700/80 flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-300 text-2xl font-black">
+            US
+          </div>
+          <div>
+            <h4 class="font-heading font-bold text-lg text-white">Dr. Umashankar S.</h4>
+            <p class="text-xs text-emerald-400 font-mono">Co-Supervisor · Professor</p>
+            <p class="text-xs text-slate-400 mt-1">Department of Electrical and Electronics Engineering</p>
+            <a href="mailto:s_umashankar@cb.amrita.edu" class="text-xs text-slate-400 hover:text-white font-mono mt-1.5 inline-block">
+              <i class="far fa-envelope mr-1"></i> s_umashankar@cb.amrita.edu
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Researchers Grid (5 Students) -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Shravanthi S -->
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-cyan-400 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center font-black text-xl group-hover:scale-105 transition-transform">
+                SS
+              </div>
+              <a href="https://github.com/Shravanthi20/" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white">Shravanthi S</h4>
+            <div class="text-xs font-mono text-cyan-400 mt-0.5">CB.SC.U4CSE23147</div>
+            <div class="mt-3 px-2.5 py-1 rounded bg-cyan-500/10 border border-cyan-500/20 text-xs font-semibold text-cyan-300 inline-block">
+              Module 3 Lead
+            </div>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+              Battery health forecasting, temporal lag feature engineering, SOH degradation modeling, and SHAP explainability.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+            <span>cb.sc.u4cse23147@cb.students.amrita.edu</span>
+          </div>
+        </div>
+
+        <!-- Gayathri U -->
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-purple-400 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-14 h-14 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center font-black text-xl group-hover:scale-105 transition-transform">
+                GU
+              </div>
+              <a href="https://github.com/gayathriuthamaraj/" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white">Gayathri U</h4>
+            <div class="text-xs font-mono text-purple-400 mt-0.5">CB.SC.U4CSE23026</div>
+            <div class="mt-3 px-2.5 py-1 rounded bg-purple-500/10 border border-purple-500/20 text-xs font-semibold text-purple-300 inline-block">
+              Federated Learning Lead
+            </div>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+              Personalized Federated Learning backbone using FedPer, decentralized client aggregation, differential privacy, and communication rounds.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+            <span>cb.sc.u4cse23026@cb.students.amrita.edu</span>
+          </div>
+        </div>
+
+        <!-- Rithanya K A -->
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-blue-400 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-14 h-14 rounded-2xl bg-blue-500/10 text-blue-400 border border-blue-500/20 flex items-center justify-center font-black text-xl group-hover:scale-105 transition-transform">
+                RK
+              </div>
+              <a href="https://github.com/Rithanya-08" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white">Rithanya K A</h4>
+            <div class="text-xs font-mono text-blue-400 mt-0.5">CB.SC.U4CSE23140</div>
+            <div class="mt-3 px-2.5 py-1 rounded bg-blue-500/10 border border-blue-500/20 text-xs font-semibold text-blue-300 inline-block">
+              Module 1 Lead
+            </div>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+              Personalized driving behaviour prediction, telematics pattern extraction, aggressive vs eco-driving classification, and guidance engine.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+            <span>cb.sc.u4cse23140@cb.students.amrita.edu</span>
+          </div>
+        </div>
+
+        <!-- Irene Divya J -->
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-teal-400 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-14 h-14 rounded-2xl bg-teal-500/10 text-teal-400 border border-teal-500/20 flex items-center justify-center font-black text-xl group-hover:scale-105 transition-transform">
+                ID
+              </div>
+              <a href="https://github.com/IreneDivyaJ" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white">Irene Divya J</h4>
+            <div class="text-xs font-mono text-teal-400 mt-0.5">CB.SC.U4CSE23167</div>
+            <div class="mt-3 px-2.5 py-1 rounded bg-teal-500/10 border border-teal-500/20 text-xs font-semibold text-teal-300 inline-block">
+              Module 2 Lead
+            </div>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+              Predictive charging recommendation, multi-criteria decision making, station availability forecasting, and charge cutoff optimization.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+            <span>cb.sc.u4cse23167@cb.students.amrita.edu</span>
+          </div>
+        </div>
+
+        <!-- Saravanapriyaa C R -->
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 hover:border-amber-400 transition-all group flex flex-col justify-between">
+          <div>
+            <div class="flex items-start justify-between mb-4">
+              <div class="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center font-black text-xl group-hover:scale-105 transition-transform">
+                SC
+              </div>
+              <a href="https://github.com/saravanapriyaa21" target="_blank" class="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 flex items-center justify-center transition-colors">
+                <i class="fab fa-github"></i>
+              </a>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white">Saravanapriyaa C R</h4>
+            <div class="text-xs font-mono text-amber-400 mt-0.5">CB.SC.U4CSE23149</div>
+            <div class="mt-3 px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/20 text-xs font-semibold text-amber-300 inline-block">
+              Hardware Lead
+            </div>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+              Vehicle hardware integration, OBD-II CAN bus transceivers (MCP2515 / ESP32), sensor ingestion pipeline, and BMS telemetry capture.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400 flex items-center justify-between">
+            <span>cb.sc.u4cse23149@cb.students.amrita.edu</span>
+          </div>
+        </div>
+
+        <!-- Research Lab Card -->
+        <div class="glass-panel p-6 rounded-2xl border border-slate-700 bg-gradient-to-br from-slate-900 to-cyan-950/30 flex flex-col justify-between">
+          <div>
+            <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center justify-center font-black text-2xl mb-4">
+              <i class="fas fa-university"></i>
+            </div>
+            <h4 class="font-heading font-bold text-lg text-white">Amrita Vishwa Vidyapeetham</h4>
+            <div class="text-xs font-mono text-slate-400 mt-0.5">Coimbatore Campus, Tamil Nadu, India</div>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+              Joint research initiative between the School of Computing (Dept of CSE) and the School of Engineering (Dept of EEE).
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-cyan-400 font-mono">
+            B.Tech CSE Capstone &amp; Academic Paper
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Project Progress & Roadmap Section -->
+  <section id="progress" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-3">Milestone Tracking</h2>
+        <h3 class="font-heading font-extrabold text-3xl sm:text-4xl text-white">Project Progress &amp; Roadmap</h3>
+        <p class="text-slate-400 mt-4 leading-relaxed">
+          Tracking the iterative engineering, experimental validation, and paper publication trajectory of SparkEV.
+        </p>
+      </div>
+
+      <div class="relative border-l-2 border-slate-800 max-w-4xl mx-auto pl-6 sm:pl-8 space-y-12">
+        
+        <!-- Milestone 1 -->
+        <div class="relative">
+          <div class="absolute -left-[33px] sm:-left-[41px] top-1.5 w-6 h-6 rounded-full bg-emerald-500 border-4 border-[#0A0F1D] flex items-center justify-center text-[10px] text-black font-bold">
+            <i class="fas fa-check"></i>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Phase 1 · Completed</span>
+            <span class="text-xs font-mono text-slate-500">Months 1–2</span>
+          </div>
+          <h4 class="font-heading font-bold text-xl text-white mt-1">Literature Survey, Problem Formulation &amp; Dataset Curation</h4>
+          <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+            Reviewed existing eco-driving, SOH estimation, and federated learning papers. Curated NASA PCoE battery aging datasets, Oxford battery degradation dataset, and recorded real-world EV OBD-II drive cycle traces.
+          </p>
+        </div>
+
+        <!-- Milestone 2 -->
+        <div class="relative">
+          <div class="absolute -left-[33px] sm:-left-[41px] top-1.5 w-6 h-6 rounded-full bg-emerald-500 border-4 border-[#0A0F1D] flex items-center justify-center text-[10px] text-black font-bold">
+            <i class="fas fa-check"></i>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Phase 2 · Completed</span>
+            <span class="text-xs font-mono text-slate-500">Months 3–4</span>
+          </div>
+          <h4 class="font-heading font-bold text-xl text-white mt-1">Hardware Sensing Prototype &amp; CAN Telemetry Gateway</h4>
+          <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+            Constructed ESP32 + MCP2515 CAN transceiver hardware interface. Successfully decoded standard OBD-II PIDs (SoC, pack voltage, current, motor RPM, pedal position) and validated telemetry streaming via MQTT/WebSocket.
+          </p>
+        </div>
+
+        <!-- Milestone 3 -->
+        <div class="relative">
+          <div class="absolute -left-[33px] sm:-left-[41px] top-1.5 w-6 h-6 rounded-full bg-emerald-500 border-4 border-[#0A0F1D] flex items-center justify-center text-[10px] text-black font-bold">
+            <i class="fas fa-check"></i>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Phase 3 · Completed</span>
+            <span class="text-xs font-mono text-slate-500">Months 5–6</span>
+          </div>
+          <h4 class="font-heading font-bold text-xl text-white mt-1">Module Model Training &amp; FedPer Federated Architecture</h4>
+          <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+            Implemented individual modules: Driving behavior classification (Mod 1), Multi-factor charging recommender (Mod 2), and Temporal SOH health regression (Mod 3). Deployed the FedPer split-model federated learning server in Flower.
+          </p>
+        </div>
+
+        <!-- Milestone 4 -->
+        <div class="relative">
+          <div class="absolute -left-[33px] sm:-left-[41px] top-1.5 w-6 h-6 rounded-full bg-cyan-500 border-4 border-[#0A0F1D] flex items-center justify-center text-[10px] text-black font-bold">
+            <i class="fas fa-spinner fa-spin"></i>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">Phase 4 · Current Focus</span>
+            <span class="text-xs font-mono text-cyan-400">Month 7 (In Progress)</span>
+          </div>
+          <h4 class="font-heading font-bold text-xl text-white mt-1">SHAP Explainability, What-If Simulator &amp; Portal Documentation</h4>
+          <p class="text-slate-300 text-sm mt-2 leading-relaxed">
+            Integrated TreeSHAP explainability engine for battery stress factors. Built the interactive What-If scenario sandbox and compiled comprehensive web documentation deliverables.
+          </p>
+        </div>
+
+        <!-- Milestone 5 -->
+        <div class="relative">
+          <div class="absolute -left-[33px] sm:-left-[41px] top-1.5 w-6 h-6 rounded-full bg-slate-700 border-4 border-[#0A0F1D] flex items-center justify-center text-[10px] text-slate-400">
+            <i class="far fa-circle"></i>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-800 text-slate-400 border border-slate-700">Phase 5 · Upcoming</span>
+            <span class="text-xs font-mono text-slate-500">Months 8–9</span>
+          </div>
+          <h4 class="font-heading font-bold text-xl text-slate-300 mt-1">On-Road Vehicle Fleet Validation &amp; Camera-Ready Publication</h4>
+          <p class="text-slate-400 text-sm mt-2 leading-relaxed">
+            Deploy SparkEV edge daemon onto test electric vehicles at Amrita campus. Conduct comparative benchmarks against centralized models, finalize Table 1 experimental numbers, and submit paper to IEEE/Springer transactions.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner Section -->
+  <section class="py-16 bg-gradient-to-r from-cyan-950/60 via-blue-950/50 to-slate-950/80 border-y border-cyan-500/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h3 class="font-heading font-bold text-2xl sm:text-3xl text-white mb-4">
+        Dive Deeper into the Research and Codebase
+      </h3>
+      <p class="text-slate-300 max-w-2xl mx-auto mb-8 text-sm sm:text-base">
+        Explore our comprehensive methodology paper breakdown, or reference the technical documentation manual for step-by-step setup, APIs, datasets, and running individual modules.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a href="methodology.html" class="px-6 py-3 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-bold text-sm transition-all flex items-center gap-2">
+          <i class="fas fa-graduation-cap"></i> Read Research Methodology
+        </a>
+        <a href="documentation.html" class="px-6 py-3 rounded-xl glass-panel text-white hover:text-cyan-400 font-semibold text-sm transition-all border border-slate-700 hover:border-cyan-400 flex items-center gap-2">
+          <i class="fas fa-code"></i> System Technical Manual
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#070B16] border-t border-slate-900 py-12 text-slate-400 text-xs font-mono">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-800/80">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-slate-950 font-black">
+            <i class="fas fa-bolt text-sm"></i>
+          </div>
+          <div>
+            <span class="font-heading font-bold text-white text-base">SparkEV</span>
+            <span class="text-slate-500 ml-2">Intelligent EV Management System</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <a href="index.html" class="hover:text-cyan-400 transition-colors">Overview</a>
+          <a href="methodology.html" class="hover:text-cyan-400 transition-colors">Methodology</a>
+          <a href="documentation.html" class="hover:text-cyan-400 transition-colors">Documentation</a>
+          <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="hover:text-cyan-400 transition-colors flex items-center gap-1">
+            <i class="fab fa-github"></i> GitHub
+          </a>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500">
+        <div>
+          &copy; 2026 SparkEV Research Team. Amrita Vishwa Vidyapeetham, Coimbatore, India.
+        </div>
+        <div>
+          Published under Academic Open Access · All Rights Reserved
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/architecture.js"></script>
+  <script src="assets/js/simulator.js"></script>
+</body>
+</html>
