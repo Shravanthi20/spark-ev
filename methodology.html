@@ -35,7 +35,7 @@
 </head>
 <body class="bg-[#FFF5F7] text-slate-800 antialiased selection:bg-rose-200 selection:text-rose-900">
 
-  <!-- Navigation Bar (No theme toggle) -->
+  <!-- Navigation Bar -->
   <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -89,15 +89,15 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 border border-pink-200 text-rose-700 text-xs font-mono uppercase font-bold mb-4">
-          <i class="fas fa-microscope text-rose-500"></i> Academic Research Approach &amp; Empirical Findings
+          <i class="fas fa-microscope text-rose-500"></i> Technical Approach &amp; Empirical Formulations
         </div>
         <h1 class="font-heading font-black text-3xl sm:text-5xl text-slate-900 tracking-tight">
           SparkEV Methodology: <br>
           <span class="text-gradient-pink">How and Why the Framework Works</span>
         </h1>
         <p class="text-slate-600 text-base mt-3 leading-relaxed">
-          Comprehensive empirical formulations, semi-empirical capacity-fade equations, Direct AR forecasting, 
-          TreeSHAP attributions, FedPer federated aggregation, and on-device microcontroller benchmarks.
+          Comprehensive explanation of the working principles, data inputs, predictive outputs, and empirical validations 
+          governing each of the four SparkEV modules.
         </p>
       </div>
     </div>
@@ -137,34 +137,35 @@
             <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Overall SparkEV Workflow &amp; Architecture</h2>
           </div>
           <p class="mb-4">
-            SparkEV is built entirely on real-world telemetry and comprises four interconnected modules feeding a unified recommendation engine:
+            Electric vehicle management has historically operated in isolation: battery monitoring merely reports state-of-charge, eco-driving guidance focuses on energy conservation without considering cell fatigue, and charging locators overlook battery longevity. 
+            SparkEV unites these streams into an integrated intelligence framework built entirely on real-world telemetry.
           </p>
           
-          <div class="glass-panel p-5 rounded-2xl border border-pink-200 bg-white mb-6">
-            <h4 class="font-bold text-sm text-slate-900 mb-2 flex items-center gap-2">
-              <i class="fas fa-sitemap text-rose-600"></i> The SparkEV Pipeline Architecture (Figure 1 in Paper)
+          <div class="glass-panel p-6 rounded-2xl border border-pink-200 bg-white mb-6">
+            <h4 class="font-bold text-sm text-slate-900 mb-3 flex items-center gap-2">
+              <i class="fas fa-sitemap text-rose-600"></i> The Interconnected SparkEV Workflow (Figure 1 in Paper)
             </h4>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+              Real-world telemetry feeds four predictive modules: driving telemetry drives Module 1 (Battery Stress), charging session records feed Module 2 (Charging Anomaly Detection), battery cycling records train Module 3 (SOH Forecasting and Risk Scoring), and trip telemetry powers Module 4 (Energy Consumption and Arrival SOC). Every prediction is interpreted through TreeSHAP explainability, and a unified recommendation engine converts the outputs into actionable in-car alerts, personalized tips, and interactive what-if comparisons.
+            </p>
             <div class="grid sm:grid-cols-4 gap-3 text-xs font-mono my-3">
               <div class="p-3 rounded-xl bg-pink-50/80 border border-pink-200">
                 <span class="font-bold text-rose-700 block mb-1">M1: Battery Stress</span>
-                <span class="text-slate-600">TUM 70 trips &rarr; XGBoost [FL]</span>
+                <span class="text-slate-600 font-sans">TUM 70 trips &rarr; XGBoost [Federated]</span>
               </div>
               <div class="p-3 rounded-xl bg-pink-50/80 border border-pink-200">
                 <span class="font-bold text-pink-700 block mb-1">M2: Charging Faults</span>
-                <span class="text-slate-600">Autosun (2,649) &rarr; XGBoost</span>
+                <span class="text-slate-600 font-sans">Autosun (2,649) &rarr; Weighted XGBoost</span>
               </div>
               <div class="p-3 rounded-xl bg-pink-50/80 border border-pink-200">
                 <span class="font-bold text-rose-700 block mb-1">M3: SOH &amp; Risk</span>
-                <span class="text-slate-600">Zenodo SOH &rarr; Direct AR</span>
+                <span class="text-slate-600 font-sans">Zenodo SOH &rarr; Direct Autoregression</span>
               </div>
               <div class="p-3 rounded-xl bg-pink-50/80 border border-pink-200">
                 <span class="font-bold text-pink-700 block mb-1">M4: Energy / SOC</span>
-                <span class="text-slate-600">TUM trips &rarr; Elastic Net [FL]</span>
+                <span class="text-slate-600 font-sans">TUM trips &rarr; Stable-23 Elastic Net</span>
               </div>
             </div>
-            <p class="text-xs text-slate-600 mt-2">
-              All four module outputs are individually explained with TreeSHAP feature attributions, fused into a single risk profile by the recommendation engine, and displayed on the driver dashboard. Modules M1 and M4 are additionally trained via Federated Learning (FedAvg / FedPer).
-            </p>
           </div>
         </section>
 
@@ -175,7 +176,7 @@
             <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Real-World Datasets (Table 1)</h2>
           </div>
           <p class="mb-4">
-            Following rigorous review, all modules are evaluated exclusively on real-world empirical EV data:
+            All models and evaluations in SparkEV are conducted exclusively using real-world empirical data rather than purely synthetic simulations:
           </p>
 
           <div class="overflow-x-auto glass-panel rounded-2xl border border-pink-200 bg-white mb-6">
@@ -219,30 +220,55 @@
             <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">03</span>
             <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Module 1: Driving Behavior to Battery Stress</h2>
           </div>
-          <div class="text-xs font-mono text-rose-600 font-bold mb-3">Lead: Rithanya K. A. (CB.SC.U4CSE23140)</div>
-          <p class="mb-3">
-            Battery stress is not measured directly. A <strong>Battery Stress Index (BSI)</strong> on a 0–100 scale is computed for every 60 s driving window (30 s step) from four min–max normalized components:
-          </p>
           
-          <div class="p-4 rounded-xl bg-white border border-pink-200 font-mono text-xs my-3 overflow-x-auto text-slate-800">
-            $$\text{BSI} = 100 \left( w_T S_T + w_C S_C + w_D S_D + w_S S_S \right) \quad \text{--- Eq. (1)}$$
-          </div>
-          <p class="text-xs text-slate-600 mb-4">
-            where \(S_T, S_C, S_D, S_S\) derive from peak temperature, peak C-rate, SoC drop, and SoC excursion outside the 20–80% band (weights: \(w_T=0.35, w_C=0.30, w_D=0.20, w_S=0.15\)).
-          </p>
+          <div class="glass-panel p-6 rounded-2xl border border-pink-200 bg-white mb-6 space-y-4">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 mb-1 flex items-center gap-2">
+                <i class="fas fa-cog text-rose-600"></i> Working Principle &amp; Approach
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Because battery stress cannot be directly measured by an in-car sensor, Module 1 constructs a physics-informed Battery Stress Index (BSI) over continuous 60-second driving windows. 
+                Instead of using arbitrary heuristic weights, the model replaces thermal and electrical current factors with a semi-empirical capacity-fade model fitted to measured cell degradation data from NASA and CALCE. 
+                An XGBoost regressor then learns to predict this stress index directly from observable driving behaviors—such as vehicle speed and acceleration—without using internal battery measurements that could cause data leakage.
+              </p>
+            </div>
 
-          <h4 class="font-bold text-slate-900 text-sm mb-2">Physics-Informed Semi-Empirical Refinement</h4>
-          <p class="mb-3 text-xs sm:text-sm">
-            Because literature weights are assumptions, the thermal and C-rate terms are replaced by a semi-empirical capacity-fade model:
-          </p>
-          <div class="p-4 rounded-xl bg-pink-50 border border-pink-200 font-mono text-xs my-3 text-rose-950 overflow-x-auto">
+            <div class="grid sm:grid-cols-2 gap-4 pt-3 border-t border-pink-100">
+              <div class="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
+                <h5 class="font-bold text-xs font-mono uppercase text-rose-800 mb-1.5 flex items-center gap-1.5">
+                  <i class="fas fa-sign-in-alt text-rose-600"></i> Module Inputs
+                </h5>
+                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                  <li><strong>Speed statistics:</strong> instantaneous, mean, and peak velocities</li>
+                  <li><strong>Acceleration dynamics:</strong> acceleration rates and jerk statistics</li>
+                  <li><strong>Driving events:</strong> counts of hard accelerations and emergency braking</li>
+                  <li><strong>Operational factors:</strong> idle duration and regenerative braking share</li>
+                  <li><strong>Trip context:</strong> driver aggressiveness score, ambient temperature, and route categories</li>
+                </ul>
+              </div>
+
+              <div class="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
+                <h5 class="font-bold text-xs font-mono uppercase text-pink-800 mb-1.5 flex items-center gap-1.5">
+                  <i class="fas fa-sign-out-alt text-pink-600"></i> Module Outputs
+                </h5>
+                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                  <li><strong>Battery Stress Index (BSI):</strong> normalized score on a 0–100 scale</li>
+                  <li><strong>Risk Tiers:</strong> classified into Low (&lt;40), Moderate (40–70), or High (&ge;70)</li>
+                  <li><strong>Explainable SHAP Contributions:</strong> quantitative impact of peak speed and acceleration</li>
+                  <li><strong>Driver Recommendations:</strong> actionable advice prioritizing speed reduction and smoother pedal work</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <h4 class="font-bold text-slate-900 text-sm mb-2">Mathematical Formulation</h4>
+          <p class="text-xs sm:text-sm text-slate-600 mb-2">The semi-empirical capacity-fade model is formulated as:</p>
+          <div class="p-4 rounded-xl bg-white border border-pink-200 font-mono text-xs my-2 text-rose-950 overflow-x-auto">
             $$Q_{\text{loss}} = B \exp\left( -\frac{E_a}{R T} \right) C^m (Ah)^z \quad \text{--- Eq. (2)}$$
           </div>
-          <p class="text-xs text-slate-600 mb-4">
-            Fitted by log-linear regression on 842 measured aging cycles from NASA and CALCE cells, explaining <strong>88.6% of calibration variance</strong> (\(m = 0.80, p = 0.04; z = 0.54, p < 0.001; E_a = 27.8\text{ kJ/mol}\)). Evaluated on each window's peak temperature, peak C-rate, and delivered charge, Eq. (2) replaces \(w_T S_T + w_C S_C\).
-          </p>
-          <p class="text-xs sm:text-sm">
-            <strong>Key SHAP Discovery:</strong> This refinement raises XGBoost CV \(R^2\) from <strong>0.708 &plusmn; 0.094 to 0.831 &plusmn; 0.040</strong> (held-out \(R^2 = 0.805\), MAE 3.23). Crucially, ambient temperature drops from rank 1 to rank 5, while driver-controllable factors—<strong>maximum speed, average speed, and mean acceleration</strong>—become the top 3 drivers!
+          <p class="text-xs text-slate-600 leading-relaxed">
+            Fitted by log-linear regression on 842 measured aging cycles, explaining 88.6% of calibration variance (\(m = 0.80, z = 0.54, E_a = 27.8\text{ kJ/mol}\)). 
+            This formulation raises prediction accuracy to \(R^2 = 0.831\) and shifts the top SHAP drivers to maximum speed, average speed, and mean acceleration.
           </p>
         </section>
 
@@ -252,15 +278,44 @@
             <span class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-mono font-bold text-sm">04</span>
             <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Module 2: Charging-Session Anomaly Detection</h2>
           </div>
-          <div class="text-xs font-mono text-pink-600 font-bold mb-3">Lead: Irene Divya J. (CB.SC.U4CSE23167)</div>
-          <p class="mb-3 text-xs sm:text-sm">
-            Raw telemetry is aggregated into 2,649 sessions (57 features from SOC, voltage, current, power, temperature, energy). An XGBoost classifier is weighted by the negative-to-positive ratio (8.765) to handle the 10.2% class imbalance:
-          </p>
-          <ul class="text-xs sm:text-sm space-y-2 list-disc list-inside text-slate-700">
-            <li><strong>XGBoost achieves 99.62% Accuracy and F1 = 0.981 (ROC-AUC 0.999):</strong> Detects 52 of 54 faulty test sessions without a single false alarm.</li>
-            <li><strong>Baselines Fail:</strong> TCN detects 0 faults (F1 0.000); LSTM detects only 1 of 54 (F1 0.036); Isolation Forest misses 23 faults (F1 0.713).</li>
-            <li><strong>Feature Resilience:</strong> Removing the top 5 energy features leaves performance identical at 99.62% and F1 = 0.981, proving fault signatures are robustly distributed across voltage, SOC, power, and temperature.</li>
-          </ul>
+
+          <div class="glass-panel p-6 rounded-2xl border border-pink-200 bg-white mb-6 space-y-4">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 mb-1 flex items-center gap-2">
+                <i class="fas fa-cog text-pink-600"></i> Working Principle &amp; Approach
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Evaluates entire electric vehicle charging sessions to identify faulty hardware, abnormal power cutoffs, and thermal issues from the driver's perspective. 
+                Using 2,649 real sessions from the Autosun/PolyU dataset, a weighted XGBoost classifier is trained to account for the natural 10.2% fault class imbalance, 
+                detecting damaged or malfunctioning chargers without generating false alarms.
+              </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4 pt-3 border-t border-pink-100">
+              <div class="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
+                <h5 class="font-bold text-xs font-mono uppercase text-pink-800 mb-1.5 flex items-center gap-1.5">
+                  <i class="fas fa-sign-in-alt text-pink-600"></i> Module Inputs
+                </h5>
+                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                  <li><strong>Voltage characteristics:</strong> initial, maximum, and average pack voltage</li>
+                  <li><strong>Current measurements:</strong> current ripple, maximum charging current, and amperage taper</li>
+                  <li><strong>Energy and power:</strong> total kilowatt-hours delivered and charging power profiles</li>
+                  <li><strong>Battery state &amp; thermal:</strong> starting and ending SOC, and cell temperature rise</li>
+                </ul>
+              </div>
+
+              <div class="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
+                <h5 class="font-bold text-xs font-mono uppercase text-rose-800 mb-1.5 flex items-center gap-1.5">
+                  <i class="fas fa-sign-out-alt text-rose-600"></i> Module Outputs
+                </h5>
+                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                  <li><strong>Session Classification:</strong> binary label indicating Normal or Faulty session</li>
+                  <li><strong>Fault Probability:</strong> probabilistic confidence score for the detected anomaly</li>
+                  <li><strong>Root-Cause Diagnostic Flags:</strong> identifies whether fault is driven by voltage, power, or thermal instability</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </section>
 
         <!-- 5. Module 3: SOH Forecasting & Risk Scoring -->
@@ -269,19 +324,42 @@
             <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">05</span>
             <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Module 3: Battery Health and Degradation Risk</h2>
           </div>
-          <div class="text-xs font-mono text-rose-600 font-bold mb-3">Lead: Shravanthi S. (CB.SC.U4CSE23147)</div>
-          <p class="mb-3 text-xs sm:text-sm">
-            Forecasts SOH ten cycles ahead from features available at cycle \(t\) (lags, drops, degradation rates, rolling trends). The <strong>Direct Autoregressive (AR)</strong> model achieves the highest accuracy:
-          </p>
-          <div class="p-4 rounded-xl bg-white border border-pink-200 font-mono text-xs my-3 overflow-x-auto text-slate-800">
-            $$\widehat{\text{SOH}}(t + 10) = \beta_0 + \sum_{i=0}^{p-1} \beta_i \text{SOH}(t - i)$$
+
+          <div class="glass-panel p-6 rounded-2xl border border-pink-200 bg-white mb-6 space-y-4">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 mb-1 flex items-center gap-2">
+                <i class="fas fa-cog text-rose-600"></i> Working Principle &amp; Approach
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Forecasts battery State-of-Health (SOH) ten full cycles ahead using a Direct Autoregressive (AR) approach, which predicts the multi-step horizon directly in a single step to avoid error accumulation. 
+                In addition, an accelerated-degradation detector compares the battery's recent capacity fade rate against its long-term trend, flagging instances where degradation suddenly speeds up.
+              </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4 pt-3 border-t border-pink-100">
+              <div class="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
+                <h5 class="font-bold text-xs font-mono uppercase text-rose-800 mb-1.5 flex items-center gap-1.5">
+                  <i class="fas fa-sign-in-alt text-rose-600"></i> Module Inputs
+                </h5>
+                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                  <li><strong>Historical SOH lags:</strong> previous capacity percentages from earlier cycles</li>
+                  <li><strong>Degradation rates:</strong> short-term (5-cycle) and long-term (20-cycle) causal rolling slopes</li>
+                  <li><strong>Cycle indicators:</strong> total operating cycles and cumulative ampere-hour throughput</li>
+                </ul>
+              </div>
+
+              <div class="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
+                <h5 class="font-bold text-xs font-mono uppercase text-pink-800 mb-1.5 flex items-center gap-1.5">
+                  <i class="fas fa-sign-out-alt text-pink-600"></i> Module Outputs
+                </h5>
+                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                  <li><strong>Ten-Cycle SOH Forecast:</strong> predicted capacity percentage (\(R^2 = 0.9591\))</li>
+                  <li><strong>Health Category:</strong> Low (&ge;85%), Moderate (80–85%), High (70–80%), or Critical (&lt;70%)</li>
+                  <li><strong>Accelerated Wear Warning:</strong> 0–100 risk score detecting abnormal degradation speed</li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <p class="text-xs sm:text-sm text-slate-700 mb-3">
-            Direct AR achieves <strong>\(R^2 = 0.9591\) with MAE = 0.00657</strong> on the chronological test set (18,065 targets from Zenodo), avoiding recursive error accumulation.
-          </p>
-          <p class="text-xs sm:text-sm text-slate-700">
-            <strong>Causal Accelerated-Degradation Detector:</strong> SOH history is smoothed with a causal rolling median, comparing recent rate \(r_{\text{recent}}\) (5 observations) with long-term rate \(r_{\text{long}}\) (20 observations): \(\Delta_{\text{acc}} = r_{\text{recent}} - r_{\text{long}}\). Confirmed if persisting in &ge;2 of the last 3 observations, providing early warnings before significant capacity fade occurs.
-          </p>
         </section>
 
         <!-- 6. Module 4: Energy & Arrival SOC -->
@@ -290,18 +368,43 @@
             <span class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-mono font-bold text-sm">06</span>
             <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Module 4: Energy Consumption &amp; In-Trip Arrival SOC</h2>
           </div>
-          <div class="text-xs font-mono text-pink-600 font-bold mb-3">Lead: Saravana Priyaa C. R. (CB.SC.U4CSE23149)</div>
-          <p class="mb-3 text-xs sm:text-sm">
-            Two Elastic Net models are deployed on the TUM Munich real-driving dataset:
-          </p>
-          <ul class="text-xs sm:text-sm space-y-2 list-disc list-inside text-slate-700">
-            <li><strong>Stable-23 Energy Model:</strong> Selected 23 features consistent across all 50 cross-validation folds; achieves <strong>\(R^2 = 0.897\) (MAE 0.0077 kWh/km)</strong>, beating full 77-feature Elastic Net (0.854), Ridge (0.819), and tree ensembles (0.72–0.74). Top SHAP drivers: battery current, cabin temperature, heating power, high-speed share.</li>
-            <li><strong>In-Trip Arrival SOC Model:</strong> Evaluated on 85 leakage-safe features strictly before the trip cutoff:
-              <br>&bull; At 25% trip: \(R^2 = 0.932\) (MAE 2.54 pp)
-              <br>&bull; At 50% trip: \(R^2 = 0.976\) (MAE 1.48 pp)
-              <br>&bull; At 75% trip: \(R^2 = 0.984\) (MAE 1.22 pp)
-            </li>
-          </ul>
+
+          <div class="glass-panel p-6 rounded-2xl border border-pink-200 bg-white mb-6 space-y-4">
+            <div>
+              <h4 class="font-bold text-sm text-slate-900 mb-1 flex items-center gap-2">
+                <i class="fas fa-cog text-pink-600"></i> Working Principle &amp; Approach
+              </h4>
+              <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Employs two Elastic Net regression models trained on real driving trips around Munich. The first model predicts the vehicle's overall energy rate from 23 highly stable features, 
+                while the second model performs in-trip estimation of final arrival state-of-charge based strictly on telemetry observed during the first 25%, 50%, or 75% of the trip.
+              </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-4 pt-3 border-t border-pink-100">
+              <div class="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
+                <h5 class="font-bold text-xs font-mono uppercase text-pink-800 mb-1.5 flex items-center gap-1.5">
+                  <i class="fas fa-sign-in-alt text-pink-600"></i> Module Inputs
+                </h5>
+                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                  <li><strong>Electrical loads:</strong> battery current and traction motor power demand</li>
+                  <li><strong>Auxiliary systems:</strong> cabin heating power and air-conditioning usage</li>
+                  <li><strong>Kinematics:</strong> high-speed motorway driving share and average cruising velocity</li>
+                  <li><strong>Early-trip telemetry:</strong> 85 leakage-safe features computed before trip cutoff</li>
+                </ul>
+              </div>
+
+              <div class="p-4 rounded-xl bg-pink-50/60 border border-pink-200">
+                <h5 class="font-bold text-xs font-mono uppercase text-rose-800 mb-1.5 flex items-center gap-1.5">
+                  <i class="fas fa-sign-out-alt text-rose-600"></i> Module Outputs
+                </h5>
+                <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                  <li><strong>Trip Energy Rate:</strong> predicted electricity usage in kWh per kilometer (\(R^2 = 0.897\))</li>
+                  <li><strong>Arrival SOC:</strong> predicted remaining battery percentage upon reaching destination (\(R^2 = 0.976\))</li>
+                  <li><strong>Range Confidence:</strong> safety buffer indicating whether charging is required en route</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </section>
 
         <!-- 7. Personalized Federated Learning -->
@@ -310,15 +413,15 @@
             <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">07</span>
             <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Personalized Federated Learning (FedPer)</h2>
           </div>
-          <div class="text-xs font-mono text-rose-600 font-bold mb-3">Lead: Gayathri U. (CB.SC.U4CSE23026)</div>
-          <p class="mb-3 text-xs sm:text-sm">
-            FedPer splits the model into shared base parameters \(\theta_B\) and a client-specific head \(\theta_{P,k}\), aggregating only the base to preserve driver privacy:
+          <p class="mb-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Preserves user data privacy by partitioning the neural network into two parts: shared base representation layers trained collaboratively across the electric vehicle fleet, and a local personalization head trained exclusively on each vehicle. 
+            Only model weight deltas are shared with the central coordinator; raw telemetry and GPS traces never leave the car.
           </p>
-          <div class="p-4 rounded-xl bg-pink-50 border border-pink-200 font-mono text-xs my-3 text-rose-950 overflow-x-auto">
+          <div class="p-4 rounded-xl bg-white border border-pink-200 font-mono text-xs my-3 text-rose-950 overflow-x-auto">
             $$\theta_B^{(r+1)} = \sum_{k=1}^K \frac{n_k}{n} \theta_{B,k}^{(r)}, \quad \theta_{P,k}^{(r+1)} \text{ stays on client } k \quad \text{--- Eq. (3)}$$
           </div>
-          <p class="text-xs sm:text-sm text-slate-700">
-            Tested on <strong>51 client trips</strong> from TUM. FedAvg nearly matches centralized arrival-SOC (\(R^2 = 0.973\) vs \(0.976\); \(\Delta R^2 \le 0.03\)). For battery stress, <strong>FedPer lowers the local error for 32 of 51 established clients</strong> (median MAE 2.81 vs 3.51 for FedAvg). Early stopping at round 30 prevents cold-start overfitting.
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Evaluated on 51 client trips, FedPer lowers the local prediction error for 32 of 51 established vehicle clients compared to standard federated averaging, while federated arrival SOC estimates closely match centralized training accuracy.
           </p>
         </section>
 
@@ -328,9 +431,8 @@
             <span class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-mono font-bold text-sm">08</span>
             <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">On-Device Edge Deployment on ESP32 (Table 7)</h2>
           </div>
-          <div class="text-xs font-mono text-pink-600 font-bold mb-3">Lead: Saravana Priyaa C. R. (CB.SC.U4CSE23149)</div>
-          <p class="mb-3 text-xs sm:text-sm">
-            All three XGBoost models of Modules 1–3 were converted into C header files and run on an ESP32 microcontroller at 240 MHz by a lightweight tree-traversal routine:
+          <p class="mb-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+            All three tree models of Modules 1–3 were converted into C header files and run on an ESP32 microcontroller at 240 MHz by a lightweight tree-traversal routine without dynamic memory allocation:
           </p>
 
           <div class="overflow-x-auto glass-panel rounded-2xl border border-pink-200 bg-white mb-4">
@@ -366,9 +468,6 @@
               </tbody>
             </table>
           </div>
-          <p class="text-xs text-slate-600">
-            Over 20 transmissions, server processing took \(17.5 \pm 2.0\text{ ms}\), while round-trip time over mobile hotspot averaged 188 ms. The entire cycle finishes in under 1 second!
-          </p>
         </section>
 
         <!-- 9. Experimental Benchmark Tables -->
@@ -488,9 +587,6 @@
               </div>
             </div>
           </div>
-          <p class="text-[11px] text-slate-500 mt-2">
-            * FedPer lowers local MAE for 32/51 established clients.
-          </p>
 
         </section>
 

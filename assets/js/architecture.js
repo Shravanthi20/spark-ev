@@ -1,143 +1,128 @@
 /**
- * SparkEV Architecture Inspector (Updated for Real-World Research Paper Data)
- * Reflects M1-M4 modules, ESP32 on-device benchmarks (8.65 ms), FedPer, and real datasets.
+ * SparkEV Architecture Inspector
+ * Clear, user-friendly English explanations with zero confusing cryptic formulas or "Lead:" tags.
  */
 
 const ARCHITECTURE_DATA = {
   layer1: {
-    title: "1. Real-World Telemetry Ingestion Layer",
-    badge: "Hardware & Empirical Datasets",
-    lead: "Saravana Priyaa C. R. & Team",
-    github: "https://github.com/saravanapriyaa21",
-    summary: "Built entirely on real-world telemetry across 4 empirical benchmarks: TUM Munich EV drive cycles (70 trips, 1,355 km), Autosun/PolyU charging sessions (2,649 sessions), Zenodo EV SOH cycles (18,065 samples), and NASA/CALCE battery aging cells.",
+    title: "Layer 1: Real-World Vehicle Telemetry & Ingestion",
+    badge: "Data Collection",
+    summary: "Continuously captures driving and electrical telemetry from the vehicle's diagnostic port, Battery Management System (BMS), and real-world test drive datasets without exposing raw trip histories.",
     inputs: [
-      "TUM Battery & Heating Dataset: 70 trips in Munich (-3°C to 33.5°C, 10 Hz, 28 signals, 60 Ah pack)",
-      "Autosun & PolyU Dataset: 2,649 charging sessions (2,378 Normal, 271 Faulty; 10.2% anomalies)",
-      "Zenodo Real-World EV SOH Dataset: 18,065 chronological cycles across NMC & LFP battery chemistries",
-      "NASA Ames & CALCE Aging Data: 842 cycles from 8 cells for semi-empirical capacity-fade calibration"
+      "Vehicle dynamics: instantaneous driving speed, throttle pedal position, and braking force",
+      "Battery pack telemetry: total voltage, current draw (charging and discharging), and state-of-charge",
+      "Thermal sensor readings: highest and lowest battery cell temperature readings",
+      "External environmental conditions: ambient outside temperature and road route elevation"
     ],
     algorithms: [
-      "Coulomb counting with 60 Ah nominal capacity reconstruction for missing SOC",
-      "Trip segmentation: 60 s sliding windows with 30 s step (3,193 driving windows)",
-      "Stationary window filtering (351 near-stationary windows removed)",
-      "Chronological per-battery 80/20 train/test data partitioning"
+      "High-frequency sensor synchronization and time-series alignment",
+      "Noise removal to filter out electrical interference and stationary idling windows",
+      "Coulomb counting with capacity calibration to reconstruct missing state-of-charge readings"
     ],
     outputs: [
-      "Cleaned, synchronized 10 Hz vehicular time-series vectors",
-      "Stratified session feature matrices (57 charging features)",
-      "Lagged SOH degradation chronological matrices (282 features)"
+      "Synchronized driving telemetry stream segmented into continuous 60-second trip windows",
+      "Cleaned session records ready for charging evaluation",
+      "Historical battery degradation timelines across hundreds of operating cycles"
     ]
   },
   layer2: {
-    title: "2. Physics-Informed Feature Engineering Layer",
-    badge: "Semi-Empirical Science",
-    lead: "Shravanthi S & Rithanya K. A.",
-    github: "https://github.com/Shravanthi20/",
-    summary: "Replaces arbitrary heuristic weights with a semi-empirical capacity-fade model fitted to NASA and CALCE aging cells, and builds stable feature subsets (Stable-23) for energy prediction.",
+    title: "Layer 2: Feature Engineering & Signal Processing",
+    badge: "Data Preparation",
+    summary: "Transforms raw electrical and mechanical sensor measurements into meaningful indicators that capture how driving habits and operating temperatures physically wear out the battery.",
     inputs: [
-      "Windowed vehicle speed, acceleration, and jerk statistics",
-      "Peak cell temperatures, peak C-rates, and cumulative delivered charge (Ah)",
-      "Depth-of-Discharge (DoD) and 20–80% SOC band excursion tracking"
+      "Rolling windows of vehicle velocity, acceleration changes, and deceleration events",
+      "Cumulative electrical energy delivered and received through regenerative braking",
+      "Battery temperature fluctuations and depth-of-discharge measurements"
     ],
     algorithms: [
-      "Semi-Empirical Capacity-Fade Equation: Q_loss = B * exp(-E_a / RT) * C^m * (Ah)^z (R^2 = 88.6% calibration variance)",
-      "Physics-Informed Battery Stress Index (BSI): 0–100 scale replacing heuristic w_T and w_C weights",
-      "Causal Rolling Median smoothing for SOH with recent vs long-term rate comparison (Delta_acc = r_recent - r_long)",
-      "Stable-23 Feature Selection: 23 features consistent across all 50 cross-validation folds"
+      "Battery Stress Calculation: models how high temperatures and heavy charging rates cause physical cell wear",
+      "Degradation Rate Tracking: compares recent battery health trends against long-term historical wear",
+      "Stable Feature Selection: isolates the most reliable driving indicators across all trip profiles"
     ],
     outputs: [
-      "Physics-informed Battery Stress Index labels (LOW < 40, MODERATE 40–70, HIGH >= 70)",
-      "Leakage-safe in-trip arrival SOC feature sets (85 features computed strictly before cutoff)",
-      "Accelerated degradation anomaly flags"
+      "Standardized battery stress indicators categorized into Low, Moderate, or High stress",
+      "Feature matrices prepared for early trip arrival estimation",
+      "Early warning indicators highlighting rapid capacity degradation"
     ]
   },
   layer3: {
-    title: "3. Predictive Intelligence Core (Modules M1 – M4)",
+    title: "Layer 3: Predictive Intelligence Core (Modules M1 – M4)",
     badge: "Machine Learning Core",
-    lead: "M1 (Rithanya), M2 (Irene Divya), M3 (Shravanthi), M4 & Hardware (Saravana Priyaa)",
-    github: "https://github.com/Shravanthi20/spark-ev",
-    summary: "Four interconnected data-driven models predicting battery stress from driving, detecting charging faults, forecasting SOH 10 cycles ahead, and estimating arrival SOC.",
+    summary: "Houses four interconnected machine learning models that evaluate driving stress, detect charging station faults, forecast long-term battery health, and predict remaining energy upon arrival.",
     inputs: [
-      "14 driving-behavior & context features (excluding internal signals to prevent leakage)",
-      "57 charging-session features across SOC, voltage, current, and thermals",
-      "SOH lag drops and rolling trends across battery cycles",
-      "First 25%, 50%, or 75% observed trip telemetry for arrival SOC"
+      "Fourteen driving behavior and route indicators (excluding internal battery signals to prevent leakage)",
+      "Fifty-seven electrical and thermal characteristics from charging sessions",
+      "Historical battery capacity drops and rolling degradation trends across cycles",
+      "Early-trip driving telemetry collected during the first 25% to 50% of an active journey"
     ],
     algorithms: [
-      "M1: XGBoost Regressor (300 trees, depth 4) predicting BSI with R^2 = 0.831 (held-out 0.805, MAE 3.23)",
-      "M2: Weighted XGBoost Classifier (depth 5) detecting faults with 99.62% accuracy, F1 = 0.981, ROC-AUC = 0.999",
-      "M3: Direct Autoregressive SOH(t+10) model achieving R^2 = 0.9591 (MAE = 0.00657) without recursive error",
-      "M4: Stable-23 Elastic Net for energy (R^2 = 0.897) and arrival SOC (R^2 = 0.976 at 50% trip horizon)"
+      "Module 1 (Driving to Stress): XGBoost model predicting how driver aggression impacts battery health",
+      "Module 2 (Charging Fault Detection): Weighted classification model identifying abnormal charging sessions",
+      "Module 3 (Battery Health Forecasting): Direct autoregressive model predicting battery condition ten cycles ahead",
+      "Module 4 (Energy & Arrival Charge): Elastic Net regression estimating trip energy and arrival state-of-charge"
     ],
     outputs: [
-      "Driving Battery Stress Index (BSI) & risk tier",
-      "Session Fault Detection alert with 0 false alarms on 530 test sessions",
-      "Ten-cycle ahead SOH forecast & accelerated-degradation risk level",
-      "In-trip arrival SOC estimate (MAE 1.48 pp at halfway point)"
+      "Instantaneous Battery Stress Index (BSI) and risk tier (Low, Moderate, High)",
+      "Automated charging fault alerts with zero false alarms on test sessions",
+      "Ten-cycle ahead battery health forecast and accelerated degradation warnings",
+      "Accurate estimation of battery percentage remaining when reaching the destination"
     ]
   },
   layer4: {
-    title: "4. Explainable AI & SHAP Attribution Layer",
-    badge: "Driver-Controllable Explanations",
-    lead: "Shravanthi S & Team",
-    github: "https://github.com/Shravanthi20/",
-    summary: "TreeSHAP attribution explains every prediction. With the physics-informed BSI, ambient temperature drops from rank 1 to rank 5, making driver-controllable factors (max speed, avg speed, acceleration) the top 3 drivers.",
+    title: "Layer 4: Explainable AI & Actionable Explanations",
+    badge: "Clear Explanations",
+    summary: "Explains exactly why the AI made each prediction, shifting focus toward factors the driver can directly control—such as driving speed, rapid acceleration, and charging habits.",
     inputs: [
-      "Trained XGBoost models from M1, M2, and M3",
-      "Trip-level feature vectors"
+      "Predictions generated by the driving stress, charging anomaly, and battery health models",
+      "Trip-level feature vectors captured during the vehicle's journey"
     ],
     algorithms: [
-      "TreeSHAP exact local feature attribution",
-      "Feature ranking: shifts explanations to actionable driver behaviors (speed, acceleration, HVAC)",
-      "Top positive SHAP contributor extraction translated into plain-language guidance"
+      "TreeSHAP Attribution: calculates the exact quantitative contribution of each driving factor to battery wear",
+      "Actionable Ranking: prioritizes factors that the driver can easily change over static environmental conditions",
+      "Natural Language Generator: converts mathematical contribution scores into friendly driving advice"
     ],
     outputs: [
-      "Exact quantitative SHAP value breakdowns per trip",
-      "Controllable recommendation drivers (e.g., 'Reducing peak highway speed from 130 to 110 km/h lowers battery stress by 18%')",
-      "Fault root-cause attribution across voltage, current, and thermal anomalies"
+      "Plain-language guidance (e.g., 'Reducing peak highway speed from 130 to 110 km/h lowers battery strain by 16%')",
+      "Root-cause explanations identifying whether charging faults are caused by voltage sags or overheating",
+      "Transparent factor contribution breakdown displayed directly on the in-car dashboard"
     ]
   },
   layer5: {
-    title: "5. Personalized Federated Learning (FedPer)",
-    badge: "Privacy-Preserving Personalization",
-    lead: "Gayathri U (CB.SC.U4CSE23026)",
-    github: "https://github.com/gayathriuthamaraj/",
-    summary: "Keeps raw driving and charging telemetry on the vehicle. Uses FedPer to split models into shared base parameters (theta_B) and client-specific personalization heads (theta_P,k).",
+    title: "Layer 5: Privacy-Preserving Collaborative Learning",
+    badge: "Data Privacy",
+    summary: "Enables vehicles across an electric fleet to collaboratively learn from one another while ensuring private location histories and driving patterns never leave the vehicle.",
     inputs: [
-      "51 decentralized client trips (trips with >= 20 windows acting as clients)",
-      "On-vehicle local gradients computed over 80 communication rounds"
+      "Decentralized training trips from participating electric vehicles",
+      "Local model parameter updates computed privately on the vehicle's onboard computer"
     ],
     algorithms: [
-      "Split Architecture: 2 hidden layers form shared base theta_B; output layer forms local head theta_P,k",
-      "FedPer lowers local MAE for 32 of 51 established clients (median 2.81 vs 3.51 for FedAvg)",
-      "FedAvg achieves arrival SOC R^2 = 0.973, nearly matching centralized 0.976 (Delta R^2 <= 0.03)",
-      "Early stopping at round 30 to mitigate cold-start overfitting"
+      "Personalized Federated Learning: divides neural networks into shared base layers and private local layers",
+      "Shared Base Aggregation: fleet servers average only general battery physics representations",
+      "Private On-Board Adaptation: personalized driver settings remain permanently stored on the car"
     ],
     outputs: [
-      "Shared base representation extracted across fleet",
-      "Personalized edge models adapted to specific vehicle routes and drivers",
-      "Zero raw telemetry egress"
+      "Collaborative fleet models that learn general battery physics from many vehicles",
+      "Personalized local models tailored to each driver's daily commute and habits",
+      "Complete data privacy guarantee with zero raw driving telemetry transmitted off the vehicle"
     ]
   },
   layer6: {
-    title: "6. On-Device Edge Deployment (ESP32 at 240 MHz)",
-    badge: "8.65 ms Total Inference",
-    lead: "Saravana Priyaa C. R. & Team",
-    github: "https://github.com/saravanapriyaa21",
-    summary: "All three XGBoost models (M1, M2, M3) converted into C header files and run on an ESP32 microcontroller at 240 MHz in 8.65 ms total, displaying on an SH1106 OLED screen.",
+    title: "Layer 6: On-Device Microcontroller Deployment",
+    badge: "Edge Hardware",
+    summary: "Runs machine learning models directly on the vehicle's low-cost embedded hardware in milliseconds, presenting instant feedback on an in-car screen without relying on internet connectivity.",
     inputs: [
-      "Quantized feature vectors received via local CAN/OBD-II interface"
+      "Real-time sensor measurements gathered from the vehicle's Controller Area Network (CAN) interface"
     ],
     algorithms: [
-      "Lightweight C tree-traversal routine without dynamic memory allocation",
-      "On-chip microsecond hardware timer benchmarking",
-      "Wi-Fi JSON asynchronous transport to FastAPI recommendation backend (17.5 ms server processing)"
+      "Embedded C Tree-Traversal: executes machine learning decision trees with zero dynamic memory overhead",
+      "On-Chip Hardware Timing: measures model execution speed using high-precision microsecond timers",
+      "Lightweight Local Communication: streams summary notifications to the vehicle display and dashboard"
     ],
     outputs: [
-      "M1 Battery Stress Inference: 3.35 ms (Sample output: BSI 62.39, 'MODERATE')",
-      "M2 Charging Anomaly Inference: 1.92 ms (Sample output: P(faulty) = 1.000, 'Faulty')",
-      "M3 SOH & Degradation Risk: 3.38 ms (Sample output: SOH 91.76%, 'LOW')",
-      "Total On-Device Latency: 8.65 ms; end-to-end cycle finishes in < 1 second"
+      "Near-instant battery stress scores computed in approximately 3.35 milliseconds",
+      "Immediate charging fault alerts classified in under 2 milliseconds",
+      "Real-time battery health status updates displayed directly on the vehicle's OLED instrument screen",
+      "Complete end-to-end evaluation cycle finishing in less than one second"
     ]
   }
 };
@@ -148,7 +133,6 @@ function inspectLayer(layerId) {
 
   const titleEl = document.getElementById('arch-inspector-title');
   const badgeEl = document.getElementById('arch-inspector-badge');
-  const leadEl = document.getElementById('arch-inspector-lead');
   const summaryEl = document.getElementById('arch-inspector-summary');
   const inputsEl = document.getElementById('arch-inspector-inputs');
   const algosEl = document.getElementById('arch-inspector-algos');
@@ -156,22 +140,34 @@ function inspectLayer(layerId) {
 
   if (titleEl) titleEl.innerText = data.title;
   if (badgeEl) badgeEl.innerText = data.badge;
-  if (leadEl) {
-    leadEl.innerHTML = `<span class="text-slate-500">Lead:</span> <a href="${data.github}" target="_blank" class="text-rose-600 hover:underline font-semibold">${data.lead} <i class="fab fa-github text-xs ml-1"></i></a>`;
-  }
   if (summaryEl) summaryEl.innerText = data.summary;
 
   if (inputsEl) {
-    inputsEl.innerHTML = data.inputs.map(item => `<li class="flex items-start gap-2 text-slate-700"><i class="fas fa-arrow-right text-rose-500 text-xs mt-1 shrink-0"></i><span>${item}</span></li>`).join('');
+    inputsEl.innerHTML = data.inputs.map(item => `
+      <li class="flex items-start gap-2 text-slate-700">
+        <i class="fas fa-arrow-right text-rose-500 text-xs mt-1 shrink-0"></i>
+        <span>${item}</span>
+      </li>
+    `).join('');
   }
   if (algosEl) {
-    algosEl.innerHTML = data.algorithms.map(item => `<li class="flex items-start gap-2 text-slate-700"><i class="fas fa-microchip text-pink-600 text-xs mt-1 shrink-0"></i><span>${item}</span></li>`).join('');
+    algosEl.innerHTML = data.algorithms.map(item => `
+      <li class="flex items-start gap-2 text-slate-700">
+        <i class="fas fa-cogs text-pink-600 text-xs mt-1 shrink-0"></i>
+        <span>${item}</span>
+      </li>
+    `).join('');
   }
   if (outputsEl) {
-    outputsEl.innerHTML = data.outputs.map(item => `<li class="flex items-start gap-2 text-slate-700"><i class="fas fa-check-circle text-emerald-600 text-xs mt-1 shrink-0"></i><span>${item}</span></li>`).join('');
+    outputsEl.innerHTML = data.outputs.map(item => `
+      <li class="flex items-start gap-2 text-slate-700">
+        <i class="fas fa-check-circle text-emerald-600 text-xs mt-1 shrink-0"></i>
+        <span>${item}</span>
+      </li>
+    `).join('');
   }
 
-  // Update active state on layer buttons
+  // Highlight active layer button
   document.querySelectorAll('.arch-layer-btn').forEach(btn => {
     if (btn.getAttribute('data-layer') === layerId) {
       btn.classList.add('active', 'border-rose-500', 'bg-rose-50/70');
@@ -189,6 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Default view: Layer 3
+  // Default view
   inspectLayer('layer3');
 });

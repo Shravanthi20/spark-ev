@@ -31,7 +31,7 @@ Explore the web documentation portal with interactive decision simulations, arch
 | **Dr. Umashankar S.** | Co-Supervisor | Professor, Dept. of EEE | — | `s_umashankar@cb.amrita.edu` |
 | **Shravanthi S** | `CB.SC.U4CSE23147` | **Module 3: Battery Health Forecasting & SHAP** | [@Shravanthi20](https://github.com/Shravanthi20/) | `cb.sc.u4cse23147@cb.students.amrita.edu` |
 | **Saravana Priyaa C. R.** | `CB.SC.U4CSE23149` | **Hardware Integration (ESP32) & Module 4** | [@saravanapriyaa21](https://github.com/saravanapriyaa21) | `cb.sc.u4cse23149@cb.students.amrita.edu` |
-| **Gayathri U** | `CB.SC.U4CSE23026` | **Federated Learning Lead (FedPer)** | [@gayathriuthamaraj](https://github.com/gayathriuthamaraj/) | `cb.sc.u4cse23026@cb.students.amrita.edu` |
+| **Gayathri U** | `CB.SC.U4CSE23026` | **Federated Learning (FedPer)** | [@gayathriuthamaraj](https://github.com/gayathriuthamaraj/) | `cb.sc.u4cse23026@cb.students.amrita.edu` |
 | **Rithanya K. A.** | `CB.SC.U4CSE23140` | **Module 1: Driving-to-Stress Prediction** | [@Rithanya-08](https://github.com/Rithanya-08) | `cb.sc.u4cse23140@cb.students.amrita.edu` |
 | **Irene Divya J.** | `CB.SC.U4CSE23167` | **Module 2: Charging Anomaly Detection** | [@IreneDivyaJ](https://github.com/IreneDivyaJ) | `cb.sc.u4cse23167@cb.students.amrita.edu` |
 
