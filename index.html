@@ -6,7 +6,25 @@
   <title>SparkEV — Personalized, Predictive &amp; Explainable EV Management</title>
   <meta name="description" content="SparkEV: A Personalized, Predictive, and Explainable Framework for Intelligent Electric Vehicle Management by Amrita Vishwa Vidyapeetham.">
   
-  <link rel="stylesheet" href="assets/css/tailwind.css">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              pink: '#F43F5E',
+              rose: '#E11D48',
+              soft: '#FFF5F7',
+              border: '#FCE7F3'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <!-- Google Fonts & FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
@@ -638,7 +656,7 @@
                 Personalized Care
               </span>
             </div>
-            <div class="h-52">
+            <div class="h-52" style="height:208px;position:relative;">
               <canvas id="sim-degradation-chart" style="width:100%;height:100%;"></canvas>
             </div>
           </div>
@@ -652,7 +670,7 @@
               </h4>
               <span class="text-[10px] font-mono text-slate-500">Mean Positive Impact</span>
             </div>
-            <div class="h-40">
+            <div class="h-40" style="height:160px;position:relative;">
               <canvas id="sim-shap-chart" style="width:100%;height:100%;"></canvas>
             </div>
           </div>

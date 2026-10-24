@@ -6,7 +6,25 @@
   <title>SparkEV What-If Decision Simulator — Interactive Sandbox</title>
   <meta name="description" content="Interactive What-If Decision Simulator for electric vehicle charging, driving dynamics, and temporal battery health forecasting.">
 
-  <link rel="stylesheet" href="assets/css/tailwind.css">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              pink: '#F43F5E',
+              rose: '#E11D48',
+              soft: '#FFF5F7',
+              border: '#FCE7F3'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <!-- Google Fonts & FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
@@ -205,7 +223,7 @@
               FedPer Optimized
             </span>
           </div>
-          <div class="h-56">
+          <div class="h-56" style="height:224px;position:relative;">
             <canvas id="sim-degradation-chart"></canvas>
           </div>
         </div>
@@ -219,7 +237,7 @@
             </h4>
             <span class="text-[10px] font-mono text-slate-500">Mean Positive SHAP</span>
           </div>
-          <div class="h-44">
+          <div class="h-44" style="height:176px;position:relative;">
             <canvas id="sim-shap-chart"></canvas>
           </div>
         </div>
