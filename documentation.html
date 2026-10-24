@@ -4,22 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SparkEV Technical Documentation — Reference Manual &amp; Developer Guide</title>
-  <meta name="description" content="Technical documentation for SparkEV: Architecture, installation, environment configuration, REST APIs, dataset processing, model files, and hardware integration.">
+  <meta name="description" content="Technical documentation for SparkEV: Architecture, installation, environment configuration, REST APIs, dataset processing, model files, and ESP32 hardware integration.">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
             brand: {
-              cyan: '#00F2FE',
-              blue: '#4FACFE',
-              emerald: '#10B981',
-              dark: '#0A0F1D',
-              card: '#111827'
+              pink: '#F43F5E',
+              rose: '#E11D48',
+              soft: '#FFF5F7',
+              border: '#FCE7F3'
             }
           }
         }
@@ -37,468 +35,384 @@
 
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="bg-[#0A0F1D] text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+<body class="bg-[#FFF5F7] text-slate-800 antialiased selection:bg-rose-200 selection:text-rose-900">
 
-  <!-- Top Navigation -->
+  <!-- Navigation Bar (No theme toggle) -->
   <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2 group">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+        <a href="index.html" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-pink flex items-center justify-center text-white font-black text-xl shadow-md shadow-pink-500/25 group-hover:scale-105 transition-transform">
             <i class="fas fa-bolt"></i>
           </div>
           <div>
-            <span class="font-heading font-black text-2xl tracking-wider text-white">Spark<span class="text-cyan-400">EV</span></span>
-            <span class="block text-[10px] font-mono text-slate-400 tracking-widest uppercase">Technical Reference Manual</span>
+            <span class="font-heading font-black text-2xl tracking-wider text-slate-900">Spark<span class="text-rose-600">EV</span></span>
+            <span class="block text-[10px] font-mono text-rose-700 font-semibold tracking-widest uppercase">Technical Reference Manual</span>
           </div>
         </a>
       </div>
 
-      <nav aria-label="Main Navigation" class="hidden lg:flex items-center gap-7 text-sm font-medium">
-        <a href="index.html" class="text-slate-300 hover:text-cyan-400 transition-colors">Overview</a>
-        <a href="index.html#architecture" class="text-slate-300 hover:text-cyan-400 transition-colors">Architecture</a>
-        <a href="methodology.html" class="text-slate-300 hover:text-cyan-400 transition-colors">Methodology</a>
-        <a href="documentation.html" class="text-emerald-400 font-semibold border-b-2 border-emerald-400 pb-1">Documentation</a>
-        <a href="index.html#simulator" class="text-slate-300 hover:text-cyan-400 transition-colors">What-If Simulator</a>
-        <a href="index.html#team" class="text-slate-300 hover:text-cyan-400 transition-colors">Team</a>
+      <nav aria-label="Main Navigation" class="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-700">
+        <a href="index.html" class="hover:text-rose-600 transition-colors">Overview</a>
+        <a href="index.html#architecture" class="hover:text-rose-600 transition-colors">Architecture</a>
+        <a href="methodology.html" class="hover:text-rose-600 transition-colors">Methodology</a>
+        <a href="documentation.html" class="text-rose-600 font-bold border-b-2 border-rose-500 pb-1">Documentation</a>
+        <a href="simulator.html" class="hover:text-rose-600 transition-colors">What-If Simulator</a>
+        <a href="index.html#team" class="hover:text-rose-600 transition-colors">Team</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <button type="button" aria-label="Toggle dark/light theme" class="theme-toggle-btn w-9 h-9 rounded-lg border border-slate-700 hover:border-cyan-400 flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-colors">
-          <i class="theme-toggle-icon fas fa-sun"></i>
-        </button>
-        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm font-medium text-white transition-all hover:border-cyan-400 flex items-center gap-2">
-          <i class="fab fa-github"></i>
+        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="px-4 py-2 rounded-xl bg-white hover:bg-rose-50 border border-pink-200 text-sm font-semibold text-slate-800 shadow-sm transition-all hover:border-pink-300 flex items-center gap-2">
+          <i class="fab fa-github text-rose-600"></i>
           <span>GitHub</span>
         </a>
-        <button id="mobile-menu-btn" type="button" aria-label="Open mobile navigation menu" class="lg:hidden w-10 h-10 rounded-lg border border-slate-700 flex items-center justify-center text-slate-300 hover:text-cyan-400">
+        <button id="mobile-menu-btn" type="button" aria-label="Open mobile navigation menu" class="lg:hidden w-10 h-10 rounded-xl border border-pink-200 bg-white flex items-center justify-center text-slate-700 hover:text-rose-600 shadow-sm">
           <i class="fas fa-bars"></i>
         </button>
       </div>
     </div>
 
     <!-- Mobile Drawer -->
-    <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-6 bg-[#0B132B] border-b border-slate-800 space-y-3 text-sm font-medium">
-      <a href="index.html" class="block py-2 text-slate-300 hover:text-cyan-400">Overview</a>
-      <a href="index.html#architecture" class="block py-2 text-slate-300 hover:text-cyan-400">Architecture</a>
-      <a href="methodology.html" class="block py-2 text-slate-300 hover:text-cyan-400">Methodology</a>
-      <a href="documentation.html" class="block py-2 text-emerald-400 font-semibold">Documentation</a>
-      <a href="index.html#simulator" class="block py-2 text-slate-300 hover:text-cyan-400">What-If Simulator</a>
-      <a href="index.html#team" class="block py-2 text-slate-300 hover:text-cyan-400">Team</a>
+    <div id="mobile-menu" class="hidden lg:hidden px-4 pt-3 pb-6 bg-white border-b border-pink-200 space-y-3 text-sm font-semibold shadow-lg">
+      <a href="index.html" class="block py-2 text-slate-700 hover:text-rose-600">Overview</a>
+      <a href="index.html#architecture" class="block py-2 text-slate-700 hover:text-rose-600">Architecture</a>
+      <a href="methodology.html" class="block py-2 text-slate-700 hover:text-rose-600">Methodology</a>
+      <a href="documentation.html" class="block py-2 text-rose-600 font-bold">Documentation</a>
+      <a href="simulator.html" class="block py-2 text-slate-700 hover:text-rose-600">What-If Simulator</a>
+      <a href="index.html#team" class="block py-2 text-slate-700 hover:text-rose-600">Team Details</a>
     </div>
   </header>
 
-  <!-- Header Banner with Live Search -->
-  <section class="py-16 bg-gradient-to-b from-slate-900 via-[#0A0F1D] to-[#0A0F1D] border-b border-slate-800/80">
+  <!-- Banner with Live Search -->
+  <section class="py-14 bg-white border-b border-pink-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div class="max-w-3xl">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono uppercase mb-4">
-            <i class="fas fa-terminal"></i> Technical Reference &amp; Manual
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 border border-pink-200 text-rose-700 text-xs font-mono uppercase font-bold mb-3">
+            <i class="fas fa-terminal text-rose-500"></i> Technical Reference &amp; Manual
           </div>
-          <h1 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight">
+          <h1 class="font-heading font-black text-3xl sm:text-5xl text-slate-900 tracking-tight">
             SparkEV System Documentation
           </h1>
-          <p class="text-slate-300 text-base sm:text-lg mt-3 leading-relaxed">
-            The definitive technical manual for developers, researchers, and engineers wanting to configure, run, test, and contribute to SparkEV.
+          <p class="text-slate-600 text-base mt-2 leading-relaxed">
+            The complete developer and researcher guide for configuring datasets, running the 4 modules, 
+            coordinating FedPer federated learning, and flashing the on-device ESP32 tree-traversal firmware.
           </p>
         </div>
 
-        <!-- Quick Search Input -->
+        <!-- Quick Search -->
         <div class="w-full md:w-80">
           <div class="relative">
-            <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-            <input type="text" id="doc-search-input" placeholder="Search documentation..." class="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-cyan-400 font-mono transition-colors">
+            <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-rose-400 text-sm"></i>
+            <input type="text" id="doc-search-input" placeholder="Search documentation..." class="w-full pl-10 pr-4 py-2.5 bg-[#FFF5F7] border border-pink-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:border-rose-400 font-mono shadow-inner transition-colors">
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Main Content Layout -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="grid lg:grid-cols-12 gap-12">
+  <!-- Content & TOC Layout -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="grid lg:grid-cols-12 gap-10">
       
-      <!-- Sticky Sidebar TOC -->
+      <!-- Sticky TOC (3 cols) -->
       <aside aria-label="Table of Contents" class="hidden lg:block lg:col-span-3">
-        <div class="toc-sticky glass-panel p-5 rounded-2xl border border-slate-800">
-          <h3 class="font-heading font-bold text-xs uppercase tracking-wider text-slate-400 mb-4 pb-2 border-b border-slate-800">
-            Manual Sections
+        <div class="toc-sticky glass-panel p-5 rounded-2xl border border-pink-200 bg-white">
+          <h3 class="font-heading font-bold text-xs uppercase tracking-wider text-rose-700 mb-3 pb-2 border-b border-pink-100">
+            Manual Contents
           </h3>
-          <nav class="space-y-1.5 text-xs font-mono">
-            <a href="#doc-overview" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">1. Overview &amp; Requirements</a>
-            <a href="#doc-structure" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">2. Repository Structure</a>
-            <a href="#doc-installation" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">3. Installation &amp; Setup</a>
-            <a href="#doc-env" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">4. Environment Variables</a>
-            <a href="#doc-api" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">5. REST API Specifications</a>
-            <a href="#doc-datasets" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">6. Datasets &amp; ETL Scripts</a>
-            <a href="#doc-models" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">7. Model Artifacts &amp; I/O</a>
-            <a href="#doc-running" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">8. Running Each Module</a>
-            <a href="#doc-hardware" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">9. Hardware Integration</a>
-            <a href="#doc-troubleshoot" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">10. Troubleshooting &amp; FAQ</a>
-            <a href="#doc-links" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">11. Links &amp; Resources</a>
+          <nav class="space-y-1 text-xs font-mono">
+            <a href="#doc-overview" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">1. Overview &amp; Requirements</a>
+            <a href="#doc-structure" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">2. Repository Layout</a>
+            <a href="#doc-installation" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">3. Setup &amp; Installation</a>
+            <a href="#doc-env" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">4. Environment Variables</a>
+            <a href="#doc-api" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">5. REST API Schemas</a>
+            <a href="#doc-datasets" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">6. Empirical Datasets</a>
+            <a href="#doc-models" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">7. Model Artifacts &amp; I/O</a>
+            <a href="#doc-running" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">8. Running Each Module</a>
+            <a href="#doc-hardware" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">9. ESP32 Deployment</a>
+            <a href="#doc-troubleshoot" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">10. Troubleshooting &amp; FAQ</a>
+            <a href="#doc-links" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">11. Citations &amp; Links</a>
           </nav>
         </div>
       </aside>
 
-      <!-- Documentation Content -->
-      <main class="lg:col-span-9 space-y-16 text-slate-300 leading-relaxed text-sm sm:text-base">
+      <!-- Main Documentation Content (9 cols) -->
+      <main class="lg:col-span-9 space-y-14 text-slate-700 leading-relaxed text-sm sm:text-base">
 
         <!-- 1. System Requirements -->
         <article id="doc-overview" class="searchable-content scroll-mt-28">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-mono font-bold text-sm">01</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Project Overview &amp; System Requirements</h2>
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">01</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Project Overview &amp; System Requirements</h2>
           </div>
           <p class="mb-4">
-            SparkEV is built using modern Python frameworks for machine learning, federated coordination, and asynchronous REST streaming. It is engineered to run either in simulation mode on a workstation or directly at the vehicle edge.
+            SparkEV unites offline model training (Python 3.10+, XGBoost, Elastic Net, Flower FL) with lightweight on-device inference on an ESP32 microcontroller at 240 MHz.
           </p>
 
-          <div class="grid sm:grid-cols-2 gap-4 my-6">
-            <div class="glass-panel p-5 rounded-xl border border-slate-700">
-              <h4 class="font-heading font-bold text-white text-base mb-3 flex items-center gap-2">
-                <i class="fas fa-desktop text-cyan-400"></i> Host / Server Requirements
+          <div class="grid sm:grid-cols-2 gap-4 my-5">
+            <div class="glass-panel p-5 rounded-xl border border-pink-200 bg-white">
+              <h4 class="font-heading font-bold text-slate-900 text-sm mb-2.5 flex items-center gap-2">
+                <i class="fas fa-desktop text-rose-600"></i> Server / Workstation Environment
               </h4>
-              <ul class="text-xs font-mono space-y-2 text-slate-300">
-                <li><span class="text-cyan-400">&bull; OS:</span> Linux (Ubuntu 22.04+), macOS 13+, or Windows 11</li>
-                <li><span class="text-cyan-400">&bull; Python:</span> 3.10.x or 3.11.x (tested on 3.11.3)</li>
-                <li><span class="text-cyan-400">&bull; RAM:</span> 8 GB minimum (16 GB for multi-client FL)</li>
-                <li><span class="text-cyan-400">&bull; GPU:</span> NVIDIA CUDA 11.8+ / 12.x (optional for accelerated PyTorch training; CPU fallback supported)</li>
+              <ul class="text-xs font-mono space-y-1.5 text-slate-700">
+                <li>&bull; Python 3.10 or 3.11 (tested on 3.11.3)</li>
+                <li>&bull; XGBoost 2.0+, Scikit-Learn 1.3+</li>
+                <li>&bull; Flower (flwr) 1.6+ for Federated Learning</li>
+                <li>&bull; FastAPI + Uvicorn for recommendation backend</li>
+                <li>&bull; 8 GB RAM minimum (16 GB for multi-client FL)</li>
               </ul>
             </div>
 
-            <div class="glass-panel p-5 rounded-xl border border-slate-700">
-              <h4 class="font-heading font-bold text-white text-base mb-3 flex items-center gap-2">
-                <i class="fas fa-microchip text-emerald-400"></i> Edge / In-Vehicle Hardware
+            <div class="glass-panel p-5 rounded-xl border border-pink-200 bg-white">
+              <h4 class="font-heading font-bold text-slate-900 text-sm mb-2.5 flex items-center gap-2">
+                <i class="fas fa-microchip text-pink-600"></i> On-Device Microcontroller
               </h4>
-              <ul class="text-xs font-mono space-y-2 text-slate-300">
-                <li><span class="text-emerald-400">&bull; Gateway MCU:</span> ESP32-WROOM-32 (Dual-core 240MHz, 520KB SRAM)</li>
-                <li><span class="text-emerald-400">&bull; CAN Controller:</span> MCP2515 SPI module with TJA1050 Transceiver</li>
-                <li><span class="text-emerald-400">&bull; Port Interface:</span> Standard OBD-II Male to DB9 Female (ISO 15765-4)</li>
-                <li><span class="text-emerald-400">&bull; Optional Edge SBC:</span> Raspberry Pi 4B (4GB) or Jetson Nano</li>
+              <ul class="text-xs font-mono space-y-1.5 text-slate-700">
+                <li>&bull; Microcontroller: ESP32 Dual-Core @ 240 MHz</li>
+                <li>&bull; Display: SH1106 OLED (128&times;64 I2C)</li>
+                <li>&bull; C Header tree-traversal inference (no dynamic heap allocation)</li>
+                <li>&bull; Total On-Device Inference Time: <strong>8.65 ms</strong></li>
+                <li>&bull; Wi-Fi client transport (JSON payload to FastAPI)</li>
               </ul>
             </div>
           </div>
         </article>
 
         <!-- 2. Repository Structure -->
-        <article id="doc-structure" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-mono font-bold text-sm">02</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Repository &amp; Folder Structure</h2>
+        <article id="doc-structure" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">02</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Repository &amp; Folder Structure</h2>
           </div>
           <p class="mb-4">
-            The project follows a clean modular layout where each research module is fully decoupled with its own data loader, training scripts, and inference wrappers:
+            The codebase is organized into modular packages corresponding to the paper's four core modules and deployment targets:
           </p>
 
           <pre><code class="language-bash">spark-ev/
-├── assets/                       # Static web portal styling, JS engines & diagrams
-│   ├── css/style.css             # Futuristic EV dark-mode CSS & glassmorphism
-│   ├── js/main.js                # Core UI scripts, theme switcher & search
-│   ├── js/architecture.js        # Interactive architecture layer inspector
-│   └── js/simulator.js           # What-If parametric decision simulation engine
-├── docs/                         # Research paper source, figures & presentation slides
-│   ├── SparkEV_Research_Paper.pdf
-│   └── architecture_diagram.png
-├── src/                          # Production Python source code
-│   ├── module1_driving/          # Module 1: Driving Behavior Guidance (Rithanya K A)
-│   │   ├── classifier.py         # LightGBM driving style classifier (Eco/Normal/Aggressive)
-│   │   ├── guidance_engine.py    # Personalized divergence detector and eco-nudges
-│   │   └── train_driving.py      # Telematics feature extractor & training pipeline
-│   ├── module2_charging/         # Module 2: Predictive Charging Recommender (Irene Divya J)
-│   │   ├── recommender.py        # Multi-Criteria Decision Making (TOPSIS) engine
-│   │   ├── station_client.py     # OpenChargeMap & dynamic tariff live client
-│   │   └── cutoff_optimizer.py   # 80% vs 100% SoC battery preservation solver
-│   ├── module3_battery/          # Module 3: Battery Health & SHAP XAI (Shravanthi S)
-│   │   ├── feature_engineering.py# Temporal lags (SOH_t-1, t-7), thermal stress integrals
-│   │   ├── soh_predictor.py      # Autoregressive gradient boosted SOH regression
-│   │   ├── shap_explainer.py     # TreeSHAP feature attributions & natural language translator
-│   │   └── train_battery.py      # NASA PCoE & Oxford dataset training pipeline
-│   ├── federated_fedper/         # Federated Learning Backbone (FedPer) (Gayathri U)
-│   │   ├── fedper_model.py       # Split PyTorch architecture: Shared Base + Local Head
-│   │   ├── server.py             # Flower FL Server performing FedAvg on base weights
-│   │   ├── client.py             # Vehicle edge client preserving private local head
-│   │   └── simulation.py         # 10-node federated heterogeneity benchmark runner
-│   ├── hardware_iot/             # Vehicle Telemetry & CAN-Bus Ingestion (Saravanapriyaa C R)
-│   │   ├── esp32_can_reader.ino  # ESP32 firmware for ISO 15765-4 OBD-II PID decoding
-│   │   ├── mqtt_telemetry.py     # Local broker subscriber and packet validator
-│   │   └── packet_schema.py      # Pydantic telemetry models & validation
-│   └── api/                      # REST API & Microservice Layer
-│       ├── main.py               # FastAPI application entrypoint
-│       ├── schemas.py            # OpenAPI request and response data contracts
-│       └── routes/               # API route definitions (/predict, /recommend, /shap)
+├── assets/                       # Light pink & white theme assets & interactive scripts
+│   ├── css/style.css             # Light pink & white styling system
+│   ├── js/main.js                # UI controls, search, scrollspy (theme toggle removed)
+│   ├── js/architecture.js        # Interactive architecture inspector with empirical data
+│   └── js/simulator.js           # Physics-informed What-If simulator engine
+├── src/                          # Production source code
+│   ├── module1_driving/          # Module 1: Driving Behavior to Battery Stress (Rithanya K. A.)
+│   │   ├── train_m1_xgboost.py   # Physics-informed BSI training (R^2 = 0.831)
+│   │   ├── capacity_fade_fit.py  # Semi-empirical NASA/CALCE capacity fade fitting
+│   │   └── guidance_engine.py    # Driver-controllable SHAP advice generator
+│   ├── module2_charging/         # Module 2: Charging Anomaly Detection (Irene Divya J.)
+│   │   ├── train_m2_anomaly.py   # Weighted XGBoost on 2,649 Autosun sessions (F1 = 0.981)
+│   │   └── session_validator.py  # Real-time session fault scoring
+│   ├── module3_battery/          # Module 3: SOH Forecasting & Risk (Shravanthi S.)
+│   │   ├── direct_ar_model.py    # SOH(t + 10) Direct AR forecaster (R^2 = 0.9591)
+│   │   ├── acceleration_detector.py # Causal rolling median degradation rate detector
+│   │   └── shap_explainer.py     # TreeSHAP feature attributions
+│   ├── module4_energy/           # Module 4: Energy & Arrival SOC (Saravana Priyaa C. R.)
+│   │   ├── stable23_elasticnet.py# Stable-23 feature energy model (R^2 = 0.897)
+│   │   └── arrival_soc_intrip.py # 25%, 50%, 75% in-trip horizon arrival SOC predictors
+│   ├── federated_fedper/         # Federated Personalization Backbone (Gayathri U.)
+│   │   ├── server.py             # Flower server aggregating shared base theta_B
+│   │   ├── client.py             # Client preserving private head theta_P,k
+│   │   └── simulation_51trips.py # 51-client TUM trip federated benchmark
+│   ├── hardware_esp32/           # On-Device ESP32 Microcontroller Deployment
+│   │   ├── esp32_sparkev_main.ino # ESP32 240 MHz firmware with SH1106 OLED
+│   │   ├── m1_tree_model.h       # Converted M1 XGBoost C header
+│   │   ├── m2_tree_model.h       # Converted M2 XGBoost C header
+│   │   └── m3_tree_model.h       # Converted M3 XGBoost C header
+│   └── api/                      # Recommendation Microservice
+│       ├── main.py               # FastAPI backend generating driver dashboard tips
+│       └── schemas.py            # Pydantic data schemas
+├── index.html                    # Project showcase portal
+├── methodology.html              # Academic methodology & empirical tables
+├── documentation.html            # Complete technical reference manual
+├── simulator.html                # Standalone interactive What-If sandbox
 ├── requirements.txt              # Pinned Python package dependencies
-├── .env.example                  # Environment configuration template
-├── index.html                    # Interactive project showcase portal
-├── methodology.html              # Academic research approach & mathematical formulation
-└── documentation.html            # Complete technical reference manual</code></pre>
+└── .env.example                  # Environment configuration template</code></pre>
         </article>
 
-        <!-- 3. Installation & Setup -->
-        <article id="doc-installation" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm">03</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Installation &amp; Setup Instructions</h2>
+        <!-- 3. Setup & Installation -->
+        <article id="doc-installation" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">03</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Setup &amp; Installation Instructions</h2>
           </div>
-          <p class="mb-4">
-            Follow these commands to clone the repository and configure your isolated virtual environment:
-          </p>
 
           <div class="space-y-4">
             <div>
-              <div class="text-xs font-mono text-cyan-400 mb-1">Step 1: Clone Repository</div>
+              <span class="text-xs font-mono text-rose-600 font-bold block mb-1">Step 1: Clone Repository</span>
               <pre><code class="language-bash">git clone https://github.com/Shravanthi20/spark-ev.git
 cd spark-ev</code></pre>
             </div>
 
             <div>
-              <div class="text-xs font-mono text-cyan-400 mb-1">Step 2: Create and Activate Virtual Environment</div>
-              <pre><code class="language-bash"># On Linux / macOS:
-python3 -m venv venv
-source venv/bin/activate
-
-# On Windows (PowerShell):
+              <span class="text-xs font-mono text-rose-600 font-bold block mb-1">Step 2: Configure Virtual Environment</span>
+              <pre><code class="language-bash"># Windows PowerShell:
 python -m venv venv
-.\venv\Scripts\Activate.ps1</code></pre>
+.\venv\Scripts\Activate.ps1
+
+# Linux / macOS:
+python3 -m venv venv
+source venv/bin/activate</code></pre>
             </div>
 
             <div>
-              <div class="text-xs font-mono text-cyan-400 mb-1">Step 3: Install Required Dependencies</div>
+              <span class="text-xs font-mono text-rose-600 font-bold block mb-1">Step 3: Install Core Dependencies</span>
               <pre><code class="language-bash">pip install --upgrade pip
 pip install -r requirements.txt</code></pre>
-            </div>
-
-            <div>
-              <div class="text-xs font-mono text-cyan-400 mb-1">Step 4: Copy Environment Configuration</div>
-              <pre><code class="language-bash">cp .env.example .env
-# Edit .env with your local ports and credentials</code></pre>
             </div>
           </div>
         </article>
 
         <!-- 4. Environment Variables -->
-        <article id="doc-env" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center font-mono font-bold text-sm">04</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Environment Variables &amp; Configuration</h2>
+        <article id="doc-env" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">04</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Environment Variables &amp; Configuration</h2>
           </div>
-          <p class="mb-4">
-            Configure system endpoints and simulation constants inside your <code>.env</code> file:
-          </p>
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs font-mono text-left text-slate-300 border border-slate-800 rounded-xl overflow-hidden">
-              <thead class="bg-slate-900 text-slate-200">
+          <div class="overflow-x-auto glass-panel rounded-xl border border-pink-200 bg-white">
+            <table class="w-full text-xs font-mono text-left text-slate-700">
+              <thead class="bg-pink-50 text-rose-900 font-bold border-b border-pink-200">
                 <tr>
-                  <th class="p-3 border-b border-slate-800">Variable</th>
-                  <th class="p-3 border-b border-slate-800">Default Value</th>
-                  <th class="p-3 border-b border-slate-800">Description</th>
+                  <th class="p-3">Variable</th>
+                  <th class="p-3">Default</th>
+                  <th class="p-3">Description</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-800/60 bg-slate-950/40">
+              <tbody class="divide-y divide-pink-100">
                 <tr>
-                  <td class="p-3 text-cyan-400 font-semibold">SPARKEV_ENV</td>
-                  <td class="p-3">development</td>
-                  <td class="p-3 font-sans text-slate-400">Environment mode (development / production / simulation)</td>
+                  <td class="p-3 font-bold text-rose-700">SPARKEV_ENV</td>
+                  <td class="p-3">production</td>
+                  <td class="p-3 font-sans text-slate-600">Runtime environment mode</td>
                 </tr>
                 <tr>
-                  <td class="p-3 text-cyan-400 font-semibold">FASTAPI_PORT</td>
+                  <td class="p-3 font-bold text-rose-700">FASTAPI_PORT</td>
                   <td class="p-3">8000</td>
-                  <td class="p-3 font-sans text-slate-400">Port for REST API microservice</td>
+                  <td class="p-3 font-sans text-slate-600">Recommendation backend listening port</td>
                 </tr>
                 <tr>
-                  <td class="p-3 text-purple-400 font-semibold">FEDPER_SERVER_HOST</td>
-                  <td class="p-3">127.0.0.1</td>
-                  <td class="p-3 font-sans text-slate-400">Host for Flower Federated Learning coordinator</td>
+                  <td class="p-3 font-bold text-rose-700">FEDPER_ROUNDS</td>
+                  <td class="p-3">80</td>
+                  <td class="p-3 font-sans text-slate-600">Federated communication rounds (early stop @ round 30)</td>
                 </tr>
                 <tr>
-                  <td class="p-3 text-purple-400 font-semibold">FEDPER_SERVER_PORT</td>
-                  <td class="p-3">8080</td>
-                  <td class="p-3 font-sans text-slate-400">gRPC communication port for FedPer model sync</td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-emerald-400 font-semibold">MQTT_BROKER_HOST</td>
-                  <td class="p-3">localhost</td>
-                  <td class="p-3 font-sans text-slate-400">Broker IP for on-board ESP32 CAN telemetry streams</td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-emerald-400 font-semibold">MQTT_TOPIC_TELEMETRY</td>
-                  <td class="p-3">sparkev/vehicle/telemetry</td>
-                  <td class="p-3 font-sans text-slate-400">Pub/Sub topic for high-frequency sensor frames</td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-amber-400 font-semibold">BATTERY_NOMINAL_KWH</td>
-                  <td class="p-3">60.0</td>
-                  <td class="p-3 font-sans text-slate-400">Battery capacity rating in kilowatt-hours</td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-amber-400 font-semibold">OPENCHARGEMAP_API_KEY</td>
-                  <td class="p-3">your_api_key_here</td>
-                  <td class="p-3 font-sans text-slate-400">Optional key to fetch live station status</td>
+                  <td class="p-3 font-bold text-rose-700">ESP32_WIFI_SSID</td>
+                  <td class="p-3">SparkEV-Hotspot</td>
+                  <td class="p-3 font-sans text-slate-600">Wi-Fi network for microcontroller telemetry upload</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </article>
 
-        <!-- 5. REST API Specifications -->
-        <article id="doc-api" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center font-mono font-bold text-sm">05</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">API Endpoints &amp; Request / Response Schemas</h2>
+        <!-- 5. REST API Schemas -->
+        <article id="doc-api" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-mono font-bold text-sm">05</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">API Endpoints &amp; Request / Response Schemas</h2>
           </div>
-          <p class="mb-4">
-            The SparkEV FastAPI server exposes asynchronous endpoints for edge clients and mobile applications.
-          </p>
 
-          <div class="space-y-8 my-6">
-            <!-- Endpoint 1: Driving Guidance -->
-            <div class="glass-panel p-6 rounded-2xl border border-slate-800">
-              <div class="flex items-center justify-between mb-3">
-                <span class="px-2.5 py-1 text-xs font-mono font-bold rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">POST</span>
-                <span class="font-mono text-xs text-slate-400">/api/v1/predict-driving</span>
+          <div class="space-y-6">
+            <!-- M1 Endpoint -->
+            <div class="glass-panel p-5 rounded-xl border border-pink-200 bg-white">
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-rose-100 text-rose-800">POST</span>
+                <span class="font-mono text-xs text-slate-500">/api/v1/predict-battery-stress</span>
               </div>
-              <p class="text-xs text-slate-300 mb-3">Evaluates a 10-second rolling telemetry window to classify driving pattern and detect baseline divergence.</p>
+              <p class="text-xs text-slate-600 mb-2">Predicts physics-informed BSI from 14 driving telemetry &amp; context features.</p>
               
-              <div class="text-[11px] font-mono text-cyan-400 mb-1">Request Payload:</div>
-              <pre><code class="language-json">{
-  "vehicle_id": "EV-TN-Amrita-01",
-  "window_seconds": 10,
-  "telemetry": [
-    { "timestamp": 1729810000, "speed_kmh": 68.4, "throttle_pct": 74.2, "brake_pressure_bar": 0.0, "power_kw": 28.5 },
-    { "timestamp": 1729810001, "speed_kmh": 72.1, "throttle_pct": 82.0, "brake_pressure_bar": 0.0, "power_kw": 34.1 }
-  ]
-}</code></pre>
-
-              <div class="text-[11px] font-mono text-emerald-400 mb-1 mt-3">Response (200 OK):</div>
+              <div class="text-[11px] font-mono text-rose-700 font-semibold mb-1">Sample Response:</div>
               <pre><code class="language-json">{
   "status": "success",
-  "driving_style": "Aggressive",
-  "style_confidence": 0.892,
-  "personal_divergence_zscore": 2.14,
-  "guidance": "High throttle jerk detected on 4% road grade. Easing acceleration saves an estimated 1.8 kWh."
+  "bsi_score": 62.39,
+  "risk_tier": "MODERATE",
+  "shap_drivers": {
+    "max_speed_kmh": +18.4,
+    "avg_speed_kmh": +12.1,
+    "mean_acceleration_ms2": +9.8,
+    "soc_excursion_band": +4.2,
+    "ambient_temperature": +2.1
+  },
+  "recommendation": "Reducing highway cruising speed from 130 to 110 km/h lowers battery stress by ~16%."
 }</code></pre>
             </div>
 
-            <!-- Endpoint 2: Battery Health & SHAP -->
-            <div class="glass-panel p-6 rounded-2xl border border-slate-800">
-              <div class="flex items-center justify-between mb-3">
-                <span class="px-2.5 py-1 text-xs font-mono font-bold rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">POST</span>
-                <span class="font-mono text-xs text-slate-400">/api/v1/battery-health-risk</span>
+            <!-- M2 Endpoint -->
+            <div class="glass-panel p-5 rounded-xl border border-pink-200 bg-white">
+              <div class="flex items-center justify-between mb-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-pink-100 text-pink-800">POST</span>
+                <span class="font-mono text-xs text-slate-500">/api/v1/detect-charging-anomaly</span>
               </div>
-              <p class="text-xs text-slate-300 mb-3">Predicts SOH degradation tier, computes stress index, and returns TreeSHAP feature attributions.</p>
+              <p class="text-xs text-slate-600 mb-2">Classifies charging sessions from 57 features (99.62% accuracy on 530 test sessions).</p>
               
-              <div class="text-[11px] font-mono text-cyan-400 mb-1">Request Payload:</div>
               <pre><code class="language-json">{
-  "vehicle_id": "EV-TN-Amrita-01",
-  "current_soh": 93.4,
-  "soh_lag_7d": 93.6,
-  "soh_lag_30d": 94.1,
-  "cycle_count": 240,
-  "pack_temp_avg_c": 37.8,
-  "fast_charge_ratio": 0.65,
-  "avg_dod_pct": 82.0
-}</code></pre>
-
-              <div class="text-[11px] font-mono text-emerald-400 mb-1 mt-3">Response (200 OK):</div>
-              <pre><code class="language-json">{
-  "predicted_soh_50_cycles": 92.15,
-  "stress_score": 74.0,
-  "risk_tier": "HIGH RISK",
-  "shap_attributions": {
-    "pack_temp_avg_c": +24.8,
-    "fast_charge_ratio": +18.2,
-    "avg_dod_pct": +11.4,
-    "cycle_count": +6.3,
-    "base_value": 13.3
-  },
-  "explanation": "High battery stress is primarily driven by elevated pack temperatures (37.8°C) and heavy reliance on fast charging (65% of sessions)."
+  "status": "success",
+  "is_faulty": true,
+  "fault_probability": 1.000,
+  "top_anomalous_features": ["voltage_variance", "thermal_gradient", "current_oscillation"]
 }</code></pre>
             </div>
           </div>
         </article>
 
-        <!-- 6. Datasets & ETL -->
-        <article id="doc-datasets" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-mono font-bold text-sm">06</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Dataset Details &amp; Preprocessing Scripts</h2>
+        <!-- 6. Empirical Datasets -->
+        <article id="doc-datasets" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">06</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Dataset Download &amp; ETL Scripts</h2>
           </div>
-          <p class="mb-4">
-            SparkEV models are trained and validated on three primary empirical data repositories:
-          </p>
+          <p class="mb-3 text-xs sm:text-sm">Preprocess raw datasets into training matrices:</p>
+          <pre><code class="language-bash"># Preprocess TUM Munich driving cycles (70 trips):
+python src/module1_driving/preprocess_tum.py --input data/raw/tum/ --window_sec 60 --step_sec 30
 
-          <ul class="space-y-4 list-disc list-inside text-slate-300 mb-6">
-            <li>
-              <strong>NASA Ames Prognostics Center of Excellence (PCoE) Li-ion Dataset:</strong>
-              Cells B0005, B0006, B0007, and B0018 run through continuous charge, discharge, and impedance cycles at room and elevated temperatures until reaching 70% End-of-Life (EOL) capacity.
-            </li>
-            <li>
-              <strong>Oxford Battery Degradation Dataset:</strong>
-              Eight 740mAh pouch cells tested in thermal chambers under standard dynamic electric vehicle drive cycles (Artemis urban and highway).
-            </li>
-            <li>
-              <strong>Amrita EV Telemetry Field Logs:</strong>
-              In-situ OBD-II CAN bus recordings collected across electric two-wheelers and passenger vehicles driving on hilly and urban routes around Coimbatore.
-            </li>
-          </ul>
+# Preprocess Autosun charging records (2,649 sessions):
+python src/module2_charging/preprocess_autosun.py --input data/raw/autosun/
 
-          <div class="glass-panel p-4 rounded-xl">
-            <div class="text-xs font-mono text-cyan-400 mb-2">Run Dataset Preprocessor &amp; Feature Generator:</div>
-            <pre><code class="language-bash">python src/module3_battery/feature_engineering.py \
-  --input_dir data/raw/nasa_pcoe/ \
-  --output_file data/processed/battery_features.parquet \
-  --lag_steps 1,7,30</code></pre>
-          </div>
+# Preprocess Zenodo SOH data (18,065 cycle records):
+python src/module3_battery/preprocess_zenodo.py --horizon 10</code></pre>
         </article>
 
         <!-- 7. Model Artifacts -->
-        <article id="doc-models" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center font-mono font-bold text-sm">07</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Model Artifacts, Inputs &amp; Outputs</h2>
+        <article id="doc-models" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">07</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Model Artifacts, Inputs &amp; Outputs</h2>
           </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs font-mono text-left text-slate-300 border border-slate-800 rounded-xl overflow-hidden">
-              <thead class="bg-slate-900 text-slate-200">
+          <div class="overflow-x-auto glass-panel rounded-xl border border-pink-200 bg-white">
+            <table class="w-full text-xs font-mono text-left text-slate-700">
+              <thead class="bg-pink-50 text-rose-900 font-bold border-b border-pink-200">
                 <tr>
-                  <th class="p-3 border-b border-slate-800">Model File</th>
-                  <th class="p-3 border-b border-slate-800">Framework</th>
-                  <th class="p-3 border-b border-slate-800">Input Dimension</th>
-                  <th class="p-3 border-b border-slate-800">Target Output</th>
+                  <th class="p-3">Model Artifact</th>
+                  <th class="p-3">Algorithm</th>
+                  <th class="p-3">Target Output</th>
+                  <th class="p-3">Validation Benchmark</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-800/60 bg-slate-950/40">
+              <tbody class="divide-y divide-pink-100">
                 <tr>
-                  <td class="p-3 text-cyan-400 font-semibold">driving_lgbm.pkl</td>
-                  <td class="p-3">LightGBM</td>
-                  <td class="p-3">14 features (speed, jerk, power, brake)</td>
-                  <td class="p-3 font-sans text-slate-400">Driving Class {Eco, Normal, Aggressive}</td>
+                  <td class="p-3 font-bold text-rose-700">m1_xgboost_bsi.pkl / .h</td>
+                  <td class="p-3">XGBoost (300 trees, d=4)</td>
+                  <td class="p-3">BSI (0–100 scale)</td>
+                  <td class="p-3 text-slate-900 font-bold">R&sup2; = 0.831 &plusmn; 0.040 (MAE 3.23)</td>
                 </tr>
                 <tr>
-                  <td class="p-3 text-blue-400 font-semibold">charging_topsis.pkl</td>
-                  <td class="p-3">Scipy / MCDM</td>
-                  <td class="p-3">Station matrix [detour, wait, tariff, kW]</td>
-                  <td class="p-3 font-sans text-slate-400">Optimal Station ID + 80% Cutoff Flag</td>
+                  <td class="p-3 font-bold text-pink-700">m2_xgboost_fault.pkl / .h</td>
+                  <td class="p-3">Weighted XGBoost (d=5)</td>
+                  <td class="p-3">Session Fault Class</td>
+                  <td class="p-3 text-slate-900 font-bold">99.62% Acc, F1 = 0.981</td>
                 </tr>
                 <tr>
-                  <td class="p-3 text-emerald-400 font-semibold">battery_soh_xgb.pt</td>
-                  <td class="p-3">XGBoost / PyTorch</td>
-                  <td class="p-3">32 temporal &amp; operational features</td>
-                  <td class="p-3 font-sans text-slate-400">Future SOH % &amp; Stress Score (0-100)</td>
+                  <td class="p-3 font-bold text-rose-700">m3_direct_ar.pkl / .h</td>
+                  <td class="p-3">Direct Autoregressive</td>
+                  <td class="p-3">SOH(t + 10) forecast</td>
+                  <td class="p-3 text-slate-900 font-bold">R&sup2; = 0.9591 (MAE 0.00657)</td>
                 </tr>
                 <tr>
-                  <td class="p-3 text-purple-400 font-semibold">fedper_base_shared.pth</td>
-                  <td class="p-3">PyTorch</td>
-                  <td class="p-3">Raw standardized telemetry vector</td>
-                  <td class="p-3 font-sans text-slate-400">Fleet-wide invariant feature embeddings</td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-purple-400 font-semibold">fedper_head_driverK.pth</td>
-                  <td class="p-3">PyTorch (Edge)</td>
-                  <td class="p-3">Base latent vector (64-dim)</td>
-                  <td class="p-3 font-sans text-slate-400">Personalized local driver predictions</td>
+                  <td class="p-3 font-bold text-pink-700">m4_stable23_elastic.pkl</td>
+                  <td class="p-3">Stable-23 Elastic Net</td>
+                  <td class="p-3">Energy (kWh/km)</td>
+                  <td class="p-3 text-slate-900 font-bold">R&sup2; = 0.897 (MAE 0.0077)</td>
                 </tr>
               </tbody>
             </table>
@@ -506,171 +420,91 @@ pip install -r requirements.txt</code></pre>
         </article>
 
         <!-- 8. Running Each Module -->
-        <article id="doc-running" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-mono font-bold text-sm">08</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Instructions for Running Each Module</h2>
-          </div>
-
-          <div class="space-y-6">
-            <!-- Run Module 1 -->
-            <div class="glass-panel p-5 rounded-xl border border-slate-800">
-              <h4 class="font-bold text-white text-sm mb-2 text-cyan-400">
-                1. Driving Behavior Prediction Module (Mod 1)
-              </h4>
-              <p class="text-xs text-slate-400 mb-3">Trains the classification model and evaluates driving baseline divergence:</p>
-              <pre><code class="language-bash">python src/module1_driving/train_driving.py --data_path data/driving_traces.csv
-python src/module1_driving/guidance_engine.py --test_stream live</code></pre>
-            </div>
-
-            <!-- Run Module 2 -->
-            <div class="glass-panel p-5 rounded-xl border border-slate-800">
-              <h4 class="font-bold text-white text-sm mb-2 text-blue-400">
-                2. Predictive Charging Recommender Module (Mod 2)
-              </h4>
-              <p class="text-xs text-slate-400 mb-3">Runs the multi-attribute TOPSIS optimizer to recommend stations and charging limits:</p>
-              <pre><code class="language-bash">python src/module2_charging/recommender.py \
-  --current_soc 28 \
-  --destination_km 110 \
-  --user_lat 11.0168 --user_lon 76.9558</code></pre>
-            </div>
-
-            <!-- Run Module 3 -->
-            <div class="glass-panel p-5 rounded-xl border border-slate-800">
-              <h4 class="font-bold text-white text-sm mb-2 text-emerald-400">
-                3. Battery Health &amp; SHAP Explainability Module (Mod 3)
-              </h4>
-              <p class="text-xs text-slate-400 mb-3">Generates battery stress scores, forecasts degradation, and outputs TreeSHAP waterfall charts:</p>
-              <pre><code class="language-bash">python src/module3_battery/train_battery.py
-python src/module3_battery/shap_explainer.py --sample_id 42</code></pre>
-            </div>
-
-            <!-- Run Federated Learning -->
-            <div class="glass-panel p-5 rounded-xl border border-slate-800">
-              <h4 class="font-bold text-white text-sm mb-2 text-purple-400">
-                4. Federated Learning (FedPer) Cluster Simulation
-              </h4>
-              <p class="text-xs text-slate-400 mb-3">Spawns a Flower federated coordinator and launches 5 decentralized vehicle clients:</p>
-              <pre><code class="language-bash"># Terminal 1: Launch FedPer Server
-python src/federated_fedper/server.py --rounds 20 --min_clients 5
-
-# Terminal 2: Launch Vehicle Clients Simulation
-python src/federated_fedper/simulation.py --num_clients 5</code></pre>
-            </div>
-
-            <!-- Run API -->
-            <div class="glass-panel p-5 rounded-xl border border-slate-800">
-              <h4 class="font-bold text-white text-sm mb-2 text-amber-400">
-                5. Launch FastAPI REST Server
-              </h4>
-              <pre><code class="language-bash">uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload</code></pre>
-              <p class="text-xs text-slate-400 mt-2">Access interactive Swagger documentation at: <a href="http://localhost:8000/docs" target="_blank" class="text-cyan-400 underline">http://localhost:8000/docs</a></p>
-            </div>
-          </div>
-        </article>
-
-        <!-- 9. Hardware Integration -->
-        <article id="doc-hardware" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-mono font-bold text-sm">09</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Hardware Integration &amp; CAN Bus Wiring Manual</h2>
-          </div>
-          <div class="text-xs font-mono text-cyan-400 mb-4">Lead: Saravanapriyaa C R (CB.SC.U4CSE23149)</div>
-          <p class="mb-4">
-            To acquire live telemetry directly from vehicle diagnostic ports, connect an <strong>ESP32 NodeMCU</strong> to the <strong>MCP2515 SPI CAN Transceiver</strong> according to the pinout below:
-          </p>
-
-          <div class="grid sm:grid-cols-2 gap-4 my-6">
-            <div class="glass-panel p-4 rounded-xl">
-              <h4 class="font-bold text-white text-xs uppercase tracking-wider mb-2 text-cyan-400">ESP32 to MCP2515 Pin Mapping</h4>
-              <ul class="text-xs font-mono space-y-1.5 text-slate-300">
-                <li>ESP32 GPIO 5 &rarr; MCP2515 CS (Chip Select)</li>
-                <li>ESP32 GPIO 18 &rarr; MCP2515 SCK (SPI Clock)</li>
-                <li>ESP32 GPIO 23 &rarr; MCP2515 MOSI / SI</li>
-                <li>ESP32 GPIO 19 &rarr; MCP2515 MISO / SO</li>
-                <li>ESP32 GPIO 21 &rarr; MCP2515 INT (Interrupt)</li>
-                <li>ESP32 5V &amp; GND &rarr; MCP2515 VCC &amp; GND</li>
-              </ul>
-            </div>
-
-            <div class="glass-panel p-4 rounded-xl">
-              <h4 class="font-bold text-white text-xs uppercase tracking-wider mb-2 text-emerald-400">MCP2515 to OBD-II Port</h4>
-              <ul class="text-xs font-mono space-y-1.5 text-slate-300">
-                <li>MCP2515 CAN_H &rarr; OBD-II Pin 6 (CAN High)</li>
-                <li>MCP2515 CAN_L &rarr; OBD-II Pin 14 (CAN Low)</li>
-                <li>MCP2515 GND &rarr; OBD-II Pin 4 / 5 (Signal Ground)</li>
-                <li><em>* Ensure 120-ohm termination jumper is enabled.</em></li>
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <!-- 10. Troubleshooting & Limitations -->
-        <article id="doc-troubleshoot" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center font-mono font-bold text-sm">10</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Troubleshooting, Known Limitations &amp; FAQ</h2>
+        <article id="doc-running" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">08</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Instructions for Running Each Module</h2>
           </div>
 
           <div class="space-y-4">
-            <div class="glass-panel p-4 rounded-xl border-l-4 border-l-amber-400">
-              <h4 class="font-bold text-white text-sm">Issue: CAN bus initialization fails (Error code: CAN_INIT_FAILED)</h4>
-              <p class="text-xs text-slate-300 mt-1">
-                <strong>Resolution:</strong> Verify that the 120-ohm termination jumper on the MCP2515 module is installed. Check that the vehicle ignition is switched to the "ON" or "ACCESSORY" position, as many EV BMS nodes sleep when key-off.
-              </p>
+            <div class="glass-panel p-4 rounded-xl border border-pink-200 bg-white">
+              <strong class="text-rose-700 block text-xs font-mono mb-1">1. Run Module 1 Driving-to-Stress Training:</strong>
+              <pre><code class="language-bash">python src/module1_driving/train_m1_xgboost.py --calibrated True</code></pre>
             </div>
 
-            <div class="glass-panel p-4 rounded-xl border-l-4 border-l-blue-400">
-              <h4 class="font-bold text-white text-sm">Issue: Flower federated clients fail to connect to server (gRPC timeout)</h4>
-              <p class="text-xs text-slate-300 mt-1">
-                <strong>Resolution:</strong> Confirm that port <code>8080</code> is open in your local firewall. When running across distinct physical devices, replace <code>127.0.0.1</code> with the server's LAN IP address in <code>.env</code>.
-              </p>
+            <div class="glass-panel p-4 rounded-xl border border-pink-200 bg-white">
+              <strong class="text-pink-700 block text-xs font-mono mb-1">2. Run Module 2 Charging Anomaly Detection:</strong>
+              <pre><code class="language-bash">python src/module2_charging/train_m2_anomaly.py --weight_ratio 8.765</code></pre>
             </div>
 
-            <div class="glass-panel p-4 rounded-xl border-l-4 border-l-purple-400">
-              <h4 class="font-bold text-white text-sm">Known Research Limitation: Sub-Zero Thermal Plating</h4>
-              <p class="text-xs text-slate-300 mt-1">
-                Under severe freezing conditions (&lt; -10°C), physical lithium plating dynamics require advanced electrochemical impedance spectroscopy (EIS) measurements which standard OBD-II PIDs do not directly supply. SparkEV relies on conservative heuristic penalties in these ranges.
-              </p>
+            <div class="glass-panel p-4 rounded-xl border border-pink-200 bg-white">
+              <strong class="text-rose-700 block text-xs font-mono mb-1">3. Run Module 3 Direct AR SOH Forecasting:</strong>
+              <pre><code class="language-bash">python src/module3_battery/direct_ar_model.py --p 10</code></pre>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl border border-pink-200 bg-white">
+              <strong class="text-pink-700 block text-xs font-mono mb-1">4. Run Federated Learning 51-Client Benchmark:</strong>
+              <pre><code class="language-bash">python src/federated_fedper/simulation_51trips.py --rounds 80 --early_stop 30</code></pre>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl border border-pink-200 bg-white">
+              <strong class="text-rose-700 block text-xs font-mono mb-1">5. Launch Recommendation FastAPI Backend:</strong>
+              <pre><code class="language-bash">uvicorn src.api.main:app --port 8000 --reload</code></pre>
             </div>
           </div>
         </article>
 
-        <!-- 11. Links & Resources -->
-        <article id="doc-links" class="searchable-content scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm">11</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Project Links, Citations &amp; Resources</h2>
+        <!-- 9. Hardware Integration Manual -->
+        <article id="doc-hardware" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-mono font-bold text-sm">09</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">ESP32 Edge Microcontroller Deployment</h2>
           </div>
-          <p class="mb-6">
-            Access official source repositories, research preprints, and developer profiles:
+          <div class="text-xs font-mono text-pink-600 font-bold mb-3">Lead: Saravana Priyaa C. R. (CB.SC.U4CSE23149)</div>
+          <p class="mb-4 text-xs sm:text-sm">
+            The three XGBoost models run sequentially on an ESP32 at 240 MHz in <strong>8.65 ms total</strong> (M1: 3.35 ms, M2: 1.92 ms, M3: 3.38 ms). Wire the SH1106 OLED display as follows:
           </p>
 
-          <div class="grid sm:grid-cols-3 gap-4 mb-8">
-            <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="glass-panel p-4 rounded-xl hover:border-cyan-400 transition-all group">
-              <div class="text-cyan-400 text-xl mb-2"><i class="fab fa-github"></i></div>
-              <div class="font-bold text-white text-sm group-hover:text-cyan-400">Main GitHub Repository</div>
-              <div class="text-xs text-slate-400 mt-1">Source code, tests &amp; configs</div>
-            </a>
+          <div class="glass-panel p-4 rounded-xl border border-pink-200 bg-white my-3">
+            <h4 class="font-bold text-xs uppercase text-rose-700 mb-2">ESP32 to SH1106 OLED Pinout</h4>
+            <ul class="text-xs font-mono space-y-1 text-slate-700">
+              <li>&bull; ESP32 GPIO 21 (SDA) &rarr; SH1106 SDA</li>
+              <li>&bull; ESP32 GPIO 22 (SCL) &rarr; SH1106 SCL</li>
+              <li>&bull; ESP32 3.3V &amp; GND &rarr; SH1106 VCC &amp; GND</li>
+            </ul>
+          </div>
+        </article>
 
-            <a href="index.html#simulator" class="glass-panel p-4 rounded-xl hover:border-emerald-400 transition-all group">
-              <div class="text-emerald-400 text-xl mb-2"><i class="fas fa-sliders-h"></i></div>
-              <div class="font-bold text-white text-sm group-hover:text-emerald-400">Interactive Simulator</div>
-              <div class="text-xs text-slate-400 mt-1">Run live What-If scenarios</div>
-            </a>
-
-            <a href="methodology.html" class="glass-panel p-4 rounded-xl hover:border-purple-400 transition-all group">
-              <div class="text-purple-400 text-xl mb-2"><i class="fas fa-file-alt"></i></div>
-              <div class="font-bold text-white text-sm group-hover:text-purple-400">Research Methodology</div>
-              <div class="text-xs text-slate-400 mt-1">Formulations &amp; metrics</div>
-            </a>
+        <!-- 10. Troubleshooting & FAQ -->
+        <article id="doc-troubleshoot" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">10</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Troubleshooting &amp; Known Limitations</h2>
           </div>
 
-          <h3 class="font-heading font-bold text-base text-white mb-2">Paper Citation (BibTeX)</h3>
-          <pre><code class="language-bash">@article{ramya2026sparkev,
+          <div class="space-y-3 text-xs sm:text-sm">
+            <div class="glass-panel p-4 rounded-xl border-l-4 border-l-rose-500 bg-white">
+              <strong class="text-slate-900 block mb-1">Q: Why does FedPer experience a cold-start cost on new vehicles?</strong>
+              <p class="text-slate-600">A: Because a fresh personalization head begins without driver history (\(R^2 = 0.452\)). Performance peaks at round 30 before local overfitting occurs, so early stopping is essential.</p>
+            </div>
+
+            <div class="glass-panel p-4 rounded-xl border-l-4 border-l-pink-500 bg-white">
+              <strong class="text-slate-900 block mb-1">Q: How does the capacity fade calibration behave at sub-zero temperatures?</strong>
+              <p class="text-slate-600">A: The fade model was calibrated on 24–42°C cells from NASA/CALCE, whereas 85% of Munich driving windows are colder. Sub-zero operation requires conservative Arrhenius scaling.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 11. Citations & Links -->
+        <article id="doc-links" class="searchable-content scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">11</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Paper Citation (BibTeX)</h2>
+          </div>
+          <pre><code class="language-bash">@article{sparkev2026,
   title={SparkEV: A Personalized, Predictive, and Explainable Framework for Intelligent Electric Vehicle Management},
-  author={Ramya, G. R. and Umashankar, S. and Shravanthi, S. and Gayathri, U. and Saravanapriyaa, C. R. and Rithanya, K. A. and Irene Divya, J.},
-  journal={School of Computing and School of Engineering, Amrita Vishwa Vidyapeetham},
+  author={Ramya, G. R. and Umashankar, S. and Shravanthi, S. and Priyaa, Saravana C. R. and Gayathri, U. and Rithanya, K. A. and Irene Divya, J.},
+  journal={Department of Computer Science and Engineering & Department of Electrical and Electronics Engineering, Amrita Vishwa Vidyapeetham},
   year={2026},
   address={Coimbatore, India}
 }</code></pre>
@@ -682,19 +516,20 @@ python src/federated_fedper/simulation.py --num_clients 5</code></pre>
   </div>
 
   <!-- Footer -->
-  <footer class="bg-[#070B16] border-t border-slate-900 py-12 text-slate-400 text-xs font-mono">
+  <footer class="bg-white border-t border-pink-100 py-10 text-slate-600 text-xs font-mono">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-slate-950 font-black">
+        <div class="w-8 h-8 rounded-lg bg-gradient-pink flex items-center justify-center text-white font-black">
           <i class="fas fa-bolt text-sm"></i>
         </div>
-        <span class="font-heading font-bold text-white text-base">SparkEV Technical Manual</span>
+        <span class="font-heading font-bold text-slate-900 text-base">SparkEV Reference Manual</span>
       </div>
       <div class="flex items-center gap-6">
-        <a href="index.html" class="hover:text-cyan-400 transition-colors">Overview</a>
-        <a href="methodology.html" class="hover:text-cyan-400 transition-colors">Methodology</a>
-        <a href="documentation.html" class="text-emerald-400 font-semibold">Documentation</a>
-        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="hover:text-cyan-400 transition-colors">GitHub</a>
+        <a href="index.html" class="hover:text-rose-600 transition-colors">Overview</a>
+        <a href="methodology.html" class="hover:text-rose-600 transition-colors">Methodology</a>
+        <a href="documentation.html" class="text-rose-600 font-bold">Documentation</a>
+        <a href="simulator.html" class="hover:text-rose-600 transition-colors">Simulator</a>
+        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="hover:text-rose-600 transition-colors">GitHub</a>
       </div>
     </div>
   </footer>

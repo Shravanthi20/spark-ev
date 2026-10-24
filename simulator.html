@@ -10,16 +10,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
             brand: {
-              cyan: '#00F2FE',
-              blue: '#4FACFE',
-              emerald: '#10B981',
-              dark: '#0A0F1D',
-              card: '#111827'
+              pink: '#F43F5E',
+              rose: '#E11D48',
+              soft: '#FFF5F7',
+              border: '#FCE7F3'
             }
           }
         }
@@ -32,38 +30,35 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-[#0A0F1D] text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+<body class="bg-[#FFF5F7] text-slate-800 antialiased selection:bg-rose-200 selection:text-rose-900">
 
-  <!-- Navigation Bar -->
+  <!-- Navigation Bar (No theme toggle) -->
   <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2 group">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+        <a href="index.html" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-pink flex items-center justify-center text-white font-black text-xl shadow-md shadow-pink-500/25 group-hover:scale-105 transition-transform">
             <i class="fas fa-bolt"></i>
           </div>
           <div>
-            <span class="font-heading font-black text-2xl tracking-wider text-white">Spark<span class="text-cyan-400">EV</span></span>
-            <span class="block text-[10px] font-mono text-slate-400 tracking-widest uppercase">What-If Decision Sandbox</span>
+            <span class="font-heading font-black text-2xl tracking-wider text-slate-900">Spark<span class="text-rose-600">EV</span></span>
+            <span class="block text-[10px] font-mono text-rose-700 font-semibold tracking-widest uppercase">What-If Decision Sandbox</span>
           </div>
         </a>
       </div>
 
-      <nav aria-label="Main Navigation" class="hidden lg:flex items-center gap-7 text-sm font-medium">
-        <a href="index.html" class="text-slate-300 hover:text-cyan-400 transition-colors">Overview</a>
-        <a href="index.html#architecture" class="text-slate-300 hover:text-cyan-400 transition-colors">Architecture</a>
-        <a href="methodology.html" class="text-slate-300 hover:text-cyan-400 transition-colors">Methodology</a>
-        <a href="documentation.html" class="text-slate-300 hover:text-cyan-400 transition-colors">Documentation</a>
-        <a href="simulator.html" class="text-cyan-400 font-semibold border-b-2 border-cyan-400 pb-1">What-If Simulator</a>
-        <a href="index.html#team" class="text-slate-300 hover:text-cyan-400 transition-colors">Team</a>
+      <nav aria-label="Main Navigation" class="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-700">
+        <a href="index.html" class="hover:text-rose-600 transition-colors">Overview</a>
+        <a href="index.html#architecture" class="hover:text-rose-600 transition-colors">Architecture</a>
+        <a href="methodology.html" class="hover:text-rose-600 transition-colors">Methodology</a>
+        <a href="documentation.html" class="hover:text-rose-600 transition-colors">Documentation</a>
+        <a href="simulator.html" class="text-rose-600 font-bold border-b-2 border-rose-500 pb-1">What-If Simulator</a>
+        <a href="index.html#team" class="hover:text-rose-600 transition-colors">Team</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <button type="button" aria-label="Toggle dark/light theme" class="theme-toggle-btn w-9 h-9 rounded-lg border border-slate-700 hover:border-cyan-400 flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-colors">
-          <i class="theme-toggle-icon fas fa-sun"></i>
-        </button>
-        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm font-medium text-white transition-all hover:border-cyan-400 flex items-center gap-2">
-          <i class="fab fa-github"></i>
+        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="px-4 py-2 rounded-xl bg-white hover:bg-rose-50 border border-pink-200 text-sm font-semibold text-slate-800 shadow-sm transition-all hover:border-pink-300 flex items-center gap-2">
+          <i class="fab fa-github text-rose-600"></i>
           <span>GitHub</span>
         </a>
       </div>
@@ -74,30 +69,30 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     
     <!-- Title banner -->
-    <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase mb-3">
-          <i class="fas fa-sliders-h"></i> Module 4 Interactive Engine
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 border border-pink-200 text-rose-700 text-xs font-mono uppercase font-bold mb-3">
+          <i class="fas fa-sliders-h text-rose-500"></i> Interactive Decision Engine
         </div>
-        <h1 class="font-heading font-black text-3xl sm:text-4xl text-white">
+        <h1 class="font-heading font-black text-3xl sm:text-4xl text-slate-900">
           Electric Vehicle Decision Sandbox
         </h1>
-        <p class="text-slate-400 text-sm mt-2 max-w-2xl">
-          Simulate hypothetical driving behaviors, climate variations, and charging decisions. 
-          Analyze the resulting battery thermal stress and examine SHAP attribution factors in real time.
+        <p class="text-slate-600 text-sm mt-2 max-w-2xl">
+          Simulate hypothetical driving behaviors, climate variations, and charging rates. 
+          Calculate the semi-empirical Battery Stress Index (BSI) and view TreeSHAP attributions in real time.
         </p>
       </div>
 
       <!-- Quick Preset Selector -->
-      <div class="flex items-center gap-2 bg-slate-900 p-2 rounded-xl border border-slate-800">
-        <span class="text-xs font-mono text-slate-400 ml-2">Scenario Presets:</span>
-        <button onclick="applyPreset('summer')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-300 hover:text-white transition-colors">
+      <div class="flex items-center gap-2 bg-white p-2 rounded-xl border border-pink-200 shadow-sm">
+        <span class="text-xs font-mono text-slate-500 ml-2 font-semibold">Presets:</span>
+        <button onclick="applyPreset('summer')" class="px-3 py-1.5 rounded-lg bg-pink-50 hover:bg-pink-100 text-xs font-mono text-rose-800 font-semibold transition-colors">
           Summer Highway
         </button>
-        <button onclick="applyPreset('winter')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-300 hover:text-white transition-colors">
-          Winter Commute
+        <button onclick="applyPreset('winter')" class="px-3 py-1.5 rounded-lg bg-pink-50 hover:bg-pink-100 text-xs font-mono text-rose-800 font-semibold transition-colors">
+          Winter Munich
         </button>
-        <button onclick="applyPreset('eco')" class="px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 text-xs font-mono transition-colors">
+        <button onclick="applyPreset('eco')" class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 text-xs font-mono font-semibold transition-colors border border-emerald-200">
           Optimal Eco
         </button>
       </div>
@@ -107,152 +102,152 @@
     <div class="grid lg:grid-cols-12 gap-8">
       
       <!-- Input Controls (5 Cols) -->
-      <div class="lg:col-span-5 glass-panel p-6 sm:p-8 rounded-2xl border border-slate-700 space-y-6">
-        <h3 class="font-heading font-bold text-lg text-white border-b border-slate-800 pb-3 flex items-center justify-between">
+      <div class="lg:col-span-5 glass-panel p-6 sm:p-7 rounded-2xl border border-pink-200 bg-white space-y-5">
+        <h3 class="font-heading font-bold text-base text-slate-900 border-b border-pink-100 pb-3 flex items-center justify-between">
           <span>Hypothetical Inputs</span>
-          <span class="text-xs font-mono text-cyan-400"><i class="fas fa-sync-alt fa-spin text-[10px] mr-1"></i> Live Computed</span>
+          <span class="text-xs font-mono text-rose-600 font-bold"><i class="fas fa-sync-alt fa-spin text-[10px] mr-1"></i> Live Reactive</span>
         </h3>
 
         <!-- Initial SoC -->
         <div>
-          <div class="flex justify-between text-sm mb-2">
-            <span class="text-slate-300 font-medium">Initial Battery SoC</span>
-            <span id="disp-soc" class="font-mono text-cyan-400 font-bold">65%</span>
+          <div class="flex justify-between text-xs font-semibold mb-1.5">
+            <span class="text-slate-700">Initial Battery SOC</span>
+            <span id="disp-soc" class="font-mono text-rose-600 font-bold">65%</span>
           </div>
           <input type="range" id="sim-soc" min="15" max="100" value="65" class="w-full">
         </div>
 
         <!-- Planned Trip Distance -->
         <div>
-          <div class="flex justify-between text-sm mb-2">
-            <span class="text-slate-300 font-medium">Planned Trip Distance</span>
-            <span id="disp-distance" class="font-mono text-cyan-400 font-bold">120 km</span>
+          <div class="flex justify-between text-xs font-semibold mb-1.5">
+            <span class="text-slate-700">Planned Trip Distance</span>
+            <span id="disp-distance" class="font-mono text-rose-600 font-bold">120 km</span>
           </div>
           <input type="range" id="sim-distance" min="20" max="300" step="5" value="120" class="w-full">
         </div>
 
         <!-- Driving Style -->
         <div>
-          <label for="sim-style" class="block text-sm font-medium text-slate-300 mb-2">Driving Style Profile</label>
-          <select id="sim-style" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm focus:border-cyan-400 focus:outline-none font-mono">
+          <label for="sim-style" class="block text-xs font-semibold text-slate-700 mb-1.5">Driving Style Profile</label>
+          <select id="sim-style" class="w-full bg-[#FFF5F7] border border-pink-200 text-slate-800 rounded-xl px-3 py-2 text-xs focus:border-rose-400 focus:outline-none font-mono">
             <option value="eco">Eco-Driver (High regenerative braking, smooth acceleration)</option>
             <option value="balanced" selected>Balanced (Standard commute)</option>
-            <option value="aggressive">Aggressive (Hard throttle spikes, late braking)</option>
+            <option value="aggressive">Aggressive (Hard throttle spikes, late braking, high speed)</option>
           </select>
         </div>
 
         <!-- Ambient Temperature -->
         <div>
-          <div class="flex justify-between text-sm mb-2">
-            <span class="text-slate-300 font-medium">Ambient Temperature</span>
-            <span id="disp-temp" class="font-mono text-cyan-400 font-bold">32°C</span>
+          <div class="flex justify-between text-xs font-semibold mb-1.5">
+            <span class="text-slate-700">Ambient Temperature (-3°C to 33.5°C)</span>
+            <span id="disp-temp" class="font-mono text-rose-600 font-bold">32°C</span>
           </div>
-          <input type="range" id="sim-temp" min="-5" max="48" value="32" class="w-full">
-          <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
-            <span>-5°C (Freezing)</span>
-            <span>25°C (Optimal)</span>
-            <span>48°C (Extreme Heat)</span>
+          <input type="range" id="sim-temp" min="-5" max="45" value="32" class="w-full">
+          <div class="flex justify-between text-[10px] font-mono text-slate-400 mt-1">
+            <span>-5°C (Winter)</span>
+            <span>20°C (Optimal)</span>
+            <span>45°C (Extreme Heat)</span>
           </div>
         </div>
 
         <!-- Charging Hardware & Target Limit -->
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-2 gap-3">
           <div>
-            <label for="sim-charger" class="block text-xs font-medium text-slate-300 mb-1.5">Charging Rate</label>
-            <select id="sim-charger" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-2.5 py-2 text-xs focus:border-cyan-400 focus:outline-none font-mono">
+            <label for="sim-charger" class="block text-[11px] font-semibold text-slate-700 mb-1">Charging Power</label>
+            <select id="sim-charger" class="w-full bg-[#FFF5F7] border border-pink-200 text-slate-800 rounded-lg px-2.5 py-1.5 text-xs focus:border-rose-400 focus:outline-none font-mono">
               <option value="ac11">11 kW AC Level 2</option>
               <option value="dc50" selected>50 kW DC Fast</option>
               <option value="dc150">150 kW Ultra-Fast</option>
             </select>
           </div>
           <div>
-            <label for="sim-target-soc" class="block text-xs font-medium text-slate-300 mb-1.5">Target SoC Limit</label>
-            <select id="sim-target-soc" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg px-2.5 py-2 text-xs focus:border-cyan-400 focus:outline-none font-mono">
+            <label for="sim-target-soc" class="block text-[11px] font-semibold text-slate-700 mb-1">Target SOC Limit</label>
+            <select id="sim-target-soc" class="w-full bg-[#FFF5F7] border border-pink-200 text-slate-800 rounded-lg px-2.5 py-1.5 text-xs focus:border-rose-400 focus:outline-none font-mono">
               <option value="80" selected>80% (Recommended)</option>
               <option value="90">90%</option>
-              <option value="100">100% (Full Saturation)</option>
+              <option value="100">100% (High Excursion)</option>
             </select>
           </div>
         </div>
 
         <!-- Baseline SOH -->
         <div>
-          <div class="flex justify-between text-sm mb-2">
-            <span class="text-slate-300 font-medium">Current SOH Baseline</span>
-            <span id="disp-baseline-soh" class="font-mono text-emerald-400 font-bold">94.0%</span>
+          <div class="flex justify-between text-xs font-semibold mb-1.5">
+            <span class="text-slate-700">Current SOH Baseline</span>
+            <span id="disp-baseline-soh" class="font-mono text-rose-600 font-bold">94.0%</span>
           </div>
           <input type="range" id="sim-baseline-soh" min="75" max="100" step="0.5" value="94" class="w-full">
         </div>
       </div>
 
       <!-- Simulation Outputs (7 Cols) -->
-      <div class="lg:col-span-7 space-y-6">
+      <div class="lg:col-span-7 space-y-5">
         
-        <!-- Output Metrics Cards -->
+        <!-- Metrics Row -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="glass-panel p-4 rounded-xl border border-slate-700">
-            <div class="text-[11px] font-mono text-slate-400 uppercase">Trip Energy Rate</div>
-            <div id="res-consumption" class="text-lg font-heading font-bold text-white mt-1">16.2 kWh/100km</div>
-            <div id="res-energy-needed" class="text-[11px] font-mono text-cyan-400 mt-0.5">19.4 kWh total</div>
+          <div class="glass-panel p-3.5 rounded-xl border border-pink-200 bg-white">
+            <div class="text-[10px] font-mono text-slate-500 uppercase font-semibold">Energy Consumption</div>
+            <div id="res-consumption" class="text-base font-heading font-black text-slate-900 mt-1">16.2 kWh/100km</div>
+            <div id="res-energy-needed" class="text-[10px] font-mono text-rose-600 mt-0.5">19.4 kWh total</div>
           </div>
 
-          <div class="glass-panel p-4 rounded-xl border border-slate-700">
-            <div class="text-[11px] font-mono text-slate-400 uppercase">Arrival SoC</div>
-            <div id="res-arrival-soc" class="text-lg font-heading font-bold text-white mt-1">32.6%</div>
-            <div class="text-[11px] font-mono text-slate-400 mt-0.5">Estimated on arrival</div>
+          <div class="glass-panel p-3.5 rounded-xl border border-pink-200 bg-white">
+            <div class="text-[10px] font-mono text-slate-500 uppercase font-semibold">Arrival SOC</div>
+            <div id="res-arrival-soc" class="text-base font-heading font-black text-slate-900 mt-1">32.6%</div>
+            <div class="text-[10px] font-mono text-slate-500 mt-0.5">Estimated on arrival</div>
           </div>
 
-          <div class="glass-panel p-4 rounded-xl border border-slate-700">
-            <div class="text-[11px] font-mono text-slate-400 uppercase">Charge Duration</div>
-            <div id="res-charge-time" class="text-lg font-heading font-bold text-white mt-1">38 mins</div>
-            <div class="text-[11px] font-mono text-slate-400 mt-0.5">To target limit</div>
+          <div class="glass-panel p-3.5 rounded-xl border border-pink-200 bg-white">
+            <div class="text-[10px] font-mono text-slate-500 uppercase font-semibold">Charge Duration</div>
+            <div id="res-charge-time" class="text-base font-heading font-black text-slate-900 mt-1">38 mins</div>
+            <div class="text-[10px] font-mono text-slate-500 mt-0.5">To target limit</div>
           </div>
 
-          <div class="glass-panel p-4 rounded-xl border border-slate-700">
-            <div class="text-[11px] font-mono text-slate-400 uppercase">Battery Stress</div>
-            <div id="res-stress-score" class="text-lg font-heading font-bold text-white mt-1">34 / 100</div>
+          <div class="glass-panel p-3.5 rounded-xl border border-pink-200 bg-white">
+            <div class="text-[10px] font-mono text-slate-500 uppercase font-semibold">Battery Stress (BSI)</div>
+            <div id="res-stress-score" class="text-base font-heading font-black text-slate-900 mt-1">34 / 100</div>
             <div class="mt-1">
-              <span id="res-risk-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full border bg-emerald-500/10 text-emerald-400 border-emerald-500/30">LOW</span>
+              <span id="res-risk-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full border bg-emerald-50 text-emerald-700 border-emerald-300">LOW</span>
             </div>
           </div>
         </div>
 
         <!-- SOH Degradation Curve Chart -->
-        <div class="glass-panel p-5 rounded-2xl border border-slate-700">
-          <div class="flex items-center justify-between mb-4">
-            <h4 class="font-heading font-bold text-sm text-white flex items-center gap-2">
-              <i class="fas fa-chart-line text-cyan-400"></i>
-              <span>Degradation Trajectory: Next 500 Cycles</span>
+        <div class="glass-panel p-5 rounded-2xl border border-pink-200 bg-white">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-heading font-bold text-xs sm:text-sm text-slate-900 flex items-center gap-2">
+              <i class="fas fa-chart-line text-rose-500"></i>
+              <span>Direct AR SOH Degradation Trajectory (Next 300 Cycles)</span>
             </h4>
-            <span class="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-              SparkEV FedPer Optimization
+            <span class="text-[11px] font-mono text-rose-700 font-bold bg-pink-50 px-2 py-0.5 rounded border border-pink-200">
+              FedPer Optimized
             </span>
           </div>
-          <div class="h-60">
+          <div class="h-56">
             <canvas id="sim-degradation-chart"></canvas>
           </div>
         </div>
 
-        <!-- SHAP Feature Importance Waterfall Chart -->
-        <div class="glass-panel p-5 rounded-2xl border border-slate-700">
-          <div class="flex items-center justify-between mb-3">
-            <h4 class="font-heading font-bold text-sm text-white flex items-center gap-2">
-              <i class="fas fa-fingerprint text-purple-400"></i>
-              <span>TreeSHAP Feature Attributions</span>
+        <!-- SHAP Feature Importance Chart -->
+        <div class="glass-panel p-5 rounded-2xl border border-pink-200 bg-white">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="font-heading font-bold text-xs sm:text-sm text-slate-900 flex items-center gap-2">
+              <i class="fas fa-fingerprint text-rose-600"></i>
+              <span>TreeSHAP Feature Attributions: Driver-Controllable Factors</span>
             </h4>
-            <span class="text-[11px] font-mono text-slate-400">Shapley Values \(\phi_i\)</span>
+            <span class="text-[10px] font-mono text-slate-500">Mean Positive SHAP</span>
           </div>
           <div class="h-44">
             <canvas id="sim-shap-chart"></canvas>
           </div>
         </div>
 
-        <!-- Actionable Guidance Box -->
-        <div class="p-5 rounded-xl bg-gradient-to-r from-cyan-950/40 to-blue-950/40 border border-cyan-500/30 text-xs">
-          <div class="font-bold text-cyan-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <i class="fas fa-robot text-cyan-400"></i> Personalized Actionable Advice
+        <!-- Recommendations Box -->
+        <div class="p-4 rounded-xl bg-pink-50 border border-pink-200 text-xs">
+          <div class="font-bold text-rose-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <i class="fas fa-robot text-rose-600"></i> Personalized Actionable Advice
           </div>
-          <ul id="res-smart-advice" class="space-y-1.5 text-slate-200">
+          <ul id="res-smart-advice" class="space-y-1 text-slate-700">
             <!-- Dynamically populated -->
           </ul>
         </div>
@@ -262,19 +257,19 @@
   </main>
 
   <!-- Footer -->
-  <footer class="bg-[#070B16] border-t border-slate-900 py-12 text-slate-400 text-xs font-mono mt-16">
+  <footer class="bg-white border-t border-pink-100 py-10 text-slate-600 text-xs font-mono mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-slate-950 font-black">
+        <div class="w-8 h-8 rounded-lg bg-gradient-pink flex items-center justify-center text-white font-black">
           <i class="fas fa-bolt text-sm"></i>
         </div>
-        <span class="font-heading font-bold text-white text-base">SparkEV What-If Engine</span>
+        <span class="font-heading font-bold text-slate-900 text-base">SparkEV What-If Sandbox</span>
       </div>
       <div class="flex items-center gap-6">
-        <a href="index.html" class="hover:text-cyan-400 transition-colors">Overview</a>
-        <a href="methodology.html" class="hover:text-cyan-400 transition-colors">Methodology</a>
-        <a href="documentation.html" class="hover:text-cyan-400 transition-colors">Documentation</a>
-        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="hover:text-cyan-400 transition-colors">GitHub</a>
+        <a href="index.html" class="hover:text-rose-600 transition-colors">Overview</a>
+        <a href="methodology.html" class="hover:text-rose-600 transition-colors">Methodology</a>
+        <a href="documentation.html" class="hover:text-rose-600 transition-colors">Documentation</a>
+        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="hover:text-rose-600 transition-colors">GitHub</a>
       </div>
     </div>
   </footer>
@@ -284,17 +279,17 @@
   <script>
     function applyPreset(preset) {
       if (preset === 'summer') {
-        document.getElementById('sim-temp').value = 40;
+        document.getElementById('sim-temp').value = 35;
         document.getElementById('sim-style').value = 'aggressive';
         document.getElementById('sim-charger').value = 'dc150';
         document.getElementById('sim-target-soc').value = 100;
       } else if (preset === 'winter') {
-        document.getElementById('sim-temp').value = 2;
+        document.getElementById('sim-temp').value = -2;
         document.getElementById('sim-style').value = 'balanced';
         document.getElementById('sim-charger').value = 'ac11';
         document.getElementById('sim-target-soc').value = 80;
       } else if (preset === 'eco') {
-        document.getElementById('sim-temp').value = 25;
+        document.getElementById('sim-temp').value = 22;
         document.getElementById('sim-style').value = 'eco';
         document.getElementById('sim-charger').value = 'dc50';
         document.getElementById('sim-target-soc').value = 80;

@@ -1,52 +1,16 @@
 /**
- * SparkEV Portal Core Scripts
- * Handles Theme Toggling, Navigation, Code Copying, and Quick Search
+ * SparkEV Core Portal Scripts (Light Pink & White Theme)
+ * Theme toggle completely removed.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initThemeToggle();
   initMobileMenu();
   initCopyButtons();
   initScrollSpy();
   initSearch();
 });
 
-// Theme Management
-function initThemeToggle() {
-  const themeToggleBtns = document.querySelectorAll('.theme-toggle-btn');
-  const savedTheme = localStorage.getItem('sparkev-theme') || 'dark';
-
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-theme');
-    updateThemeIcons(true);
-  } else {
-    document.body.classList.remove('light-theme');
-    updateThemeIcons(false);
-  }
-
-  themeToggleBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const isLight = document.body.classList.toggle('light-theme');
-      localStorage.setItem('sparkev-theme', isLight ? 'light' : 'dark');
-      updateThemeIcons(isLight);
-    });
-  });
-}
-
-function updateThemeIcons(isLight) {
-  const icons = document.querySelectorAll('.theme-toggle-icon');
-  icons.forEach(icon => {
-    if (isLight) {
-      icon.classList.remove('fa-sun');
-      icon.classList.add('fa-moon');
-    } else {
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
-    }
-  });
-}
-
-// Mobile Menu
+// Mobile Drawer Menu
 function initMobileMenu() {
   const menuBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
@@ -56,7 +20,6 @@ function initMobileMenu() {
       mobileMenu.classList.toggle('hidden');
     });
 
-    // Close on navigation
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
@@ -68,7 +31,6 @@ function initMobileMenu() {
 // Code Copy Buttons
 function initCopyButtons() {
   document.querySelectorAll('pre').forEach(pre => {
-    // Avoid double wrapper
     if (pre.parentElement.classList.contains('code-wrapper')) return;
 
     const wrapper = document.createElement('div');
@@ -77,14 +39,14 @@ function initCopyButtons() {
     wrapper.appendChild(pre);
 
     const button = document.createElement('button');
-    button.className = 'copy-btn opacity-80 hover:opacity-100 flex items-center gap-1.5';
+    button.className = 'copy-btn flex items-center gap-1.5';
     button.innerHTML = '<i class="far fa-copy"></i><span>Copy</span>';
 
     button.addEventListener('click', async () => {
       const code = pre.querySelector('code')?.innerText || pre.innerText;
       try {
         await navigator.clipboard.writeText(code);
-        button.innerHTML = '<i class="fas fa-check text-emerald-400"></i><span class="text-emerald-400">Copied!</span>';
+        button.innerHTML = '<i class="fas fa-check text-rose-600"></i><span class="text-rose-600">Copied!</span>';
         setTimeout(() => {
           button.innerHTML = '<i class="far fa-copy"></i><span>Copy</span>';
         }, 2000);
@@ -97,7 +59,7 @@ function initCopyButtons() {
   });
 }
 
-// Scrollspy for TOC
+// ScrollSpy for Table of Contents
 function initScrollSpy() {
   const tocLinks = document.querySelectorAll('.toc-link');
   if (tocLinks.length === 0) return;
@@ -119,11 +81,11 @@ function initScrollSpy() {
 
     tocLinks.forEach(link => {
       if (link.getAttribute('href') === `#${currentId}`) {
-        link.classList.add('text-cyan-400', 'font-semibold', 'border-l-2', 'border-cyan-400', 'pl-2');
-        link.classList.remove('text-slate-400');
+        link.classList.add('text-rose-600', 'font-bold', 'border-l-2', 'border-rose-500', 'pl-2', 'bg-pink-50/80');
+        link.classList.remove('text-slate-600');
       } else {
-        link.classList.remove('text-cyan-400', 'font-semibold', 'border-l-2', 'border-cyan-400', 'pl-2');
-        link.classList.add('text-slate-400');
+        link.classList.remove('text-rose-600', 'font-bold', 'border-l-2', 'border-rose-500', 'pl-2', 'bg-pink-50/80');
+        link.classList.add('text-slate-600');
       }
     });
   });

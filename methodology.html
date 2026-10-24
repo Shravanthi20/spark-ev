@@ -3,23 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SparkEV Research Methodology — Technical Approach &amp; Foundations</title>
-  <meta name="description" content="Detailed research methodology, mathematical formulations, and engineering architecture behind SparkEV: FedPer, SHAP, SOH forecasting, and charging optimization.">
+  <title>SparkEV Research Methodology — Experimental Formulations &amp; Findings</title>
+  <meta name="description" content="Technical research methodology, mathematical formulations, and empirical results for SparkEV across TUM, Autosun, Zenodo, and NASA/CALCE datasets.">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
             brand: {
-              cyan: '#00F2FE',
-              blue: '#4FACFE',
-              emerald: '#10B981',
-              dark: '#0A0F1D',
-              card: '#111827'
+              pink: '#F43F5E',
+              rose: '#E11D48',
+              soft: '#FFF5F7',
+              border: '#FCE7F3'
             }
           }
         }
@@ -33,500 +31,467 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
 
-  <!-- PrismJS for Syntax Highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="bg-[#0A0F1D] text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+<body class="bg-[#FFF5F7] text-slate-800 antialiased selection:bg-rose-200 selection:text-rose-900">
 
-  <!-- Navigation Bar -->
+  <!-- Navigation Bar (No theme toggle) -->
   <header class="sticky top-0 z-50 glass-nav transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <a href="index.html" class="flex items-center gap-2 group">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+        <a href="index.html" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-pink flex items-center justify-center text-white font-black text-xl shadow-md shadow-pink-500/25 group-hover:scale-105 transition-transform">
             <i class="fas fa-bolt"></i>
           </div>
           <div>
-            <span class="font-heading font-black text-2xl tracking-wider text-white">Spark<span class="text-cyan-400">EV</span></span>
-            <span class="block text-[10px] font-mono text-slate-400 tracking-widest uppercase">Methodology Specification</span>
+            <span class="font-heading font-black text-2xl tracking-wider text-slate-900">Spark<span class="text-rose-600">EV</span></span>
+            <span class="block text-[10px] font-mono text-rose-700 font-semibold tracking-widest uppercase">Methodology Specification</span>
           </div>
         </a>
       </div>
 
-      <nav aria-label="Main Navigation" class="hidden lg:flex items-center gap-7 text-sm font-medium">
-        <a href="index.html" class="text-slate-300 hover:text-cyan-400 transition-colors">Overview</a>
-        <a href="index.html#architecture" class="text-slate-300 hover:text-cyan-400 transition-colors">Architecture</a>
-        <a href="methodology.html" class="text-cyan-400 font-semibold border-b-2 border-cyan-400 pb-1">Methodology</a>
-        <a href="documentation.html" class="text-slate-300 hover:text-cyan-400 flex items-center gap-1.5 transition-colors">
+      <nav aria-label="Main Navigation" class="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-700">
+        <a href="index.html" class="hover:text-rose-600 transition-colors">Overview</a>
+        <a href="index.html#architecture" class="hover:text-rose-600 transition-colors">Architecture</a>
+        <a href="methodology.html" class="text-rose-600 font-bold border-b-2 border-rose-500 pb-1">Methodology</a>
+        <a href="documentation.html" class="hover:text-rose-600 flex items-center gap-1.5 transition-colors">
           <span>Documentation</span>
-          <span class="px-1.5 py-0.5 text-[10px] bg-emerald-500/20 text-emerald-300 rounded border border-emerald-500/30 font-mono">Manual</span>
+          <span class="px-2 py-0.5 text-[10px] bg-rose-100 text-rose-800 rounded-full border border-rose-200 font-mono">Manual</span>
         </a>
-        <a href="index.html#simulator" class="text-slate-300 hover:text-cyan-400 transition-colors">What-If Simulator</a>
-        <a href="index.html#team" class="text-slate-300 hover:text-cyan-400 transition-colors">Team</a>
+        <a href="simulator.html" class="hover:text-rose-600 transition-colors">What-If Simulator</a>
+        <a href="index.html#team" class="hover:text-rose-600 transition-colors">Team</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <button type="button" aria-label="Toggle dark/light theme" class="theme-toggle-btn w-9 h-9 rounded-lg border border-slate-700 hover:border-cyan-400 flex items-center justify-center text-slate-300 hover:text-cyan-400 transition-colors">
-          <i class="theme-toggle-icon fas fa-sun"></i>
-        </button>
-        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-sm font-medium text-white transition-all hover:border-cyan-400 flex items-center gap-2">
-          <i class="fab fa-github"></i>
+        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="px-4 py-2 rounded-xl bg-white hover:bg-rose-50 border border-pink-200 text-sm font-semibold text-slate-800 shadow-sm transition-all hover:border-pink-300 flex items-center gap-2">
+          <i class="fab fa-github text-rose-600"></i>
           <span>GitHub</span>
         </a>
-        <!-- Mobile hamburger -->
-        <button id="mobile-menu-btn" type="button" aria-label="Open mobile navigation menu" class="lg:hidden w-10 h-10 rounded-lg border border-slate-700 flex items-center justify-center text-slate-300 hover:text-cyan-400">
+        <button id="mobile-menu-btn" type="button" aria-label="Open mobile navigation menu" class="lg:hidden w-10 h-10 rounded-xl border border-pink-200 bg-white flex items-center justify-center text-slate-700 hover:text-rose-600 shadow-sm">
           <i class="fas fa-bars"></i>
         </button>
       </div>
     </div>
 
     <!-- Mobile Drawer -->
-    <div id="mobile-menu" class="hidden lg:hidden px-4 pt-2 pb-6 bg-[#0B132B] border-b border-slate-800 space-y-3 text-sm font-medium">
-      <a href="index.html" class="block py-2 text-slate-300 hover:text-cyan-400">Overview</a>
-      <a href="index.html#architecture" class="block py-2 text-slate-300 hover:text-cyan-400">Architecture</a>
-      <a href="methodology.html" class="block py-2 text-cyan-400 font-semibold">Methodology</a>
-      <a href="documentation.html" class="block py-2 text-slate-300 hover:text-emerald-400">Documentation</a>
-      <a href="index.html#simulator" class="block py-2 text-slate-300 hover:text-cyan-400">What-If Simulator</a>
-      <a href="index.html#team" class="block py-2 text-slate-300 hover:text-cyan-400">Team Details</a>
+    <div id="mobile-menu" class="hidden lg:hidden px-4 pt-3 pb-6 bg-white border-b border-pink-200 space-y-3 text-sm font-semibold shadow-lg">
+      <a href="index.html" class="block py-2 text-slate-700 hover:text-rose-600">Overview</a>
+      <a href="index.html#architecture" class="block py-2 text-slate-700 hover:text-rose-600">Architecture</a>
+      <a href="methodology.html" class="block py-2 text-rose-600 font-bold">Methodology</a>
+      <a href="documentation.html" class="block py-2 text-slate-700 hover:text-rose-600">Documentation</a>
+      <a href="simulator.html" class="block py-2 text-slate-700 hover:text-rose-600">What-If Simulator</a>
+      <a href="index.html#team" class="block py-2 text-slate-700 hover:text-rose-600">Team Details</a>
     </div>
   </header>
 
   <!-- Page Header -->
-  <section class="py-16 bg-gradient-to-b from-slate-900 via-[#0A0F1D] to-[#0A0F1D] border-b border-slate-800/80">
+  <section class="py-14 bg-white border-b border-pink-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono uppercase mb-4">
-          <i class="fas fa-microscope"></i> Research Workflow &amp; Algorithmic Approach
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 border border-pink-200 text-rose-700 text-xs font-mono uppercase font-bold mb-4">
+          <i class="fas fa-microscope text-rose-500"></i> Academic Research Approach &amp; Empirical Findings
         </div>
-        <h1 class="font-heading font-black text-3xl sm:text-5xl text-white tracking-tight">
+        <h1 class="font-heading font-black text-3xl sm:text-5xl text-slate-900 tracking-tight">
           SparkEV Methodology: <br>
-          <span class="text-gradient-cyan">How and Why the System Works</span>
+          <span class="text-gradient-pink">How and Why the Framework Works</span>
         </h1>
-        <p class="text-slate-300 text-base sm:text-lg mt-4 leading-relaxed">
-          A comprehensive breakdown of the data ingestion pipelines, temporal feature engineering, machine learning formulations, 
-          Federated Personalization (FedPer), and SHAP explainability governing the SparkEV framework.
+        <p class="text-slate-600 text-base mt-3 leading-relaxed">
+          Comprehensive empirical formulations, semi-empirical capacity-fade equations, Direct AR forecasting, 
+          TreeSHAP attributions, FedPer federated aggregation, and on-device microcontroller benchmarks.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- Content with Sidebar TOC -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="grid lg:grid-cols-12 gap-12">
+  <!-- Content Grid with Sticky TOC -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="grid lg:grid-cols-12 gap-10">
       
       <!-- Sticky Table of Contents (3 cols) -->
       <aside aria-label="Table of Contents" class="hidden lg:block lg:col-span-3">
-        <div class="toc-sticky glass-panel p-5 rounded-2xl border border-slate-800">
-          <h3 class="font-heading font-bold text-xs uppercase tracking-wider text-slate-400 mb-4 pb-2 border-b border-slate-800">
-            Table of Contents
+        <div class="toc-sticky glass-panel p-5 rounded-2xl border border-pink-200 bg-white">
+          <h3 class="font-heading font-bold text-xs uppercase tracking-wider text-rose-700 mb-3 pb-2 border-b border-pink-100">
+            Methodology Sections
           </h3>
-          <nav class="space-y-2 text-xs font-mono">
-            <a href="#sec-workflow" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">1. Workflow &amp; Architecture</a>
-            <a href="#sec-data" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">2. Data Ingestion &amp; Hardware</a>
-            <a href="#sec-preprocessing" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">3. Preprocessing &amp; Cleansing</a>
-            <a href="#sec-features" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">4. Temporal Feature Engineering</a>
-            <a href="#sec-module1" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">5. Driving Behavior (Mod 1)</a>
-            <a href="#sec-module2" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">6. Predictive Charging (Mod 2)</a>
-            <a href="#sec-module3" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">7. Battery Health &amp; SHAP (Mod 3)</a>
-            <a href="#sec-fedper" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">8. Federated Learning (FedPer)</a>
-            <a href="#sec-simulator" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">9. What-If Simulator (Mod 4)</a>
-            <a href="#sec-evaluation" class="toc-link block py-1 text-slate-400 hover:text-cyan-400 transition-colors">10. Evaluation &amp; Metrics</a>
+          <nav class="space-y-1 text-xs font-mono">
+            <a href="#m-workflow" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">1. Workflow &amp; Architecture</a>
+            <a href="#m-datasets" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">2. Real-World Datasets</a>
+            <a href="#m-module1" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">3. Driving to Stress (M1)</a>
+            <a href="#m-module2" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">4. Charging Anomaly (M2)</a>
+            <a href="#m-module3" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">5. SOH Forecasting (M3)</a>
+            <a href="#m-module4" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">6. Energy &amp; Arrival SOC (M4)</a>
+            <a href="#m-fedper" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">7. Federated Learning (FedPer)</a>
+            <a href="#m-esp32" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">8. Edge Deployment on ESP32</a>
+            <a href="#m-tables" class="toc-link block py-1.5 text-slate-600 hover:text-rose-600 rounded px-2 transition-all">9. Experimental Results (T1–T7)</a>
           </nav>
         </div>
       </aside>
 
-      <!-- Main Methodology Text (9 cols) -->
-      <main class="lg:col-span-9 space-y-16 text-slate-300 leading-relaxed text-sm sm:text-base">
+      <!-- Main Text (9 cols) -->
+      <main class="lg:col-span-9 space-y-14 text-slate-700 leading-relaxed text-sm sm:text-base">
 
-        <!-- Section 1: Workflow & Architecture -->
-        <section id="sec-workflow" class="scroll-mt-28">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-mono font-bold text-sm">01</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Overall SparkEV Workflow &amp; Architecture</h2>
-          </div>
-          <p class="mb-6">
-            Electric vehicle systems have traditionally operated in silos: driving behavior analysis evaluates driver aggressiveness without accounting for battery degradation; battery management systems display present State-of-Charge without anticipating route-specific stresses; and charging locators recommend stations based solely on physical distance rather than battery longevity or dwell times.
-          </p>
-          <p class="mb-6">
-            <strong>SparkEV</strong> addresses these fragmented paradigms by implementing a closed-loop multi-tier decision support system. The operational lifecycle follows two synchronized flows:
-          </p>
-
-          <!-- Flow 1 Callout -->
-          <div class="glass-panel p-5 rounded-xl border-l-4 border-l-cyan-400 mb-6 font-mono text-xs sm:text-sm text-cyan-200">
-            <strong class="text-white block mb-2">Equation (1) — Operational Inference &amp; Decision Support Flow:</strong>
-            EV Data &rarr; Preprocessing &rarr; Feature Engineering &rarr; Predictive Intelligence Modules &rarr; Explanation / Recommendation &rarr; What-If Simulation &rarr; User Decision
-          </div>
-
-          <!-- Flow 2 Callout -->
-          <div class="glass-panel p-5 rounded-xl border-l-4 border-l-purple-400 mb-6 font-mono text-xs sm:text-sm text-purple-200">
-            <strong class="text-white block mb-2">Equation (2) — Privacy-Preserving Collaborative Learning Flow:</strong>
-            Local EV Data &rarr; Local Model Training &rarr; Model Updates &rarr; Federated Aggregation &rarr; Shared Model &rarr; Personalized Local Model (FedPer)
-          </div>
-
-          <p>
-            By decoupling the base representations (universal vehicle electrochemistry) from personalization heads (individual driver quirks, terrain, and habits), SparkEV achieves high accuracy without transmitting a single byte of private GPS or trip history to external cloud endpoints.
-          </p>
-        </section>
-
-        <!-- Section 2: Data Ingestion & Hardware -->
-        <section id="sec-data" class="scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-mono font-bold text-sm">02</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Data Ingestion &amp; Hardware Sensing Pipeline</h2>
+        <!-- 1. Overall Workflow & Architecture -->
+        <section id="m-workflow" class="scroll-mt-28">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">01</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Overall SparkEV Workflow &amp; Architecture</h2>
           </div>
           <p class="mb-4">
-            Led by <strong>Saravanapriyaa C R (Hardware Lead)</strong>, the telemetry acquisition framework utilizes on-board hardware components to ingest multi-modal signals from the vehicle’s Controller Area Network (CAN) bus and Battery Management System (BMS).
+            SparkEV is built entirely on real-world telemetry and comprises four interconnected modules feeding a unified recommendation engine:
           </p>
           
-          <div class="grid sm:grid-cols-2 gap-4 my-6">
-            <div class="glass-panel p-4 rounded-xl">
-              <h4 class="font-bold text-white text-sm flex items-center gap-2 mb-2">
-                <i class="fas fa-microchip text-cyan-400"></i> Hardware Transceiver Gateway
-              </h4>
-              <ul class="text-xs space-y-1.5 text-slate-300">
-                <li>&bull; Microcontroller: <strong>ESP32 Dual-Core 240MHz</strong></li>
-                <li>&bull; Bus Interface: <strong>MCP2515 CAN Controller + TJA1050 Transceiver</strong></li>
-                <li>&bull; Protocol Standard: <strong>ISO 15765-4 CAN (11-bit / 500 kbps)</strong></li>
-                <li>&bull; Streaming Protocol: <strong>MQTT / JSON over local secure Wi-Fi / WebSocket</strong></li>
-              </ul>
+          <div class="glass-panel p-5 rounded-2xl border border-pink-200 bg-white mb-6">
+            <h4 class="font-bold text-sm text-slate-900 mb-2 flex items-center gap-2">
+              <i class="fas fa-sitemap text-rose-600"></i> The SparkEV Pipeline Architecture (Figure 1 in Paper)
+            </h4>
+            <div class="grid sm:grid-cols-4 gap-3 text-xs font-mono my-3">
+              <div class="p-3 rounded-xl bg-pink-50/80 border border-pink-200">
+                <span class="font-bold text-rose-700 block mb-1">M1: Battery Stress</span>
+                <span class="text-slate-600">TUM 70 trips &rarr; XGBoost [FL]</span>
+              </div>
+              <div class="p-3 rounded-xl bg-pink-50/80 border border-pink-200">
+                <span class="font-bold text-pink-700 block mb-1">M2: Charging Faults</span>
+                <span class="text-slate-600">Autosun (2,649) &rarr; XGBoost</span>
+              </div>
+              <div class="p-3 rounded-xl bg-pink-50/80 border border-pink-200">
+                <span class="font-bold text-rose-700 block mb-1">M3: SOH &amp; Risk</span>
+                <span class="text-slate-600">Zenodo SOH &rarr; Direct AR</span>
+              </div>
+              <div class="p-3 rounded-xl bg-pink-50/80 border border-pink-200">
+                <span class="font-bold text-pink-700 block mb-1">M4: Energy / SOC</span>
+                <span class="text-slate-600">TUM trips &rarr; Elastic Net [FL]</span>
+              </div>
             </div>
-
-            <div class="glass-panel p-4 rounded-xl">
-              <h4 class="font-bold text-white text-sm flex items-center gap-2 mb-2">
-                <i class="fas fa-satellite text-emerald-400"></i> External Context Ingestion
-              </h4>
-              <ul class="text-xs space-y-1.5 text-slate-300">
-                <li>&bull; Station Infrastructure: <strong>OpenChargeMap REST API v3</strong></li>
-                <li>&bull; Weather &amp; Ambient Temp: <strong>Open-Meteo API (10-min resolution)</strong></li>
-                <li>&bull; Route Elevation: <strong>OSRM / Google Directions Elevation Profile</strong></li>
-                <li>&bull; Electricity Tariffs: <strong>Dynamic Time-of-Use (ToU) price feeds</strong></li>
-              </ul>
-            </div>
+            <p class="text-xs text-slate-600 mt-2">
+              All four module outputs are individually explained with TreeSHAP feature attributions, fused into a single risk profile by the recommendation engine, and displayed on the driver dashboard. Modules M1 and M4 are additionally trained via Federated Learning (FedAvg / FedPer).
+            </p>
           </div>
+        </section>
 
-          <h3 class="font-heading font-bold text-lg text-white mb-3">Key Ingested Sensor Signals</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs font-mono text-left text-slate-300 border border-slate-800 rounded-xl overflow-hidden">
-              <thead class="bg-slate-900 text-slate-200">
+        <!-- 2. Real-World Datasets -->
+        <section id="m-datasets" class="scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">02</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Real-World Datasets (Table 1)</h2>
+          </div>
+          <p class="mb-4">
+            Following rigorous review, all modules are evaluated exclusively on real-world empirical EV data:
+          </p>
+
+          <div class="overflow-x-auto glass-panel rounded-2xl border border-pink-200 bg-white mb-6">
+            <table class="w-full text-xs font-mono text-left text-slate-700">
+              <thead class="bg-pink-50 text-rose-900 font-bold border-b border-pink-200">
                 <tr>
-                  <th class="p-3 border-b border-slate-800">Parameter</th>
-                  <th class="p-3 border-b border-slate-800">CAN / OBD-II PID</th>
-                  <th class="p-3 border-b border-slate-800">Frequency</th>
-                  <th class="p-3 border-b border-slate-800">Operational Relevance</th>
+                  <th class="p-3.5">Module</th>
+                  <th class="p-3.5">Dataset</th>
+                  <th class="p-3.5">Description &amp; Sampling Specifications</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-800/60 bg-slate-950/40">
+              <tbody class="divide-y divide-pink-100">
                 <tr>
-                  <td class="p-3 text-cyan-400 font-semibold">Vehicle Speed</td>
-                  <td class="p-3">PID 0x0D</td>
-                  <td class="p-3">10 Hz</td>
-                  <td class="p-3 font-sans text-slate-400">Kinetic energy expenditure &amp; aerodynamic drag evaluation</td>
+                  <td class="p-3.5 font-bold text-rose-700">M1, M4</td>
+                  <td class="p-3.5 font-semibold text-slate-900">TUM battery and heating data</td>
+                  <td class="p-3.5 text-slate-600 font-sans">70 real trips in/around Munich (32 summer, 38 winter; Jun. 2019–Feb. 2020), 10 Hz, 1,355 km, 30.4 h; ambient -3°C to 33.5°C.</td>
                 </tr>
                 <tr>
-                  <td class="p-3 text-cyan-400 font-semibold">Accelerator &amp; Brake</td>
-                  <td class="p-3">PID 0x49 / 0x4B</td>
-                  <td class="p-3">20 Hz</td>
-                  <td class="p-3 font-sans text-slate-400">Jerk calculation, aggressive acceleration &amp; regen capture</td>
+                  <td class="p-3.5 font-bold text-rose-700">M1 (calib.)</td>
+                  <td class="p-3.5 font-semibold text-slate-900">NASA &amp; CALCE</td>
+                  <td class="p-3.5 text-slate-600 font-sans">842 battery-aging cycles (602 NASA, 240 CALCE) from 8 cells for semi-empirical capacity-fade calibration.</td>
                 </tr>
                 <tr>
-                  <td class="p-3 text-emerald-400 font-semibold">Pack Voltage (\(V_{pack}\))</td>
-                  <td class="p-3">BMS 0x1806E5F4</td>
-                  <td class="p-3">10 Hz</td>
-                  <td class="p-3 font-sans text-slate-400">Terminal voltage sag, internal resistance (\(R_i\)) estimation</td>
+                  <td class="p-3.5 font-bold text-pink-700">M2</td>
+                  <td class="p-3.5 font-semibold text-slate-900">Autosun and PolyU</td>
+                  <td class="p-3.5 text-slate-600 font-sans">2,649 charging sessions (2,378 Normal, 271 Faulty; 10.2% faulty rate) with 57 derived features.</td>
                 </tr>
                 <tr>
-                  <td class="p-3 text-emerald-400 font-semibold">Current (\(I_{pack}\))</td>
-                  <td class="p-3">BMS 0x1806E5F4</td>
-                  <td class="p-3">20 Hz</td>
-                  <td class="p-3 font-sans text-slate-400">C-rate strain computation and Coulomb counting integration</td>
-                </tr>
-                <tr>
-                  <td class="p-3 text-amber-400 font-semibold">Cell Temperatures (\(T_{min}, T_{max}\))</td>
-                  <td class="p-3">BMS 0x1806E5F5</td>
-                  <td class="p-3">1 Hz</td>
-                  <td class="p-3 font-sans text-slate-400">Thermal gradient, degradation risk &amp; thermal runaway safeguards</td>
+                  <td class="p-3.5 font-bold text-rose-700">M3</td>
+                  <td class="p-3.5 font-semibold text-slate-900">Zenodo Real-world EV SOH</td>
+                  <td class="p-3.5 text-slate-600 font-sans">18,065 SOH(t + 10) targets with 282 features across NMC and LFP charging-cycle records.</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </section>
 
-        <!-- Section 3: Preprocessing & Cleansing -->
-        <section id="sec-preprocessing" class="scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm">03</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Data Preprocessing &amp; Cleansing</h2>
+        <!-- 3. Module 1: Driving to Battery Stress -->
+        <section id="m-module1" class="scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">03</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Module 1: Driving Behavior to Battery Stress</h2>
           </div>
-          <p class="mb-4">
-            Real-world vehicular data contains transmission dropouts, electromagnetic interference on the CAN bus, and sensor quantization noise. The preprocessing pipeline applies:
-          </p>
-          <ul class="space-y-3 list-disc list-inside text-slate-300">
-            <li>
-              <strong>Outlier Filtering via Hampel Identifier:</strong> Replaces isolated sensor spikes by computing median absolute deviation (MAD) over a rolling 5-second window:
-              $$\text{MAD} = \text{median}(|x_i - \tilde{x}|)$$
-            </li>
-            <li>
-              <strong>Extended Kalman Filter (EKF) SoC Reconstruction:</strong> Overcomes Coulomb counting cumulative drift by fusing current integration \(\int I dt\) with an offline Open-Circuit Voltage (OCV) polynomial lookup curve:
-              $$SoC_k = SoC_{k-1} - \frac{\eta \cdot \Delta t}{C_n} I_k + w_k$$
-              $$V_k = f_{OCV}(SoC_k) - R_0 I_k - V_{RC} + v_k$$
-            </li>
-            <li>
-              <strong>Resampling &amp; Dynamic Time Warping:</strong> Standardizes heterogeneous sample rates to synchronized 1-second intervals for downstream inference.
-            </li>
-          </ul>
-        </section>
-
-        <!-- Section 4: Temporal Feature Engineering -->
-        <section id="sec-features" class="scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center font-mono font-bold text-sm">04</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Temporal Feature Engineering &amp; Model Development</h2>
-          </div>
-          <p class="mb-4">
-            Led by <strong>Shravanthi S (Module 3 Lead)</strong>, the feature engineering pipeline constructs higher-order temporal indices that capture cumulative electro-thermal damage:
-          </p>
-
-          <div class="space-y-6">
-            <div class="glass-panel p-6 rounded-xl">
-              <h4 class="font-bold text-white text-base mb-2">1. Historical SOH Lag Features</h4>
-              <p class="text-sm text-slate-300 mb-3">
-                Battery degradation exhibits heavy temporal autoregressive dependence. We inject historical lag terms:
-              </p>
-              <div class="font-mono text-cyan-300 bg-slate-900/80 p-3 rounded-lg text-xs">
-                Lag Vector = [ SOH_{t-1}, SOH_{t-7}, SOH_{t-30}, \Delta SOH_{7d}, \Delta SOH_{30d} ]
-              </div>
-            </div>
-
-            <div class="glass-panel p-6 rounded-xl">
-              <h4 class="font-bold text-white text-base mb-2">2. Cumulative Thermal Stress Integral (TSI)</h4>
-              <p class="text-sm text-slate-300 mb-3">
-                Lithium plating and Solid Electrolyte Interphase (SEI) growth accelerate non-linearly when operating outside the 20°C–30°C optimal window:
-              </p>
-              <div class="font-mono text-emerald-300 bg-slate-900/80 p-3 rounded-lg text-xs">
-                TSI = \int_0^T \max(0, T_{pack}(t) - 30^\circ\text{C}) \, dt + \gamma \int_0^T \max(0, 5^\circ\text{C} - T_{pack}(t)) \, dt
-              </div>
-            </div>
-
-            <div class="glass-panel p-6 rounded-xl">
-              <h4 class="font-bold text-white text-base mb-2">3. Aggressive Driving Index (ADI)</h4>
-              <p class="text-sm text-slate-300 mb-3">
-                Quantifies throttle and braking volatility to represent inverter and cell current strain:
-              </p>
-              <div class="font-mono text-amber-300 bg-slate-900/80 p-3 rounded-lg text-xs">
-                ADI = \frac{1}{T} \sum_{k=1}^T \left( \alpha \cdot |\text{Jerk}_k| + \beta \cdot \mathbf{1}_{a_k < -3.0\,\text{m/s}^2} + \lambda \cdot (C_{\text{rate}, k} - 1.5)^+ \right)
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Section 5: Module 1 Driving Behavior -->
-        <section id="sec-module1" class="scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-mono font-bold text-sm">05</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Module 1: Personalized Driving Behavior Prediction</h2>
-          </div>
-          <div class="text-xs font-mono text-cyan-400 mb-4">Lead: Rithanya K A (CB.SC.U4CSE23140)</div>
-          <p class="mb-4">
-            Traditional eco-driving systems impose universal rules that ignore driver habits, road elevations, and localized traffic patterns. Module 1 establishes a <em>personalized driver baseline</em> and detects deviations:
-          </p>
-          <ul class="space-y-3 list-disc list-inside text-slate-300 mb-6">
-            <li><strong>Input:</strong> 10-second rolling sliding windows of vehicle speed, throttle position rate, braking deceleration, and power demand.</li>
-            <li><strong>Classifier:</strong> Gradient Boosted Decision Tree (LightGBM) trained to classify driving state into <code>Eco</code>, <code>Normal</code>, or <code>Aggressive</code>.</li>
-            <li><strong>Personal Divergence Metric (\(D_{user}\)):</strong> Compares current energy rate \(E_t\) against the user's historical 80th-percentile consumption on equivalent road grades:
-              $$D_{user} = \frac{E_{observed} - \mathbb{E}[E_{user} \mid \text{Grade}, \text{Speed}]}{\sigma(E_{user})}$$
-            </li>
-            <li><strong>Actionable Guidance:</strong> When \(D_{user} > 1.64\), the guidance engine triggers non-intrusive in-vehicle HMI alerts (e.g., <em>"Gradual throttle increase recommended on uphill stretch to save 2.4 kWh"</em>).</li>
-          </ul>
-        </section>
-
-        <!-- Section 6: Module 2 Predictive Charging -->
-        <section id="sec-module2" class="scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center font-mono font-bold text-sm">06</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Module 2: Predictive Charging Recommendation</h2>
-          </div>
-          <div class="text-xs font-mono text-blue-400 mb-4">Lead: Irene Divya J (CB.SC.U4CSE23167)</div>
-          <p class="mb-4">
-            Conventional navigation apps route drivers to the nearest charging station. Module 2 formulates charging as a <strong>Multi-Attribute Utility Optimization</strong> problem, considering driver itinerary, station queues, pricing, and cell preservation:
+          <div class="text-xs font-mono text-rose-600 font-bold mb-3">Lead: Rithanya K. A. (CB.SC.U4CSE23140)</div>
+          <p class="mb-3">
+            Battery stress is not measured directly. A <strong>Battery Stress Index (BSI)</strong> on a 0–100 scale is computed for every 60 s driving window (30 s step) from four min–max normalized components:
           </p>
           
-          <div class="glass-panel p-6 rounded-xl my-6">
-            <h4 class="font-bold text-white text-base mb-3">Multi-Objective Cost Function</h4>
-            <div class="font-mono text-cyan-300 bg-slate-900/80 p-3 rounded-lg text-xs leading-loose">
-              \min_{j \in \mathcal{S},\, SoC_{target}} \mathcal{C}(j) = w_1 \cdot T_{\text{travel}}(j) + w_2 \cdot T_{\text{wait}}(j) + w_3 \cdot \text{Cost}(j) + w_4 \cdot \Psi_{\text{stress}}(P_j, SoC_{target}, T_{\text{pack}})
-            </div>
-            <p class="text-xs text-slate-300 mt-4 leading-relaxed">
-              Where \(\Psi_{\text{stress}}\) penalizes 150kW+ DC charging in ambient temperatures \(>35^\circ\text{C}\) and charges exceeding 80% SoC, where CC-CV transition causes excessive cathode lattice tension.
-            </p>
+          <div class="p-4 rounded-xl bg-white border border-pink-200 font-mono text-xs my-3 overflow-x-auto text-slate-800">
+            $$\text{BSI} = 100 \left( w_T S_T + w_C S_C + w_D S_D + w_S S_S \right) \quad \text{--- Eq. (1)}$$
           </div>
+          <p class="text-xs text-slate-600 mb-4">
+            where \(S_T, S_C, S_D, S_S\) derive from peak temperature, peak C-rate, SoC drop, and SoC excursion outside the 20–80% band (weights: \(w_T=0.35, w_C=0.30, w_D=0.20, w_S=0.15\)).
+          </p>
 
-          <p>
-            <strong>Smart 80% Cutoff Policy:</strong> The model dynamically advises charging to 80% instead of 100% when remaining destination distance is safely within range, reducing session duration by up to 50% while mitigating long-term capacity fade.
+          <h4 class="font-bold text-slate-900 text-sm mb-2">Physics-Informed Semi-Empirical Refinement</h4>
+          <p class="mb-3 text-xs sm:text-sm">
+            Because literature weights are assumptions, the thermal and C-rate terms are replaced by a semi-empirical capacity-fade model:
+          </p>
+          <div class="p-4 rounded-xl bg-pink-50 border border-pink-200 font-mono text-xs my-3 text-rose-950 overflow-x-auto">
+            $$Q_{\text{loss}} = B \exp\left( -\frac{E_a}{R T} \right) C^m (Ah)^z \quad \text{--- Eq. (2)}$$
+          </div>
+          <p class="text-xs text-slate-600 mb-4">
+            Fitted by log-linear regression on 842 measured aging cycles from NASA and CALCE cells, explaining <strong>88.6% of calibration variance</strong> (\(m = 0.80, p = 0.04; z = 0.54, p < 0.001; E_a = 27.8\text{ kJ/mol}\)). Evaluated on each window's peak temperature, peak C-rate, and delivered charge, Eq. (2) replaces \(w_T S_T + w_C S_C\).
+          </p>
+          <p class="text-xs sm:text-sm">
+            <strong>Key SHAP Discovery:</strong> This refinement raises XGBoost CV \(R^2\) from <strong>0.708 &plusmn; 0.094 to 0.831 &plusmn; 0.040</strong> (held-out \(R^2 = 0.805\), MAE 3.23). Crucially, ambient temperature drops from rank 1 to rank 5, while driver-controllable factors—<strong>maximum speed, average speed, and mean acceleration</strong>—become the top 3 drivers!
           </p>
         </section>
 
-        <!-- Section 7: Module 3 Battery Health & SHAP -->
-        <section id="sec-module3" class="scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-mono font-bold text-sm">07</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Module 3: Battery Health Forecasting &amp; SHAP Explainability</h2>
+        <!-- 4. Module 2: Charging Anomaly Detection -->
+        <section id="m-module2" class="scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-mono font-bold text-sm">04</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Module 2: Charging-Session Anomaly Detection</h2>
           </div>
-          <div class="text-xs font-mono text-emerald-400 mb-4">Lead: Shravanthi S (CB.SC.U4CSE23147)</div>
-          <p class="mb-4">
-            State-of-Health (SOH) quantifies the present usable capacity of the battery relative to its rated factory specification:
+          <div class="text-xs font-mono text-pink-600 font-bold mb-3">Lead: Irene Divya J. (CB.SC.U4CSE23167)</div>
+          <p class="mb-3 text-xs sm:text-sm">
+            Raw telemetry is aggregated into 2,649 sessions (57 features from SOC, voltage, current, power, temperature, energy). An XGBoost classifier is weighted by the negative-to-positive ratio (8.765) to handle the 10.2% class imbalance:
           </p>
-          <div class="font-mono text-emerald-300 bg-slate-900/80 p-3 rounded-lg text-xs mb-6">
-            SOH_t = \frac{Q_{\text{current, max}}}{Q_{\text{nominal}}} \times 100\%
-          </div>
-
-          <p class="mb-4">
-            SparkEV performs two synchronized tasks in Module 3:
-          </p>
-          <ol class="space-y-4 list-decimal list-inside text-slate-300 mb-6">
-            <li>
-              <strong>Autoregressive SOH Forecaster:</strong> Employs an ensemble of temporal XGBoost regressors to predict \(SOH_{t+k}\) over the next 100 to 500 charge-discharge cycles based on engineered lag and degradation vectors.
-            </li>
-            <li>
-              <strong>Risk Scoring Engine:</strong> Computes a unified Battery Stress Index \(\mathcal{S} \in [0, 100]\) mapping into discrete tiers:
-              <span class="text-emerald-400 font-bold ml-2">Low Risk (&lt;40)</span>, 
-              <span class="text-amber-400 font-bold ml-2">Moderate Risk (40–69)</span>, and 
-              <span class="text-rose-400 font-bold ml-2">High Risk (&ge;70)</span>.
-            </li>
-          </ol>
-
-          <h3 class="font-heading font-bold text-lg text-white mb-3">SHAP (SHapley Additive exPlanations) Formulation</h3>
-          <p class="mb-4">
-            To provide true explainability, SparkEV computes Shapley values based on cooperative game theory, attributing each feature's contribution to the difference between the actual prediction and the fleet baseline:
-          </p>
-          <div class="glass-panel p-5 rounded-xl font-mono text-cyan-300 text-xs my-4 leading-loose overflow-x-auto">
-            \phi_i(x) = \sum_{S \subseteq \mathcal{F} \setminus \{i\}} \frac{|S|!(|\mathcal{F}| - |S| - 1)!}{|\mathcal{F}|!} \left[ f_x(S \cup \{i\}) - f_x(S) \right]
-          </div>
-          <p class="text-sm text-slate-300">
-            Using the polynomial-time <strong>TreeSHAP</strong> algorithm, feature attributions for 32 input dimensions are computed in &lt;12 milliseconds on edge hardware. If a vehicle receives a "High Risk" notification, the Natural Language Generator outputs the exact reason: <em>"Frequent DC Fast Charging at &gt;36°C contributed +24.8% to the current degradation rate."</em>
-          </p>
-        </section>
-
-        <!-- Section 8: Federated Learning (FedPer) -->
-        <section id="sec-fedper" class="scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center font-mono font-bold text-sm">08</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Personalized Federated Learning using FedPer</h2>
-          </div>
-          <div class="text-xs font-mono text-purple-400 mb-4">Lead: Gayathri U (CB.SC.U4CSE23026)</div>
-          <p class="mb-4">
-            Vehicles operate in diverse geographical regions (cold winters vs hot summers), with drivers exhibiting vastly different acceleration and charging habits. Standard Federated Averaging (FedAvg) forces every client model towards a consensus global mean, which degrades performance for outlier vehicles.
-          </p>
-          <p class="mb-4">
-            SparkEV solves this heterogeneity with <strong>Federated Personalization (FedPer)</strong>:
-          </p>
-
-          <div class="glass-panel p-6 rounded-xl my-6">
-            <h4 class="font-bold text-white text-base mb-3">The Split Neural Architecture</h4>
-            <p class="text-xs text-slate-300 mb-4">
-              Every client vehicle network is partitioned into two distinct segments:
-            </p>
-            <div class="grid sm:grid-cols-2 gap-4 text-xs font-mono">
-              <div class="p-3 bg-purple-950/30 border border-purple-500/30 rounded-lg">
-                <div class="text-purple-300 font-bold mb-1">1. Base Layers \(f_{\text{base}}(\cdot; \theta)\)</div>
-                <div class="text-slate-400 font-sans">Shared representation layers extracting universal physics, impedance dynamics, and temporal electrochemistry. Synchronized via server federated aggregation.</div>
-              </div>
-              <div class="p-3 bg-cyan-950/30 border border-cyan-500/30 rounded-lg">
-                <div class="text-cyan-300 font-bold mb-1">2. Personal Head \(g_{\text{head}}(\cdot; \phi^k)\)</div>
-                <div class="text-slate-400 font-sans">Client-specific dense classification / regression layers tuned to Driver \(k\)'s personal usage patterns. Stays strictly local on the vehicle; never transmitted.</div>
-              </div>
-            </div>
-          </div>
-
-          <h3 class="font-heading font-bold text-lg text-white mb-2">FedPer Aggregation Algorithm</h3>
-          <p class="text-xs text-slate-400 mb-4">During communication round \(t\), the federated coordinator performs aggregation strictly on base parameters:</p>
-          <div class="font-mono text-purple-300 bg-slate-900/80 p-3 rounded-lg text-xs leading-loose">
-            \theta_{t+1} = \sum_{k=1}^K \frac{n_k}{N} \theta_t^k \quad \text{while} \quad \phi_{t+1}^k \leftarrow \phi_t^k - \eta \nabla_{\phi^k} \mathcal{L}_k
-          </div>
-          <p class="text-sm text-slate-300 mt-4">
-            This mathematical separation ensures that client-specific traits are preserved indefinitely on each car while improving the shared fleet representation. Communication payloads remain light (&lt;450 KB per model update).
-          </p>
-        </section>
-
-        <!-- Section 9: What-If Simulation Approach -->
-        <section id="sec-simulator" class="scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-mono font-bold text-sm">09</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Module 4: What-If Simulation Engine</h2>
-          </div>
-          <p class="mb-4">
-            Rather than constraining the user to an opaque, prescriptive recommendation, the <strong>What-If Simulator</strong> operates as a forward dynamic model.
-          </p>
-          <p class="mb-4">
-            Given an arbitrary user hypothesis vector \(\mathbf{x}_{\text{hyp}} = [\text{Style}, \text{Temp}, P_{\text{charger}}, SoC_{\text{target}}]\), the simulator calculates:
-          </p>
-          <ul class="space-y-2 list-disc list-inside text-slate-300 text-sm">
-            <li><strong>Thermal Gradient Rise:</strong> Predicts battery pack temperature evolution \(\Delta T(t)\) under selected charging C-rates.</li>
-            <li><strong>Equivalent Full Cycles (EFC):</strong> Computes cumulative degradation impact using modified Arrhenius and Wöhler fatigue relationships.</li>
-            <li><strong>Trade-Off Exploration:</strong> Directly quantifies the compromise between charging convenience and cell lifespan (e.g., <em>"Charging to 100% takes 45 extra minutes and induces 2.3x more degradation than stopping at 80%"</em>).</li>
+          <ul class="text-xs sm:text-sm space-y-2 list-disc list-inside text-slate-700">
+            <li><strong>XGBoost achieves 99.62% Accuracy and F1 = 0.981 (ROC-AUC 0.999):</strong> Detects 52 of 54 faulty test sessions without a single false alarm.</li>
+            <li><strong>Baselines Fail:</strong> TCN detects 0 faults (F1 0.000); LSTM detects only 1 of 54 (F1 0.036); Isolation Forest misses 23 faults (F1 0.713).</li>
+            <li><strong>Feature Resilience:</strong> Removing the top 5 energy features leaves performance identical at 99.62% and F1 = 0.981, proving fault signatures are robustly distributed across voltage, SOC, power, and temperature.</li>
           </ul>
         </section>
 
-        <!-- Section 10: Evaluation & Metrics -->
-        <section id="sec-evaluation" class="scroll-mt-28 border-t border-slate-800 pt-12">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center font-mono font-bold text-sm">10</span>
-            <h2 class="font-heading font-black text-2xl sm:text-3xl text-white">Evaluation Methodology &amp; Benchmark Metrics</h2>
+        <!-- 5. Module 3: SOH Forecasting & Risk Scoring -->
+        <section id="m-module3" class="scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">05</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Module 3: Battery Health and Degradation Risk</h2>
           </div>
-          <p class="mb-6">
-            The SparkEV architecture is rigorously evaluated across both centralized and decentralized benchmarks using standard machine learning metrics:
+          <div class="text-xs font-mono text-rose-600 font-bold mb-3">Lead: Shravanthi S. (CB.SC.U4CSE23147)</div>
+          <p class="mb-3 text-xs sm:text-sm">
+            Forecasts SOH ten cycles ahead from features available at cycle \(t\) (lags, drops, degradation rates, rolling trends). The <strong>Direct Autoregressive (AR)</strong> model achieves the highest accuracy:
+          </p>
+          <div class="p-4 rounded-xl bg-white border border-pink-200 font-mono text-xs my-3 overflow-x-auto text-slate-800">
+            $$\widehat{\text{SOH}}(t + 10) = \beta_0 + \sum_{i=0}^{p-1} \beta_i \text{SOH}(t - i)$$
+          </div>
+          <p class="text-xs sm:text-sm text-slate-700 mb-3">
+            Direct AR achieves <strong>\(R^2 = 0.9591\) with MAE = 0.00657</strong> on the chronological test set (18,065 targets from Zenodo), avoiding recursive error accumulation.
+          </p>
+          <p class="text-xs sm:text-sm text-slate-700">
+            <strong>Causal Accelerated-Degradation Detector:</strong> SOH history is smoothed with a causal rolling median, comparing recent rate \(r_{\text{recent}}\) (5 observations) with long-term rate \(r_{\text{long}}\) (20 observations): \(\Delta_{\text{acc}} = r_{\text{recent}} - r_{\text{long}}\). Confirmed if persisting in &ge;2 of the last 3 observations, providing early warnings before significant capacity fade occurs.
+          </p>
+        </section>
+
+        <!-- 6. Module 4: Energy & Arrival SOC -->
+        <section id="m-module4" class="scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-mono font-bold text-sm">06</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Module 4: Energy Consumption &amp; In-Trip Arrival SOC</h2>
+          </div>
+          <div class="text-xs font-mono text-pink-600 font-bold mb-3">Lead: Saravana Priyaa C. R. (CB.SC.U4CSE23149)</div>
+          <p class="mb-3 text-xs sm:text-sm">
+            Two Elastic Net models are deployed on the TUM Munich real-driving dataset:
+          </p>
+          <ul class="text-xs sm:text-sm space-y-2 list-disc list-inside text-slate-700">
+            <li><strong>Stable-23 Energy Model:</strong> Selected 23 features consistent across all 50 cross-validation folds; achieves <strong>\(R^2 = 0.897\) (MAE 0.0077 kWh/km)</strong>, beating full 77-feature Elastic Net (0.854), Ridge (0.819), and tree ensembles (0.72–0.74). Top SHAP drivers: battery current, cabin temperature, heating power, high-speed share.</li>
+            <li><strong>In-Trip Arrival SOC Model:</strong> Evaluated on 85 leakage-safe features strictly before the trip cutoff:
+              <br>&bull; At 25% trip: \(R^2 = 0.932\) (MAE 2.54 pp)
+              <br>&bull; At 50% trip: \(R^2 = 0.976\) (MAE 1.48 pp)
+              <br>&bull; At 75% trip: \(R^2 = 0.984\) (MAE 1.22 pp)
+            </li>
+          </ul>
+        </section>
+
+        <!-- 7. Personalized Federated Learning -->
+        <section id="m-fedper" class="scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">07</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Personalized Federated Learning (FedPer)</h2>
+          </div>
+          <div class="text-xs font-mono text-rose-600 font-bold mb-3">Lead: Gayathri U. (CB.SC.U4CSE23026)</div>
+          <p class="mb-3 text-xs sm:text-sm">
+            FedPer splits the model into shared base parameters \(\theta_B\) and a client-specific head \(\theta_{P,k}\), aggregating only the base to preserve driver privacy:
+          </p>
+          <div class="p-4 rounded-xl bg-pink-50 border border-pink-200 font-mono text-xs my-3 text-rose-950 overflow-x-auto">
+            $$\theta_B^{(r+1)} = \sum_{k=1}^K \frac{n_k}{n} \theta_{B,k}^{(r)}, \quad \theta_{P,k}^{(r+1)} \text{ stays on client } k \quad \text{--- Eq. (3)}$$
+          </div>
+          <p class="text-xs sm:text-sm text-slate-700">
+            Tested on <strong>51 client trips</strong> from TUM. FedAvg nearly matches centralized arrival-SOC (\(R^2 = 0.973\) vs \(0.976\); \(\Delta R^2 \le 0.03\)). For battery stress, <strong>FedPer lowers the local error for 32 of 51 established clients</strong> (median MAE 2.81 vs 3.51 for FedAvg). Early stopping at round 30 prevents cold-start overfitting.
+          </p>
+        </section>
+
+        <!-- 8. Edge Deployment on ESP32 -->
+        <section id="m-esp32" class="scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-3">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-mono font-bold text-sm">08</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">On-Device Edge Deployment on ESP32 (Table 7)</h2>
+          </div>
+          <div class="text-xs font-mono text-pink-600 font-bold mb-3">Lead: Saravana Priyaa C. R. (CB.SC.U4CSE23149)</div>
+          <p class="mb-3 text-xs sm:text-sm">
+            All three XGBoost models of Modules 1–3 were converted into C header files and run on an ESP32 microcontroller at 240 MHz by a lightweight tree-traversal routine:
           </p>
 
-          <div class="overflow-x-auto mb-8">
-            <table class="w-full text-xs font-mono text-left text-slate-300 border border-slate-800 rounded-xl overflow-hidden">
-              <thead class="bg-slate-900 text-slate-200">
+          <div class="overflow-x-auto glass-panel rounded-2xl border border-pink-200 bg-white mb-4">
+            <table class="w-full text-xs font-mono text-left text-slate-700">
+              <thead class="bg-pink-50 text-rose-900 font-bold border-b border-pink-200">
                 <tr>
-                  <th class="p-3 border-b border-slate-800">Module / Task</th>
-                  <th class="p-3 border-b border-slate-800">Evaluation Metric</th>
-                  <th class="p-3 border-b border-slate-800">Centralized Baseline</th>
-                  <th class="p-3 border-b border-slate-800">Standard FedAvg</th>
-                  <th class="p-3 border-b border-slate-800 text-cyan-400">SparkEV (FedPer)</th>
+                  <th class="p-3">Model</th>
+                  <th class="p-3">Sample On-Device Output</th>
+                  <th class="p-3">Inference Time (ms)</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-800/60 bg-slate-950/40">
+              <tbody class="divide-y divide-pink-100">
                 <tr>
-                  <td class="p-3 font-semibold text-white">Driving Behavior (Mod 1)</td>
-                  <td class="p-3">Macro F1-Score</td>
-                  <td class="p-3">89.4%</td>
-                  <td class="p-3">84.2%</td>
-                  <td class="p-3 text-cyan-400 font-bold">92.8% (+8.6%)</td>
+                  <td class="p-3 font-bold text-rose-700">M1: Battery Stress</td>
+                  <td class="p-3">BSI 62.39, "MODERATE"</td>
+                  <td class="p-3 font-bold text-slate-900">3.35 ms</td>
                 </tr>
                 <tr>
-                  <td class="p-3 font-semibold text-white">Charging Recommender (Mod 2)</td>
-                  <td class="p-3">Recommendation Acceptance</td>
-                  <td class="p-3">81.0%</td>
-                  <td class="p-3">76.5%</td>
-                  <td class="p-3 text-cyan-400 font-bold">88.5% (+12.0%)</td>
+                  <td class="p-3 font-bold text-pink-700">M2: Charging Anomaly</td>
+                  <td class="p-3">P(faulty) = 1.000, "Faulty"</td>
+                  <td class="p-3 font-bold text-slate-900">1.92 ms</td>
                 </tr>
                 <tr>
-                  <td class="p-3 font-semibold text-white">Battery SOH Forecast (Mod 3)</td>
-                  <td class="p-3">Mean Absolute Error (MAE)</td>
-                  <td class="p-3">&plusmn;1.72%</td>
-                  <td class="p-3">&plusmn;2.41%</td>
-                  <td class="p-3 text-emerald-400 font-bold">&plusmn;1.38% (Lowest)</td>
+                  <td class="p-3 font-bold text-rose-700">M3: SOH / Degradation Risk</td>
+                  <td class="p-3">SOH 91.76%, "LOW"</td>
+                  <td class="p-3 font-bold text-slate-900">3.38 ms</td>
                 </tr>
-                <tr>
-                  <td class="p-3 font-semibold text-white">Privacy Guarantee</td>
-                  <td class="p-3">Raw Telemetry Egress</td>
-                  <td class="p-3 text-red-400">100% Transmitted</td>
-                  <td class="p-3 text-emerald-400">0% (Private)</td>
-                  <td class="p-3 text-emerald-400 font-bold">0% (Private)</td>
+                <tr class="bg-pink-50/50 font-bold text-rose-900">
+                  <td class="p-3">Total (Sequential)</td>
+                  <td class="p-3">SH1106 OLED Display + JSON over Wi-Fi</td>
+                  <td class="p-3 text-rose-700 text-sm">8.65 ms</td>
                 </tr>
               </tbody>
             </table>
           </div>
-
-          <p class="text-xs text-slate-400 leading-relaxed">
-            * Benchmark results simulated on composite datasets fusing NASA PCoE battery cycling traces, Oxford Battery Degradation data, and Amrita EV CAN telemetry streams across 15 decentralized vehicle clients.
+          <p class="text-xs text-slate-600">
+            Over 20 transmissions, server processing took \(17.5 \pm 2.0\text{ ms}\), while round-trip time over mobile hotspot averaged 188 ms. The entire cycle finishes in under 1 second!
           </p>
+        </section>
+
+        <!-- 9. Experimental Benchmark Tables -->
+        <section id="m-tables" class="scroll-mt-28 border-t border-pink-100 pt-10">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-8 h-8 rounded-lg bg-pink-100 text-rose-600 flex items-center justify-center font-mono font-bold text-sm">09</span>
+            <h2 class="font-heading font-black text-2xl sm:text-3xl text-slate-900">Complete Empirical Tables (Tables 2–6)</h2>
+          </div>
+
+          <!-- Table 2: Module 1 -->
+          <div class="mb-6">
+            <h4 class="font-bold text-slate-900 text-xs sm:text-sm mb-2">Table 2: Battery-Stress Prediction (Module 1, 5-Fold Trip-Grouped CV)</h4>
+            <div class="overflow-x-auto glass-panel rounded-xl border border-pink-200 bg-white">
+              <table class="w-full text-xs font-mono text-left">
+                <thead class="bg-pink-50 text-rose-900 font-bold border-b border-pink-200">
+                  <tr>
+                    <th class="p-2.5">Label</th>
+                    <th class="p-2.5">Model</th>
+                    <th class="p-2.5">CV R&sup2;</th>
+                    <th class="p-2.5">Held-out R&sup2;</th>
+                    <th class="p-2.5">Held-out MAE</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-pink-100 text-slate-700">
+                  <tr><td>Original</td><td>Linear Regression</td><td>0.553 &plusmn; 0.183</td><td>—</td><td>—</td></tr>
+                  <tr><td>Original</td><td>Elastic Net</td><td>0.585 &plusmn; 0.135</td><td>—</td><td>—</td></tr>
+                  <tr><td>Original</td><td>Random Forest</td><td>0.704 &plusmn; 0.084</td><td>—</td><td>—</td></tr>
+                  <tr><td>Original</td><td>XGBoost</td><td>0.708 &plusmn; 0.094</td><td>0.737</td><td>4.58</td></tr>
+                  <tr class="bg-pink-50/40 font-semibold text-rose-950"><td>Physics-Informed</td><td>Linear Regression</td><td>0.732 &plusmn; 0.030</td><td>—</td><td>—</td></tr>
+                  <tr class="bg-pink-50/40 font-semibold text-rose-950"><td>Physics-Informed</td><td>Random Forest</td><td>0.802 &plusmn; 0.041</td><td>—</td><td>—</td></tr>
+                  <tr class="bg-rose-50 font-bold text-rose-900"><td>Physics-Informed</td><td>XGBoost (SparkEV)</td><td>0.831 &plusmn; 0.040</td><td>0.805</td><td>3.23</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Table 3: Module 2 -->
+          <div class="mb-6">
+            <h4 class="font-bold text-slate-900 text-xs sm:text-sm mb-2">Table 3: Charging-Session Anomaly Detection (Module 2, 530 Test Sessions)</h4>
+            <div class="overflow-x-auto glass-panel rounded-xl border border-pink-200 bg-white">
+              <table class="w-full text-xs font-mono text-left">
+                <thead class="bg-pink-50 text-rose-900 font-bold border-b border-pink-200">
+                  <tr>
+                    <th class="p-2.5">Model</th>
+                    <th class="p-2.5">Accuracy (%)</th>
+                    <th class="p-2.5">Precision</th>
+                    <th class="p-2.5">Recall</th>
+                    <th class="p-2.5">F1-Score</th>
+                    <th class="p-2.5">ROC-AUC</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-pink-100 text-slate-700">
+                  <tr><td>Isolation Forest</td><td>95.28%</td><td>0.939</td><td>0.574</td><td>0.713</td><td>0.929</td></tr>
+                  <tr><td>LSTM</td><td>90.00%</td><td>1.000</td><td>0.019</td><td>0.036</td><td>—</td></tr>
+                  <tr><td>TCN</td><td>89.81%</td><td>0.000</td><td>0.000</td><td>0.000</td><td>0.633</td></tr>
+                  <tr class="bg-rose-50 font-bold text-rose-900"><td>XGBoost</td><td>99.62%</td><td>1.000</td><td>0.963</td><td>0.981</td><td>0.999</td></tr>
+                  <tr class="bg-pink-50/40 text-rose-900 font-semibold"><td>XGBoost (No Energy Feat.)</td><td>99.62%</td><td>1.000</td><td>0.963</td><td>0.981</td><td>0.9998</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Table 4: Module 3 -->
+          <div class="mb-6">
+            <h4 class="font-bold text-slate-900 text-xs sm:text-sm mb-2">Table 4: SOH(t + 10) Forecasting (Module 3, Chronological Test Set)</h4>
+            <div class="overflow-x-auto glass-panel rounded-xl border border-pink-200 bg-white">
+              <table class="w-full text-xs font-mono text-left">
+                <thead class="bg-pink-50 text-rose-900 font-bold border-b border-pink-200">
+                  <tr>
+                    <th class="p-2.5">Model</th>
+                    <th class="p-2.5">MAE</th>
+                    <th class="p-2.5">RMSE</th>
+                    <th class="p-2.5">R&sup2;</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-pink-100 text-slate-700">
+                  <tr><td>Random Forest</td><td>0.00981</td><td>0.01819</td><td>0.9197</td></tr>
+                  <tr><td>XGBoost</td><td>0.00964</td><td>0.01772</td><td>0.9238</td></tr>
+                  <tr><td>MLP</td><td>0.02116</td><td>0.03937</td><td>0.6237</td></tr>
+                  <tr class="bg-rose-50 font-bold text-rose-900"><td>Direct AR (SparkEV)</td><td>0.00657</td><td>0.01248</td><td>0.9591</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Table 5 & 6 -->
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <h4 class="font-bold text-slate-900 text-xs mb-2">Table 5: Arrival SOC Horizons (Module 4)</h4>
+              <div class="overflow-x-auto glass-panel rounded-xl border border-pink-200 bg-white">
+                <table class="w-full text-[11px] font-mono text-left">
+                  <thead class="bg-pink-50 text-rose-900 font-bold">
+                    <tr><th class="p-2">Horizon</th><th class="p-2">Centr. R&sup2;</th><th class="p-2">FedAvg</th><th class="p-2">FedPer</th></tr>
+                  </thead>
+                  <tbody class="divide-y divide-pink-100 text-slate-700">
+                    <tr><td>25% &rarr; 100%</td><td>0.932</td><td>0.961</td><td>0.637</td></tr>
+                    <tr class="font-bold text-rose-900 bg-rose-50/50"><td>50% &rarr; 100%</td><td>0.976</td><td>0.973</td><td>0.965</td></tr>
+                    <tr><td>75% &rarr; 100%</td><td>0.984</td><td>0.984</td><td>0.979</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-bold text-slate-900 text-xs mb-2">Table 6: Centralized vs. Federated R&sup2;</h4>
+              <div class="overflow-x-auto glass-panel rounded-xl border border-pink-200 bg-white">
+                <table class="w-full text-[11px] font-mono text-left">
+                  <thead class="bg-pink-50 text-rose-900 font-bold">
+                    <tr><th class="p-2">Task</th><th class="p-2">Centralized</th><th class="p-2">FedAvg</th><th class="p-2">FedPer</th></tr>
+                  </thead>
+                  <tbody class="divide-y divide-pink-100 text-slate-700">
+                    <tr><td>M1: Stress</td><td>0.737</td><td>0.541</td><td>0.452*</td></tr>
+                    <tr><td>M4: Energy</td><td>0.837</td><td>0.740</td><td>&asymp;0.75</td></tr>
+                    <tr class="font-bold text-rose-900 bg-rose-50/50"><td>M4: Arrival SOC</td><td>0.976</td><td>0.973</td><td>0.965</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-2">
+            * FedPer lowers local MAE for 32/51 established clients.
+          </p>
+
         </section>
 
       </main>
@@ -535,19 +500,20 @@
   </div>
 
   <!-- Footer -->
-  <footer class="bg-[#070B16] border-t border-slate-900 py-12 text-slate-400 text-xs font-mono">
+  <footer class="bg-white border-t border-pink-100 py-10 text-slate-600 text-xs font-mono">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-400 to-emerald-400 flex items-center justify-center text-slate-950 font-black">
+        <div class="w-8 h-8 rounded-lg bg-gradient-pink flex items-center justify-center text-white font-black">
           <i class="fas fa-bolt text-sm"></i>
         </div>
-        <span class="font-heading font-bold text-white text-base">SparkEV Methodology</span>
+        <span class="font-heading font-bold text-slate-900 text-base">SparkEV Methodology</span>
       </div>
       <div class="flex items-center gap-6">
-        <a href="index.html" class="hover:text-cyan-400 transition-colors">Overview</a>
-        <a href="methodology.html" class="text-cyan-400 font-semibold">Methodology</a>
-        <a href="documentation.html" class="hover:text-cyan-400 transition-colors">Documentation</a>
-        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="hover:text-cyan-400 transition-colors">GitHub</a>
+        <a href="index.html" class="hover:text-rose-600 transition-colors">Overview</a>
+        <a href="methodology.html" class="text-rose-600 font-bold">Methodology</a>
+        <a href="documentation.html" class="hover:text-rose-600 transition-colors">Documentation</a>
+        <a href="simulator.html" class="hover:text-rose-600 transition-colors">Simulator</a>
+        <a href="https://github.com/Shravanthi20/spark-ev" target="_blank" class="hover:text-rose-600 transition-colors">GitHub</a>
       </div>
     </div>
   </footer>
