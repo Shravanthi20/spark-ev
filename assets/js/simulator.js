@@ -6,6 +6,45 @@
 let degradationChartInstance = null;
 let shapChartInstance = null;
 
+function applyPreset(preset) {
+  const socEl = document.getElementById('sim-soc');
+  const distEl = document.getElementById('sim-distance');
+  const styleEl = document.getElementById('sim-style');
+  const tempEl = document.getElementById('sim-temp');
+  const chargerEl = document.getElementById('sim-charger');
+  const targetSocEl = document.getElementById('sim-target-soc');
+  const baselineSohEl = document.getElementById('sim-baseline-soh');
+
+  if (preset === 'summer') {
+    if (socEl) socEl.value = 85;
+    if (distEl) distEl.value = 160;
+    if (styleEl) styleEl.value = 'aggressive';
+    if (tempEl) tempEl.value = 38;
+    if (chargerEl) chargerEl.value = 'dc150';
+    if (targetSocEl) targetSocEl.value = 95;
+    if (baselineSohEl) baselineSohEl.value = 92.0;
+  } else if (preset === 'winter') {
+    if (socEl) socEl.value = 75;
+    if (distEl) distEl.value = 110;
+    if (styleEl) styleEl.value = 'balanced';
+    if (tempEl) tempEl.value = -4;
+    if (chargerEl) chargerEl.value = 'dc50';
+    if (targetSocEl) targetSocEl.value = 80;
+    if (baselineSohEl) baselineSohEl.value = 95.0;
+  } else if (preset === 'eco') {
+    if (socEl) socEl.value = 70;
+    if (distEl) distEl.value = 95;
+    if (styleEl) styleEl.value = 'eco';
+    if (tempEl) tempEl.value = 22;
+    if (chargerEl) chargerEl.value = 'ac11';
+    if (targetSocEl) targetSocEl.value = 80;
+    if (baselineSohEl) baselineSohEl.value = 98.0;
+  }
+
+  runSimulation();
+}
+window.applyPreset = applyPreset;
+
 function runSimulation() {
   const soc = parseFloat(document.getElementById('sim-soc')?.value || 65);
   const distance = parseFloat(document.getElementById('sim-distance')?.value || 120);
@@ -85,14 +124,12 @@ function runSimulation() {
   }
 
   // 3. Semi-Empirical Physics-Informed Battery Stress Index (BSI)
-  // Formula: Qloss = B * exp(-Ea / RT) * C^m * (Ah)^z
-  // Calibrated on NASA & CALCE cells (m = 0.80, z = 0.54, Ea = 27.8 kJ/mol)
   const T_kelvin = 273.15 + Math.max(10, ambientTemp + 5);
   const R_gas = 8.314; // J/(mol*K)
   const Ea = 27800; // J/mol
   const arrhenius = Math.exp(-Ea / (R_gas * T_kelvin));
   const cRateTerm = Math.pow(Math.max(0.2, cRate), 0.80);
-  const ahDelivered = energyNeeded / 0.36; // rough Ah throughput
+  const ahDelivered = energyNeeded / 0.36;
   const throughputTerm = Math.pow(Math.max(1.0, ahDelivered), 0.54);
 
   const rawFadeProxy = 1000 * arrhenius * cRateTerm * throughputTerm;
@@ -106,8 +143,7 @@ function runSimulation() {
 
   const bsiScore = Math.min(98, Math.max(12, Math.round(15 + speedContrib + accelContrib + (rawFadeProxy * 8) + socExtremeContrib + deepDischargeContrib)));
 
-  // BSI classification from research paper:
-  // LOW (< 40), MODERATE (40-70), HIGH (>= 70)
+  // BSI classification
   let bsiTier = "LOW";
   let bsiBadgeClass = "bg-emerald-50 text-emerald-700 border-emerald-200";
   if (bsiScore >= 70) {
@@ -134,12 +170,13 @@ function runSimulation() {
   // Generate plain-language advice
   generateSmartAdvice(arrivalSoc, targetSoc, chargerType, ambientTemp, maxSpeedVal, accelJerkVal, bsiTier);
 
-  // Render SHAP attribution chart (Driver-controllable factors top 3!)
+  // Render SHAP attribution chart
   updateShapChart(speedContrib, accelContrib, rawFadeProxy * 8, socExtremeContrib, tempShapContrib);
 
-  // Render SOH degradation projection (Direct AR model comparison)
+  // Render SOH degradation projection
   updateDegradationChart(baselineSoh, bsiScore);
 }
+window.runSimulation = runSimulation;
 
 function updateElementText(id, text) {
   const el = document.getElementById(id);
@@ -178,10 +215,9 @@ function generateSmartAdvice(arrivalSoc, targetSoc, chargerType, ambientTemp, ma
 }
 
 function updateShapChart(speed, accel, fadeModel, socExtremes, temp) {
-  const ctx = document.getElementById('sim-shap-chart')?.getContext('2d');
-  if (!ctx) return;
+  const canvas = document.getElementById('sim-shap-chart');
+  if (!canvas || typeof Chart === 'undefined') return;
 
-  // The paper shows: With physics-informed BSI, top 3 are driver-controllable factors!
   const labels = [
     '1. Maximum Speed (Driver)',
     '2. Mean Acceleration (Driver)',
@@ -198,127 +234,135 @@ function updateShapChart(speed, accel, fadeModel, socExtremes, temp) {
     parseFloat(temp.toFixed(1))
   ];
 
-  if (shapChartInstance) {
-    shapChartInstance.destroy();
-  }
+  try {
+    if (shapChartInstance) {
+      shapChartInstance.destroy();
+    }
 
-  shapChartInstance = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Mean Positive SHAP Contribution (+BSI)',
-        data: values,
-        backgroundColor: [
-          'rgba(244, 63, 94, 0.85)',   // Rose
-          'rgba(236, 72, 153, 0.80)',  // Pink
-          'rgba(219, 39, 119, 0.75)',  // Deep pink
-          'rgba(190, 24, 93, 0.70)',   // Dark rose
-          'rgba(148, 163, 184, 0.70)'  // Slate for ambient temp (dropped to 5th)
-        ],
-        borderColor: '#E11D48',
-        borderWidth: 1,
-        borderRadius: 5
-      }]
-    },
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => ` +${ctx.raw} BSI impact (TreeSHAP)`
+    const ctx = canvas.getContext('2d');
+    shapChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Mean Positive SHAP Contribution (+BSI)',
+          data: values,
+          backgroundColor: [
+            'rgba(244, 63, 94, 0.85)',
+            'rgba(236, 72, 153, 0.80)',
+            'rgba(219, 39, 119, 0.75)',
+            'rgba(190, 24, 93, 0.70)',
+            'rgba(148, 163, 184, 0.70)'
+          ],
+          borderColor: '#E11D48',
+          borderWidth: 1,
+          borderRadius: 5
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` +${ctx.raw} BSI impact (TreeSHAP)`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: '#FCE7F3' },
+            ticks: { color: '#64748B' }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { color: '#1E293B', font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600' } }
           }
         }
-      },
-      scales: {
-        x: {
-          grid: { color: '#FCE7F3' },
-          ticks: { color: '#64748B' }
-        },
-        y: {
-          grid: { display: false },
-          ticks: { color: '#1E293B', font: { family: "'Plus Jakarta Sans', sans-serif", weight: '600' } }
-        }
       }
-    }
-  });
+    });
+  } catch (err) {
+    console.error('Error rendering SHAP chart:', err);
+  }
 }
 
 function updateDegradationChart(baselineSoh, bsiScore) {
-  const ctx = document.getElementById('sim-degradation-chart')?.getContext('2d');
-  if (!ctx) return;
+  const canvas = document.getElementById('sim-degradation-chart');
+  if (!canvas || typeof Chart === 'undefined') return;
 
   const cycles = [0, 50, 100, 150, 200, 250, 300];
-  
-  // Rate derived from Direct AR SOH model (R^2 = 0.9591, MAE = 0.00657)
   const unmanagedRatePer100 = 0.75 + (bsiScore * 0.018);
   const sparkevRatePer100 = 0.65 + (bsiScore * 0.008);
 
   const unmanagedData = cycles.map(c => Math.max(70, baselineSoh - ((c / 100.0) * unmanagedRatePer100)));
   const sparkevData = cycles.map(c => Math.max(70, baselineSoh - ((c / 100.0) * sparkevRatePer100)));
 
-  if (degradationChartInstance) {
-    degradationChartInstance.destroy();
-  }
+  try {
+    if (degradationChartInstance) {
+      degradationChartInstance.destroy();
+    }
 
-  degradationChartInstance = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: cycles.map(c => `${c} Cycles`),
-      datasets: [
-        {
-          label: 'SparkEV FedPer Guided Operation (Direct AR)',
-          data: sparkevData,
-          borderColor: '#E11D48',
-          backgroundColor: 'rgba(244, 63, 94, 0.08)',
-          borderWidth: 2.5,
-          tension: 0.25,
-          fill: true
-        },
-        {
-          label: 'Unmanaged Operation (No Guidance)',
-          data: unmanagedData,
-          borderColor: '#94A3B8',
-          backgroundColor: 'transparent',
-          borderWidth: 2,
-          borderDash: [5, 5],
-          tension: 0.25
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: { color: '#1E293B', font: { family: "'Plus Jakarta Sans', sans-serif" } }
-        },
-        tooltip: {
-          callbacks: {
-            label: (ctx) => ` ${ctx.dataset.label}: ${ctx.raw.toFixed(2)}% SOH`
+    const ctx = canvas.getContext('2d');
+    degradationChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: cycles.map(c => `${c} Cycles`),
+        datasets: [
+          {
+            label: 'SparkEV FedPer Guided Operation (Direct AR)',
+            data: sparkevData,
+            borderColor: '#E11D48',
+            backgroundColor: 'rgba(244, 63, 94, 0.08)',
+            borderWidth: 2.5,
+            tension: 0.25,
+            fill: true
+          },
+          {
+            label: 'Unmanaged Operation (No Guidance)',
+            data: unmanagedData,
+            borderColor: '#94A3B8',
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            tension: 0.25
           }
-        }
+        ]
       },
-      scales: {
-        x: {
-          grid: { color: '#FCE7F3' },
-          ticks: { color: '#64748B' }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: { color: '#1E293B', font: { family: "'Plus Jakarta Sans', sans-serif" } }
+          },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => ` ${ctx.dataset.label}: ${ctx.raw.toFixed(2)}% SOH`
+            }
+          }
         },
-        y: {
-          min: 78,
-          max: 100,
-          grid: { color: '#FCE7F3' },
-          ticks: {
-            color: '#64748B',
-            callback: value => `${value}%`
+        scales: {
+          x: {
+            grid: { color: '#FCE7F3' },
+            ticks: { color: '#64748B' }
+          },
+          y: {
+            min: 78,
+            max: 100,
+            grid: { color: '#FCE7F3' },
+            ticks: {
+              color: '#64748B',
+              callback: value => `${value}%`
+            }
           }
         }
       }
-    }
-  });
+    });
+  } catch (err) {
+    console.error('Error rendering degradation chart:', err);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -335,13 +379,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Wait for Chart.js to be ready before first render
-  function initWhenReady() {
+  function initWhenReady(attempts = 0) {
     if (typeof Chart !== 'undefined') {
       runSimulation();
+    } else if (attempts < 50) {
+      setTimeout(() => initWhenReady(attempts + 1), 100);
     } else {
-      setTimeout(initWhenReady, 100);
+      console.warn('Chart.js not loaded after 5s, running simulation without charts');
+      runSimulation();
     }
   }
-  setTimeout(initWhenReady, 200);
+  initWhenReady();
 });
